@@ -9,18 +9,16 @@ st.set_page_config(
     layout="centered"
 )
 
-# 2. ใส่ Custom CSS ตกแต่ง
+# 2. ใส่ Custom CSS ตกแต่งให้แน่น สวยงาม สไตล์พรีเมียม
 st.markdown("""
     <style>
-    /* ดึงฟอนต์ Mitr จาก Google Fonts */
     @import url('https://fonts.googleapis.com/css2?family=Mitr:wght@300;400;500;600&display=swap');
 
-    /* กำหนดฟอนต์ Mitr เฉพาะข้อความทั่วไป */
     html, body, .stApp, p, h1, h2, h3, h4, h5, h6, input, select, textarea, label {
         font-family: 'Mitr', sans-serif !important;
     }
 
-    /* 📌 สั่งเปิดคืนค่าปุ่มกด Sidebar และแสดงผลชัดเจนตลอดเวลา */
+    /* คืนค่าปุ่มกวักเปิด Sidebar */
     [data-testid="stSidebarCollapseButton"],
     [data-testid="collapsedControl"] {
         display: block !important;
@@ -29,12 +27,12 @@ st.markdown("""
         z-index: 999999 !important;
     }
 
-    /* 🚫 ซ่อนปุ่มมงกุฎและลิงก์ Streamlit ด้านล่าง */
+    /* ซ่อนปุ่มมงกุฎและส่วนเกิน */
     footer, #MainMenu, [data-testid="stDecoration"], .stAppViewerFooter {
         display: none !important;
     }
 
-    /* ตกแต่งหัวข้อโลโก้ใน Sidebar */
+    /* โลโก้แถบข้าง */
     .sidebar-logo-title {
         font-size: 1.8rem;
         font-weight: 600;
@@ -45,72 +43,117 @@ st.markdown("""
         gap: 8px;
     }
 
-    /* ตกแต่งกล่องข้อมูลส่วนตัวแบบชิดซ้าย */
+    /* กล่องข้อมูลส่วนตัว */
     .user-profile-box {
-        background-color: #f8f9fa;
-        border-left: 4px solid #7b2cbf;
-        padding: 12px 16px;
-        border-radius: 8px;
+        background: linear-gradient(135deg, #f3e8ff 0%, #fce7f3 100%);
+        border: 1px solid #e9d5ff;
+        border-left: 5px solid #8b5cf6;
+        padding: 14px 18px;
+        border-radius: 12px;
         margin-bottom: 20px;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        box-shadow: 0 2px 8px rgba(139, 92, 246, 0.08);
     }
     .user-profile-title {
-        font-size: 1.2rem;
+        font-size: 1.15rem;
         font-weight: 600;
-        color: #2b2b2b;
-        margin-bottom: 6px;
+        color: #4c1d95;
+        margin-bottom: 4px;
     }
     .user-profile-detail {
-        font-size: 0.95rem;
-        color: #555;
-        line-height: 1.6;
+        font-size: 0.9rem;
+        color: #6b21a8;
     }
 
+    /* กล่อง Widget สีและเลขมงคลประจำวัน */
+    .daily-lucky-container {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+    }
+    .lucky-card {
+        flex: 1;
+        min-width: 130px;
+        background-color: #ffffff;
+        border: 1px solid #f1f5f9;
+        padding: 10px 14px;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+        text-align: center;
+    }
+    .lucky-title {
+        font-size: 0.8rem;
+        color: #64748b;
+        margin-bottom: 2px;
+    }
+    .lucky-value {
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: #0f172a;
+    }
+
+    /* การ์ดคำทำนาย */
     .fortune-card {
         background-color: #ffffff;
-        border-left: 5px solid #ff007f;
-        padding: 15px;
-        border-radius: 8px;
-        margin-bottom: 12px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        color: #222;
-    }
-    .tarot-card {
-        background-color: #ffffff;
-        border: 1px solid #e0e0e0;
-        border-top: 4px solid #7b2cbf;
-        padding: 15px;
+        border-left: 5px solid #ec4899;
+        padding: 16px;
         border-radius: 10px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        color: #222;
-    }
-    .summary-box {
-        background-color: #f3e8ff;
-        border: 1px solid #d8b4fe;
-        padding: 18px;
-        border-radius: 10px;
-        color: #3b0764;
-        margin-top: 15px;
+        margin-bottom: 14px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.04);
     }
     .fortune-title {
         font-weight: 600;
-        font-size: 1.1rem;
-        color: #111;
-        margin-bottom: 5px;
+        font-size: 1.05rem;
+        color: #1e293b;
+        margin-bottom: 4px;
     }
     .fortune-desc {
-        font-size: 0.95rem;
-        color: #444;
+        font-size: 0.92rem;
+        color: #475569;
         line-height: 1.5;
+    }
+
+    /* การ์ดไพ่ทาโรต์ */
+    .tarot-card {
+        background-color: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-top: 4px solid #7c3aed;
+        padding: 16px;
+        border-radius: 12px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+        height: 100%;
+    }
+
+    /* กล่องสรุปภาพรวม */
+    .summary-box {
+        background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%);
+        border: 1px solid #d8b4fe;
+        padding: 18px;
+        border-radius: 12px;
+        color: #3b0764;
+        margin-top: 18px;
+    }
+
+    /* กล่องคำคมสร้างพลังใจ */
+    .quote-box {
+        background-color: #f8fafc;
+        border: 1px stroke #e2e8f0;
+        padding: 14px 18px;
+        border-radius: 10px;
+        margin-top: 25px;
+        text-align: center;
+        color: #64748b;
+        font-size: 0.88rem;
+        font-style: italic;
     }
     </style>
 """, unsafe_allow_html=True)
 
-# 3. โลโก้ Moonity ที่มุมบนซ้าย (วางใน Sidebar)
+# 3. โลโก้ Moonity ใน Sidebar
 st.sidebar.markdown('<div class="sidebar-logo-title">🔮 Moonity</div>', unsafe_allow_html=True)
 st.sidebar.markdown("---")
 
-# 4. ข้อมูลดวงชะตา
+# 4. ข้อมูลดวงชะตา Sidebar
 st.sidebar.header("👤 ข้อมูลดวงชะตา")
 user_type = st.sidebar.radio("รูปแบบการใช้งาน:", ["✨ กรอกวัน/เดือน/ปีเกิด", "🎲 ใช้งานแบบชั่วคราว"])
 
@@ -154,11 +197,36 @@ else:
 
 st.markdown(profile_html, unsafe_allow_html=True)
 
-# 6. เนื้อหาแต่ละโหมด
+# 6. เพิ่ม Widget สีและเลขมงคลประจำวัน
+lucky_widget = """
+<div class="daily-lucky-container">
+    <div class="lucky-card">
+        <div class="lucky-title">🎨 สีมงคลวันนี้</div>
+        <div class="lucky-value">ชมพู / ฟ้าเข้ม</div>
+    </div>
+    <div class="lucky-card">
+        <div class="lucky-title">⛔ สีต้องห้าม</div>
+        <div class="lucky-value">สีแดง</div>
+    </div>
+    <div class="lucky-card">
+        <div class="lucky-title">🔢 เลขนำโชค</div>
+        <div class="lucky-value">16, 89, 95</div>
+    </div>
+    <div class="lucky-card">
+        <div class="lucky-title">🧭 ทิศมงคล</div>
+        <div class="lucky-value">ตะวันออกเฉียงเหนือ</div>
+    </div>
+</div>
+"""
+st.markdown(lucky_widget, unsafe_allow_html=True)
+
+# 7. เนื้อหาแต่ละโหมด
 if menu == "✨ ดวงรายวันเฉพาะบุคคล":
+    st.subheader(f"✨ คำทำนายประจำวันสำหรับ: คุณ{user_info['name']}")
+    
     if st.button("🔮 ผูกดวงรับคำทำนาย"):
         work_list = [
-            "การงานราบรื่น มีผู้ใหญ่คอยซัพพอร์ตให้ความช่วยเหลือ",
+            "การงานราบรื่น มีผู้ใหญ่คอยซัพพอร์ตและสนับสนุนผลงาน",
             "ไอเดียสร้างสรรค์พุ่งกระฉูด เหมาะสำหรับการเริ่มโปรเจกต์ใหม่",
             "ระวังงานด่วนเข้ามาพร้อมกัน ควรจัดลำดับความสำคัญให้ดี"
         ]
@@ -173,26 +241,26 @@ if menu == "✨ ดวงรายวันเฉพาะบุคคล":
             "ควรระวังเรื่องอารมณ์และคำพูดเล็กๆ น้อยๆ กับคนรัก"
         ]
         
-        st.success(f"🔮 **คำทำนายประจำวันของคุณ {user_info['name']}**")
+        st.success(f"🔮 **คำทำนายผูกดวงชะตาเรียบร้อยแล้ว**")
         
         st.markdown(f"""
         <div class="fortune-card">
-            <div class="fortune-title">💼 ด้านการงาน</div>
+            <div class="fortune-title">💼 ด้านการงานและการเรียน</div>
             <div class="fortune-desc">{random.choice(work_list)}</div>
         </div>
-        <div class="fortune-card">
-            <div class="fortune-title">💰 ด้านการเงิน</div>
+        <div class="fortune-card" style="border-left-color: #10b981;">
+            <div class="fortune-title">💰 ด้านการเงินและโชคลาภ</div>
             <div class="fortune-desc">{random.choice(money_list)}</div>
         </div>
-        <div class="fortune-card">
-            <div class="fortune-title">💖 ด้านความรัก</div>
+        <div class="fortune-card" style="border-left-color: #f43f5e;">
+            <div class="fortune-title">💖 ด้านความรักและความสัมพันธ์</div>
             <div class="fortune-desc">{random.choice(love_list)}</div>
         </div>
         """, unsafe_allow_html=True)
 
 elif menu == "⛩️ เซียมซีออนไลน์":
     st.subheader("⛩️ เขย่าเซียมซีตั้งจิตอธิษฐาน")
-    st.caption("ตั้งจิตให้นิ่ง นึกถึงสิ่งที่อยากรู้ แล้วกดเขย่าเซียมซี")
+    st.caption("ตั้งจิตให้นิ่ง นึกถึงสิ่งที่อยากรู้ แล้วกดเขย่ากระบอกเซียมซี")
     
     if st.button("🎯 เขย่ากระบอกเซียมซี"):
         stick = random.randint(1, 5)
@@ -301,7 +369,7 @@ elif menu == "🃏 ไพ่ทาโรต์ 3 ใบ":
         with col1:
             st.markdown(f"""
             <div class="tarot-card">
-                <h4>📜 อดีต (Past)</h4>
+                <h4 style="color: #6b21a8;">📜 อดีต (Past)</h4>
                 <p><b>{drawn[0]['name']}</b></p>
                 <p class="fortune-desc">{drawn[0]['past']}</p>
             </div>
@@ -310,7 +378,7 @@ elif menu == "🃏 ไพ่ทาโรต์ 3 ใบ":
         with col2:
             st.markdown(f"""
             <div class="tarot-card">
-                <h4>⏳ ปัจจุบัน (Present)</h4>
+                <h4 style="color: #6b21a8;">⏳ ปัจจุบัน (Present)</h4>
                 <p><b>{drawn[1]['name']}</b></p>
                 <p class="fortune-desc">{drawn[1]['present']}</p>
             </div>
@@ -319,7 +387,7 @@ elif menu == "🃏 ไพ่ทาโรต์ 3 ใบ":
         with col3:
             st.markdown(f"""
             <div class="tarot-card">
-                <h4>🚀 อนาคต (Future)</h4>
+                <h4 style="color: #6b21a8;">🚀 อนาคต (Future)</h4>
                 <p><b>{drawn[2]['name']}</b></p>
                 <p class="fortune-desc">{drawn[2]['future']}</p>
             </div>
@@ -343,3 +411,11 @@ elif menu == "🃏 ไพ่ทาโรต์ 3 ใบ":
             <p>{summary_text}</p>
         </div>
         """, unsafe_allow_html=True)
+
+# 8. ส่วนท้าย: คำคมพลังบวกประจำวัน
+quotes = [
+    "✨ 'ดวงชะตาเป็นเพียงเข็มทิศ การลงมือทำคือผู้กำหนดทิศทางชีวิตที่แท้จริง'",
+    "🌟 'ทุกวันคือโอกาสใหม่ในการเริ่มต้นสร้างสิ่งดีๆ ให้ตัวเอง'",
+    "💖 'ความเชื่อมั่นในตัวเอง คือคาถาเวทมนตร์ที่ดีที่สุด'"
+]
+st.markdown(f'<div class="quote-box">{random.choice(quotes)}</div>', unsafe_allow_html=True)
