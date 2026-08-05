@@ -15,22 +15,24 @@ st.markdown("""
     /* ดึงฟอนต์ Mitr จาก Google Fonts */
     @import url('https://fonts.googleapis.com/css2?family=Mitr:wght@300;400;500;600&display=swap');
 
-    /* บังคับใช้ฟอนต์ Mitr เฉพาะตัวหนังสือทั่วไป (ไม่กระทบไอคอนระบบ) */
-    html, body, [class*="css"], .stMarkdown, h1, h2, h3, h4, h5, h6, p, div, span, button, input, select, textarea {
+    /* กำหนดฟอนต์ Mitr เฉพาะตัวหนังสือหลัก ไม่ไปทับไอคอนระบบ */
+    html, body, .stApp, p, h1, h2, h3, h4, h5, h6, input, select, textarea, label {
         font-family: 'Mitr', sans-serif !important;
     }
 
-    /* คืนค่าฟอนต์ให้ไอคอนระบบ Streamlit (แก้ตัวอักษร double_arrow_right) */
-    .material-symbols-sharp, [data-testid="stIconMaterial"], i {
-        font-family: 'Material Symbols Sharp' !important;
+    /* สั่งคุ้มครองไอคอนระบบ Streamlit ไม่ให้โดนเปลี่ยนเป็นฟอนต์ Mitr */
+    [data-testid="stIconMaterial"], 
+    [data-testid="collapsedControl"], 
+    [data-testid="stSidebarCollapseButton"],
+    .material-symbols-outlined,
+    .material-symbols-sharp {
+        font-family: 'Material Symbols Outlined', 'Material Symbols Sharp' !important;
     }
 
-    /* 🚫 ซ่อนแถบเมนูขวาบน (Fork, GitHub, Header) */
+    /* 🚫 ซ่อนเมนูขวาบนและปุ่มมงกุฎด้านล่าง */
     header[data-testid="stHeader"] {
         display: none !important;
     }
-
-    /* 🚫 ซ่อนปุ่มมงกุฎสีแดงและโลโก้ Streamlit มุมขวาล่าง */
     footer, #MainMenu, [data-testid="stDecoration"], .stAppViewerFooter {
         display: none !important;
     }
