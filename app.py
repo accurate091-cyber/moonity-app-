@@ -15,9 +15,24 @@ st.markdown("""
     /* ดึงฟอนต์ Mitr จาก Google Fonts */
     @import url('https://fonts.googleapis.com/css2?family=Mitr:wght@300;400;500;600&display=swap');
 
-    /* บังคับใช้ฟอนต์ Mitr ทั่วทั้งหน้าเว็บ */
+    /* บังคับใช้ฟอนต์ Mitr เฉพาะตัวหนังสือทั่วไป (ไม่กระทบไอคอนระบบ) */
     html, body, [class*="css"], .stMarkdown, h1, h2, h3, h4, h5, h6, p, div, span, button, input, select, textarea {
         font-family: 'Mitr', sans-serif !important;
+    }
+
+    /* คืนค่าฟอนต์ให้ไอคอนระบบ Streamlit (แก้ตัวอักษร double_arrow_right) */
+    .material-symbols-sharp, [data-testid="stIconMaterial"], i {
+        font-family: 'Material Symbols Sharp' !important;
+    }
+
+    /* 🚫 ซ่อนแถบเมนูขวาบน (Fork, GitHub, Header) */
+    header[data-testid="stHeader"] {
+        display: none !important;
+    }
+
+    /* 🚫 ซ่อนปุ่มมงกุฎสีแดงและโลโก้ Streamlit มุมขวาล่าง */
+    footer, #MainMenu, [data-testid="stDecoration"], .stAppViewerFooter {
+        display: none !important;
     }
 
     /* ตกแต่งหัวข้อโลโก้ใน Sidebar */
