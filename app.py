@@ -1,6 +1,7 @@
 import random
 from datetime import datetime
 import streamlit as st
+from supabase import create_client, Client
 
 # 1. ตั้งค่าหน้าตาของแอป
 st.set_page_config(
@@ -9,7 +10,19 @@ st.set_page_config(
     layout="centered"
 )
 
-# 2. ใส่ Custom CSS ตกแต่ง
+# 2. เชื่อมต่อ Supabase Database
+@st.cache_resource
+def init_supabase() -> Client:
+    url = st.secrets["SUPABASE_URL"]
+    key = st.secrets["SUPABASE_KEY"]
+    return create_client(url, key)
+
+try:
+    supabase = init_supabase()
+except Exception as e:
+    supabase = None
+
+# 3. Custom CSS ตกแต่ง
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Mitr:wght@300;400;500;600&display=swap');
@@ -18,12 +31,10 @@ st.markdown("""
         font-family: 'Mitr', sans-serif !important;
     }
 
-    /* 📌 เปลี่ยนสีพื้นหลังของ Sidebar ด้านซ้ายให้เป็นสีเดียวกับกล่องข้อมูลส่วนตัว */
     [data-testid="stSidebar"] {
         background: linear-gradient(180deg, #f3e8ff 0%, #fce7f3 100%) !important;
     }
 
-    /* คืนค่าปุ่มกวักเปิด Sidebar */
     [data-testid="stSidebarCollapseButton"],
     [data-testid="collapsedControl"] {
         display: block !important;
@@ -32,12 +43,10 @@ st.markdown("""
         z-index: 999999 !important;
     }
 
-    /* ซ่อนปุ่มมงกุฎและส่วนเกิน */
     footer, #MainMenu, [data-testid="stDecoration"], .stAppViewerFooter {
         display: none !important;
     }
 
-    /* โลโก้แถบข้าง */
     .sidebar-logo-title {
         font-size: 1.8rem;
         font-weight: 600;
@@ -48,7 +57,6 @@ st.markdown("""
         gap: 8px;
     }
 
-    /* กล่องข้อมูลส่วนตัว */
     .user-profile-box {
         background: linear-gradient(135deg, #f3e8ff 0%, #fce7f3 100%);
         border: 1px solid #e9d5ff;
@@ -69,7 +77,6 @@ st.markdown("""
         color: #6b21a8;
     }
 
-    /* กล่อง Widget สีและเลขมงคลประจำวัน */
     .daily-lucky-container {
         display: flex;
         gap: 10px;
@@ -97,7 +104,6 @@ st.markdown("""
         color: #0f172a;
     }
 
-    /* การ์ดคำทำนาย */
     .fortune-card {
         background-color: #ffffff;
         border-left: 5px solid #ec4899;
@@ -118,7 +124,6 @@ st.markdown("""
         line-height: 1.5;
     }
 
-    /* การ์ดไพ่ทาโรต์ */
     .tarot-card {
         background-color: #ffffff;
         border: 1px solid #e2e8f0;
@@ -129,7 +134,6 @@ st.markdown("""
         height: 100%;
     }
 
-    /* กล่องสรุปภาพรวม */
     .summary-box {
         background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%);
         border: 1px solid #d8b4fe;
@@ -139,7 +143,6 @@ st.markdown("""
         margin-top: 18px;
     }
 
-    /* กล่องคำคมสร้างพลังใจ */
     .quote-box {
         background-color: #f8fafc;
         border: 1px solid #e2e8f0;
@@ -154,35 +157,79 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# 3. โลโก้ Moonity ใน Sidebar
+# 4. โลโก้ Moonity ใน Sidebar
 st.sidebar.markdown('<div class="sidebar-logo-title">🔮 Moonity</div>', unsafe_allow_html=True)
 st.sidebar.markdown("---")
 
-# 4. ข้อมูลดวงชะตา Sidebar
-st.sidebar.header("👤 ข้อมูลดวงชะตา")
-user_type = st.sidebar.radio("รูปแบบการใช้งาน:", ["✨ กรอกวัน/เดือน/ปีเกิด", "🎲 ใช้งานแบบชั่วคราว"])
+# 5. ระบบเข้าสู่ระบบ / บันทึกข้อมูล
+st.sidebar.header("🔑 เข้าสู่ระบบ / สมาชิก")
+if "user" not in st.session_state:
+    st.session_state.user = None
 
-if user_type == "✨ กรอกวัน/เดือน/ปีเกิด":
-    name = st.sidebar.text_input("ชื่อ/ชื่อเล่น:", "ดวงดี")
-    birth_date = st.sidebar.date_input("วันเกิด:", datetime(1997, 12, 31))
-    birth_time = st.sidebar.time_input("เวลาเกิด:", datetime.strptime("09:00", "%H:%M").time())
-    user_info = {
-        "name": name, 
-        "birth_date": birth_date.strftime("%d/%m/%Y"), 
-        "birth_time": birth_time.strftime("%H:%M น."),
-        "mode": "full"
-    }
-else:
-    user_info = {
-        "name": "ผู้มาเยือน", 
-        "birth_date": "ไม่ได้ระบุ", 
-        "birth_time": "ไม่ได้ระบุ",
-        "mode": "guest"
-    }
+auth_mode = st.sidebar.radio("เลือกทำรายการ:", ["เข้าสู่ระบบด้วย อีเมล", "สมัครสมาชิกใหม่", "ใช้งานแบบชั่วคราว"])
+
+user_info = {"name": "ผู้มาเยือน", "birth_date": "ไม่ได้ระบุ", "birth_time": "ไม่ได้ระบุ", "mode": "guest"}
+
+if auth_mode == "เข้าสู่ระบบด้วย อีเมล":
+    email = st.sidebar.text_input("อีเมล:")
+    password = st.sidebar.text_input("รหัสผ่าน:", type="password")
+    if st.sidebar.button("เข้าสู่ระบบ"):
+        if supabase:
+            try:
+                res = supabase.auth.sign_in_with_password({"email": email, "password": password})
+                st.session_state.user = res.user
+                st.sidebar.success("เข้าสู่ระบบสำเร็จ!")
+            except Exception as e:
+                st.sidebar.error("อีเมลหรือรหัสผ่านไม่ถูกต้อง")
+                
+elif auth_mode == "สมัครสมาชิกใหม่":
+    reg_email = st.sidebar.text_input("อีเมลสำหรับสมัคร:")
+    reg_password = st.sidebar.text_input("ตั้งรหัสผ่าน:", type="password")
+    reg_name = st.sidebar.text_input("ชื่อ/ชื่อเล่น:", "ดวงดี")
+    reg_birth_date = st.sidebar.date_input("วันเกิด:", datetime(1997, 12, 31))
+    reg_birth_time = st.sidebar.time_input("เวลาเกิด:", datetime.strptime("09:00", "%H:%M").time())
+    
+    if st.sidebar.button("ลงทะเบียน"):
+        if supabase:
+            try:
+                res = supabase.auth.sign_up({"email": reg_email, "password": reg_password})
+                if res.user:
+                    # บันทึกโปรไฟล์ลงตาราง profiles
+                    supabase.table("profiles").insert({
+                        "id": res.user.id,
+                        "name": reg_name,
+                        "birth_date": reg_birth_date.strftime("%Y-%m-%d"),
+                        "birth_time": reg_birth_time.strftime("%H:%M:%S")
+                    }).execute()
+                    st.sidebar.success("สมัครสมาชิกเรียบร้อย! สามารถเข้าสู่ระบบได้เลย")
+            except Exception as e:
+                st.sidebar.error(f"เกิดข้อผิดพลาด: {e}")
+
+# ดึงข้อมูลผู้ใช้หากล็อกอินแล้ว
+if st.session_state.user and supabase:
+    try:
+        profile_res = supabase.table("profiles").select("*").eq("id", st.session_state.user.id).execute()
+        if profile_res.data:
+            prof = profile_res.data[0]
+            b_date = datetime.strptime(prof['birth_date'], "%Y-%m-%d").strftime("%d/%m/%Y") if prof['birth_date'] else "ไม่ได้ระบุ"
+            b_time = prof['birth_time'][:5] + " น." if prof['birth_time'] else "ไม่ได้ระบุ"
+            user_info = {
+                "name": prof['name'],
+                "birth_date": b_date,
+                "birth_time": b_time,
+                "mode": "full"
+            }
+            st.sidebar.info(f"👤 เข้าใช้งานโดย: {prof['name']}")
+            if st.sidebar.button("ออกจากระบบ"):
+                supabase.auth.sign_out()
+                st.session_state.user = None
+                st.rerun()
+    except Exception as e:
+        pass
 
 menu = st.sidebar.radio("📌 เลือกโหมดคำทำนาย", ["✨ ดวงรายวันเฉพาะบุคคล", "⛩️ เซียมซีออนไลน์", "🃏 ไพ่ทาโรต์ 3 ใบ"])
 
-# 5. แสดงกล่องข้อมูลส่วนตัวชิดซ้ายด้านบน
+# 6. แสดงกล่องข้อมูลส่วนตัวชิดซ้ายด้านบน
 if user_info['mode'] == 'full':
     profile_html = f"""
     <div class="user-profile-box">
@@ -196,13 +243,13 @@ else:
     profile_html = f"""
     <div class="user-profile-box">
         <div class="user-profile-title">✨ ข้อมูลดวงชะตา: คุณ{user_info['name']}</div>
-        <div class="user-profile-detail">🎲 โหมดใช้งานแบบชั่วคราว</div>
+        <div class="user-profile-detail">🎲 โหมดใช้งานแบบชั่วคราว (เข้าสู่ระบบเพื่อบันทึกดวงชะตาถาวร)</div>
     </div>
     """
 
 st.markdown(profile_html, unsafe_allow_html=True)
 
-# 6. เพิ่ม Widget สีและเลขมงคลประจำวัน
+# 7. เพิ่ม Widget สีและเลขมงคลประจำวัน
 lucky_widget = """
 <div class="daily-lucky-container">
     <div class="lucky-card">
@@ -225,7 +272,7 @@ lucky_widget = """
 """
 st.markdown(lucky_widget, unsafe_allow_html=True)
 
-# 7. เนื้อหาแต่ละโหมด
+# 8. เนื้อหาแต่ละโหมด
 if menu == "✨ ดวงรายวันเฉพาะบุคคล":
     st.subheader(f"✨ คำทำนายประจำวันสำหรับ: คุณ{user_info['name']}")
     
@@ -417,7 +464,7 @@ elif menu == "🃏 ไพ่ทาโรต์ 3 ใบ":
         </div>
         """, unsafe_allow_html=True)
 
-# 8. ส่วนท้าย: คำคมพลังบวกประจำวัน
+# 9. คำคมพลังบวกประจำวัน
 quotes = [
     "✨ 'ดวงชะตาเป็นเพียงเข็มทิศ การลงมือทำคือผู้กำหนดทิศทางชีวิตที่แท้จริง'",
     "🌟 'ทุกวันคือโอกาสใหม่ในการเริ่มต้นสร้างสิ่งดีๆ ให้ตัวเอง'",
