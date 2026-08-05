@@ -20,32 +20,15 @@ st.markdown("""
         font-family: 'Mitr', sans-serif !important;
     }
 
-    /* สไตล์สำหรับโลโก้ที่ฟิกไว้มุมบนซ้าย */
-    .fixed-header-logo {
-        position: fixed;
-        top: 10px;
-        left: 10px;
-        z-index: 9999;
-        display: flex;
-        align-items: center;
-        font-family: 'Mitr', sans-serif;
-    }
-    .logo-img {
-        width: 40px; /* ปรับขนาดไอคอนตามต้องการ */
-        height: auto;
-        margin-right: 10px;
-    }
-    .logo-text {
-        font-size: 24px;
+    /* ตกแต่งหัวข้อโลโก้ใน Sidebar */
+    .sidebar-logo-title {
+        font-size: 1.8rem;
         font-weight: 600;
         color: #111;
-        text-decoration: none;
-    }
-
-    /* ดันเนื้อหาหลักลงมาเพื่อไม่ให้โลโก้บัง */
-    /* เนื่องจาก Streamlit จัดองค์ประกอบแบบไดนามิก เราจึงต้องเว้นระยะห่างด้านบน */
-    .block-container {
-        padding-top: 60px !important;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
     }
 
     .fortune-card {
@@ -88,19 +71,11 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# 3. ใส่โลโก้ที่ฟิกไว้มุมบนซ้าย (ใช้ HTML)
-# คุณสามารถเปลี่ยน path ของรูปภาพเป็น URL จริงได้
-logo_html = f"""
-    <div class="fixed-header-logo">
-        <img src="https://em-content.zobj.net/source/microsoft-teams/363/crystal-ball_1f52e.png" class="logo-img">
-        <span class="logo-text">Moonity</span>
-    </div>
-"""
-st.markdown(logo_html, unsafe_allow_html=True)
+# 3. โลโก้ Moonity ที่มุมบนซ้าย (วางใน Sidebar)
+st.sidebar.markdown('<div class="sidebar-logo-title">🔮 Moonity</div>', unsafe_allow_html=True)
+st.sidebar.markdown("---")
 
-# 4. ส่วนเนื้อหาหลัก
-# เนื่องจากโลโก้ถูกย้ายไปด้านบนซ้ายแล้ว เราจะลบ st.title() และ st.markdown() เดิมออก
-
+# 4. ข้อมูลดวงชะตา
 st.sidebar.header("👤 ข้อมูลดวงชะตา")
 user_type = st.sidebar.radio("รูปแบบการใช้งาน:", ["✨ กรอกวัน/เดือน/ปีเกิด", "🎲 ใช้งานแบบชั่วคราว"])
 
@@ -173,7 +148,7 @@ elif menu == "⛩️ เซียมซีออนไลน์":
                 "work": "เหมาะแก่การเจรจา ค้าขาย หรือติดต่อประสานงาน",
                 "money": "เงินทองไม่ขาดมือ มีลาภปากลาภลอย",
                 "love": "คนมีคู่รักใคร่หวานชื่น คนโสดมีคนมาขายขนมจีบ",
-                "luck": "เลข มงคล: 2, 6, 26, 62"
+                "luck": "เลขมงคล: 2, 6, 26, 62"
             },
             3: {
                 "title": "ใบที่ 3: ชะลอเพื่อรอจังหวะ (ปานกลาง)",
