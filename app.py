@@ -31,6 +31,27 @@ st.markdown("""
         gap: 8px;
     }
 
+    /* ตกแต่งกล่องข้อมูลส่วนตัวแบบชิดซ้าย */
+    .user-profile-box {
+        background-color: #f8f9fa;
+        border-left: 4px solid #7b2cbf;
+        padding: 12px 16px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    .user-profile-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: #2b2b2b;
+        margin-bottom: 6px;
+    }
+    .user-profile-detail {
+        font-size: 0.95rem;
+        color: #555;
+        line-height: 1.6;
+    }
+
     .fortune-card {
         background-color: #ffffff;
         border-left: 5px solid #ff007f;
@@ -83,15 +104,44 @@ if user_type == "✨ กรอกวัน/เดือน/ปีเกิด":
     name = st.sidebar.text_input("ชื่อ/ชื่อเล่น:", "คุณดวงดี")
     birth_date = st.sidebar.date_input("วันเกิด:", datetime(1997, 12, 31))
     birth_time = st.sidebar.time_input("เวลาเกิด:", datetime.strptime("09:00", "%H:%M").time())
-    user_info = {"name": name, "birth_date": birth_date, "mode": "full"}
+    user_info = {
+        "name": name, 
+        "birth_date": birth_date.strftime("%d/%m/%Y"), 
+        "birth_time": birth_time.strftime("%H:%M น."),
+        "mode": "full"
+    }
 else:
-    user_info = {"name": "ผู้มาเยือน", "mode": "guest"}
+    user_info = {
+        "name": "ผู้มาเยือน", 
+        "birth_date": "ไม่ได้ระบุ", 
+        "birth_time": "ไม่ได้ระบุ",
+        "mode": "guest"
+    }
 
 menu = st.sidebar.radio("📌 เลือกโหมดคำทำนาย", ["✨ ดวงรายวันเฉพาะบุคคล", "⛩️ เซียมซีออนไลน์", "🃏 ไพ่ทาโรต์ 3 ใบ"])
 
+# 5. แสดงกล่องข้อมูลส่วนตัวชิดซ้ายด้านบน
+if user_info['mode'] == 'full':
+    profile_html = f"""
+    <div class="user-profile-box">
+        <div class="user-profile-title">✨ ข้อมูลดวงชะตา: คุณ{user_info['name']}</div>
+        <div class="user-profile-detail">
+            📅 <b>วันเกิด:</b> {user_info['birth_date']} &nbsp;|&nbsp; ⏰ <b>เวลาเกิด:</b> {user_info['birth_time']}
+        </div>
+    </div>
+    """
+else:
+    profile_html = f"""
+    <div class="user-profile-box">
+        <div class="user-profile-title">✨ ข้อมูลดวงชะตา: คุณ{user_info['name']}</div>
+        <div class="user-profile-detail">🎲 โหมดใช้งานแบบชั่วคราว</div>
+    </div>
+    """
+
+st.markdown(profile_html, unsafe_allow_html=True)
+
+# 6. เนื้อหาแต่ละโหมด
 if menu == "✨ ดวงรายวันเฉพาะบุคคล":
-    st.subheader(f"✨ ดูดวงรายวันสำหรับ: {user_info['name']}")
-    
     if st.button("🔮 ผูกดวงรับคำทำนาย"):
         work_list = [
             "การงานราบรื่น มีผู้ใหญ่คอยซัพพอร์ตให้ความช่วยเหลือ",
