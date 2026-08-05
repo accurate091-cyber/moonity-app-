@@ -9,13 +9,18 @@ st.set_page_config(
     layout="centered"
 )
 
-# 2. ใส่ Custom CSS ตกแต่งให้แน่น สวยงาม สไตล์พรีเมียม
+# 2. ใส่ Custom CSS ตกแต่ง
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Mitr:wght@300;400;500;600&display=swap');
 
     html, body, .stApp, p, h1, h2, h3, h4, h5, h6, input, select, textarea, label {
         font-family: 'Mitr', sans-serif !important;
+    }
+
+    /* 📌 เปลี่ยนสีพื้นหลังของ Sidebar ด้านซ้ายให้เป็นสีเดียวกับกล่องข้อมูลส่วนตัว */
+    [data-testid="stSidebar"] {
+        background: linear-gradient(180deg, #f3e8ff 0%, #fce7f3 100%) !important;
     }
 
     /* คืนค่าปุ่มกวักเปิด Sidebar */
@@ -36,7 +41,7 @@ st.markdown("""
     .sidebar-logo-title {
         font-size: 1.8rem;
         font-weight: 600;
-        color: #111;
+        color: #4c1d95;
         margin-bottom: 10px;
         display: flex;
         align-items: center;
@@ -137,7 +142,7 @@ st.markdown("""
     /* กล่องคำคมสร้างพลังใจ */
     .quote-box {
         background-color: #f8fafc;
-        border: 1px stroke #e2e8f0;
+        border: 1px solid #e2e8f0;
         padding: 14px 18px;
         border-radius: 10px;
         margin-top: 25px;
