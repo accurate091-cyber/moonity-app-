@@ -5,10 +5,18 @@ from supabase import create_client, Client
 
 # 1. ตั้งค่าหน้าตาของแอป
 st.set_page_config(
-    page_title="🔮 Moonity - มูนิตี้ ดูดวงออนไลน์",
+    page_title="🔮 Moonity | คลินิกฮีลใจสไตล์สายมู",
     page_icon="🔮",
     layout="centered"
 )
+
+# เพิ่ม Meta Tags ให้แสดงผลเวลาแชร์ลิงก์สวยงาม
+st.markdown("""
+    <head>
+        <meta property="og:title" content="🔮 Moonity | คลินิกฮีลใจสไตล์สายมู">
+        <meta property="og:description" content="พื้นที่พักใจ ดูดวงรายวัน เซียมซี ไพ่ทาโรต์ ฮีลใจให้พลังบวก">
+    </head>
+""", unsafe_allow_html=True)
 
 # 2. เชื่อมต่อ Supabase Database
 @st.cache_resource
