@@ -12,21 +12,26 @@ st.set_page_config(
 # 2. ใส่ Custom CSS ตกแต่ง
 st.markdown("""
     <style>
-    /* ดึงฟอนต์ Mitr จาก Google Fonts */
+    /* ดึงฟอนต์ Mitr และ Material Icons จาก Google Fonts */
     @import url('https://fonts.googleapis.com/css2?family=Mitr:wght@300;400;500;600&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0');
 
-    /* กำหนดฟอนต์ Mitr เฉพาะตัวหนังสือหลัก ไม่ไปทับไอคอนระบบ */
+    /* กำหนดฟอนต์ Mitr เฉพาะข้อความทั่วไป */
     html, body, .stApp, p, h1, h2, h3, h4, h5, h6, input, select, textarea, label {
         font-family: 'Mitr', sans-serif !important;
     }
 
-    /* สั่งคุ้มครองไอคอนระบบ Streamlit ไม่ให้โดนเปลี่ยนเป็นฟอนต์ Mitr */
-    [data-testid="stIconMaterial"], 
-    [data-testid="collapsedControl"], 
+    /* 📌 สั่งให้ไอคอนย่อ/ขยาย Sidebar แสดงตลอดเวลา + ใช้ฟอนต์ไอคอนที่ถูกต้อง */
     [data-testid="stSidebarCollapseButton"],
-    .material-symbols-outlined,
-    .material-symbols-sharp {
-        font-family: 'Material Symbols Outlined', 'Material Symbols Sharp' !important;
+    [data-testid="collapsedControl"] {
+        opacity: 1 !important;
+        visibility: visible !important;
+    }
+
+    [data-testid="stSidebarCollapseButton"] *,
+    [data-testid="collapsedControl"] *,
+    .material-symbols-outlined {
+        font-family: 'Material Symbols Outlined' !important;
     }
 
     /* 🚫 ซ่อนเมนูขวาบนและปุ่มมงกุฎด้านล่าง */
