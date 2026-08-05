@@ -12,32 +12,24 @@ st.set_page_config(
 # 2. ใส่ Custom CSS ตกแต่ง
 st.markdown("""
     <style>
-    /* ดึงฟอนต์ Mitr และ Material Icons จาก Google Fonts */
+    /* ดึงฟอนต์ Mitr จาก Google Fonts */
     @import url('https://fonts.googleapis.com/css2?family=Mitr:wght@300;400;500;600&display=swap');
-    @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0');
 
     /* กำหนดฟอนต์ Mitr เฉพาะข้อความทั่วไป */
     html, body, .stApp, p, h1, h2, h3, h4, h5, h6, input, select, textarea, label {
         font-family: 'Mitr', sans-serif !important;
     }
 
-    /* 📌 สั่งให้ไอคอนย่อ/ขยาย Sidebar แสดงตลอดเวลา + ใช้ฟอนต์ไอคอนที่ถูกต้อง */
+    /* 📌 สั่งเปิดคืนค่าปุ่มกด Sidebar และแสดงผลชัดเจนตลอดเวลา */
     [data-testid="stSidebarCollapseButton"],
     [data-testid="collapsedControl"] {
+        display: block !important;
         opacity: 1 !important;
         visibility: visible !important;
+        z-index: 999999 !important;
     }
 
-    [data-testid="stSidebarCollapseButton"] *,
-    [data-testid="collapsedControl"] *,
-    .material-symbols-outlined {
-        font-family: 'Material Symbols Outlined' !important;
-    }
-
-    /* 🚫 ซ่อนเมนูขวาบนและปุ่มมงกุฎด้านล่าง */
-    header[data-testid="stHeader"] {
-        display: none !important;
-    }
+    /* 🚫 ซ่อนปุ่มมงกุฎและลิงก์ Streamlit ด้านล่าง */
     footer, #MainMenu, [data-testid="stDecoration"], .stAppViewerFooter {
         display: none !important;
     }
@@ -123,7 +115,7 @@ st.sidebar.header("👤 ข้อมูลดวงชะตา")
 user_type = st.sidebar.radio("รูปแบบการใช้งาน:", ["✨ กรอกวัน/เดือน/ปีเกิด", "🎲 ใช้งานแบบชั่วคราว"])
 
 if user_type == "✨ กรอกวัน/เดือน/ปีเกิด":
-    name = st.sidebar.text_input("ชื่อ/ชื่อเล่น:", "คุณดวงดี")
+    name = st.sidebar.text_input("ชื่อ/ชื่อเล่น:", "ดวงดี")
     birth_date = st.sidebar.date_input("วันเกิด:", datetime(1997, 12, 31))
     birth_time = st.sidebar.time_input("เวลาเกิด:", datetime.strptime("09:00", "%H:%M").time())
     user_info = {
