@@ -2,14 +2,24 @@ import random
 from datetime import datetime
 import streamlit as st
 
+# 1. ตั้งค่าหน้าตาของแอป
 st.set_page_config(
     page_title="🔮 Moonity - มูนิตี้ ดูดวงออนไลน์",
     page_icon="🔮",
     layout="centered"
 )
 
+# 2. ใส่ Custom CSS ตกแต่งความสวยงาม และเรียกใช้ฟอนต์ Mitr
 st.markdown("""
     <style>
+    /* ดึงฟอนต์ Mitr จาก Google Fonts */
+    @import url('https://fonts.googleapis.com/css2?family=Mitr:wght@300;400;500;600&display=swap');
+
+    /* บังคับใช้ฟอนต์ Mitr ทั่วทั้งหน้าเว็บ */
+    html, body, [class*="css"], .stMarkdown, h1, h2, h3, h4, h5, h6, p, div, span, button, input, select, textarea {
+        font-family: 'Mitr', sans-serif !important;
+    }
+
     .fortune-card {
         background-color: #ffffff;
         border-left: 5px solid #ff007f;
@@ -37,7 +47,7 @@ st.markdown("""
         margin-top: 15px;
     }
     .fortune-title {
-        font-weight: bold;
+        font-weight: 600;
         font-size: 1.1rem;
         color: #111;
         margin-bottom: 5px;
@@ -45,7 +55,7 @@ st.markdown("""
     .fortune-desc {
         font-size: 0.95rem;
         color: #444;
-        line-height: 1.4;
+        line-height: 1.5;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -193,7 +203,7 @@ elif menu == "🃏 ไพ่ทาโรต์ 3 ใบ":
         {
             "name": "The Fool 🎒",
             "past": "อดีตเคยผ่านการเริ่มต้นใหม่ การกล้าเสี่ยง หรือก้าวออกจากพื้นที่เซฟโซนเดิมๆ",
-            "present": "ปัจจุบันพร้อมที่จะเปิดรับประสบการณ์ใหม่ มีอิสรภาพในการคิดและตัดสินใจ แต่อาจขาดความระมัดระวังเล็กน้อย",
+            "present": "ปัจจุบันพร้อมที่จะเปิดรับประสบการณ์ใหม่ มีอิสรภาพในการคิดและตัดสินใจ แต่างอาจขาดความระมัดระวังเล็กน้อย",
             "future": "อนาคตจะได้เริ่มต้นเส้นทางใหม่ การเดินทางใหม่ๆ หรือการลงทุนที่ท้าทายแต่ตื่นเต้น",
             "tone": "neutral"
         },
