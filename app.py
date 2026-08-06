@@ -1,6 +1,29 @@
 import random
 from datetime import datetime
 import streamlit as st
+st.markdown("""
+    <style>
+    /* สั่งเบราว์เซอร์มือถือไม่ให้บังคับเปิด Dark Mode บนเว็บเรา */
+    :root {
+        color-scheme: light !important;
+    }
+
+    /* บังคับทุกข้อความและทุกองค์ประกอบใน Sidebar ให้เป็นสีม่วงเข้มทั้งหมดแบบเด็ดขาด */
+    [data-testid="stSidebar"], [data-testid="stSidebar"] * {
+        color: #4c1d95 !important;
+    }
+
+    /* บังคับช่องกรอกข้อมูลให้พื้นหลังเป็นสีขาว และตัวหนังสือข้างในเป็นสีดำเสมอ */
+    [data-testid="stSidebar"] input, 
+    [data-testid="stSidebar"] textarea, 
+    [data-testid="stSidebar"] select {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+        -webkit-text-fill-color: #000000 !important;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
 # 1. ตั้งค่าหน้าของแอป (ต้องอยู่บนสุด)
 st.set_page_config(
     page_title="🔮 Moonity | คลินิกฮีลใจสไตล์สายมู",
