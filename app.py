@@ -977,31 +977,28 @@ elif menu == "🃏 ไพ่ทาโรต์":
 
     full_deck = major_arcana + minor_arcana
 
-    # CSS จัดการลบกรอบปุ่มและเส้นขอบทุกสถานะของ Streamlit ออกอย่างเด็ดขาด
+    # CSS บังคับลบกรอบสีเทาของปุ่มออกโดยเฉพาะ
     st.markdown("""
         <style>
-        div[data-testid="column"] button {
+        [data-testid="column"] button {
+            background-color: transparent !important;
             background: transparent !important;
-            border: 0px solid transparent !important;
+            border: none !important;
             box-shadow: none !important;
             outline: none !important;
             padding: 0px !important;
             margin: 0px !important;
-            font-size: 1.25rem !important;
-            transition: transform 0.2s;
+            border-radius: 0px !important;
         }
-        div[data-testid="column"] button:hover {
-            transform: scale(1.25);
+        [data-testid="column"] button:hover,
+        [data-testid="column"] button:focus,
+        [data-testid="column"] button:active {
+            background-color: transparent !important;
             background: transparent !important;
-            border: none !important;
-        }
-        div[data-testid="column"] button:focus, 
-        div[data-testid="column"] button:active,
-        div[data-testid="column"] button:visited {
             border: none !important;
             box-shadow: none !important;
-            background: transparent !important;
             outline: none !important;
+            transform: scale(1.25);
         }
         </style>
     """, unsafe_allow_html=True)
@@ -1036,7 +1033,7 @@ elif menu == "🃏 ไพ่ทาโรต์":
         st.session_state.tarot_deck_78[52:78]
     ]
 
-    # แสดงผลเป็นโต๊ะไพ่ 3 แถว ไร้กรอบ ไร้ข้อความกวนใจ
+    # แสดงผลเป็นโต๊ะไพ่ 3 แถว ไร้กรอบ ไร้พื้นหลังโดยสมบูรณ์
     for r_idx, row_cards in enumerate(deck_rows):
         cols = st.columns(26)
         for c_idx, card_data in enumerate(row_cards):
