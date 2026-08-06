@@ -8,7 +8,18 @@ st.set_page_config(
     page_icon="🔮",
     layout="centered"
 )
-、st.markdown("""
+import random
+from datetime import datetime
+import streamlit as st
+
+# 1. ตั้งค่าหน้าของแอป (ต้องอยู่บนสุดบรรทัดแรกๆ เสมอ)
+st.set_page_config(
+    page_title="🔮 Moonity | คลินิกฮีลใจสไตล์สายมู",
+    page_icon="🔮",
+    layout="centered"
+)
+
+st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Mitr:wght@300;400;500;600&display=swap');
 
@@ -55,7 +66,7 @@ st.set_page_config(
         background-color: #ffffff !important;
     }
 
-    /* 3. ปรับแต่งเมนู Radio ใน Sidebar ให้เข้ากับธีมพาสเทล */ 
+    /* 3. ปรับแต่งเมนู Radio ใน Sidebar ให้เข้ากับธีมพาสเทล */
     [data-testid="stSidebar"] .stRadio div[role="radiogroup"] label {
         background-color: rgba(255, 255, 255, 0.3) !important;
         border-radius: 8px !important;
