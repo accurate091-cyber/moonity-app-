@@ -53,8 +53,8 @@ st.markdown("""
     }
 
     [data-testid="stSidebar"] {
-        background: linear-gradient(180deg, #f3e8ff 0%, #fce7f3 100%) !important;
-    }
+    background: linear-gradient(180deg, #f3e8ff 0%, #fce7f3 100%) !important;
+}
 
     [data-testid="stSidebarCollapseButton"],
     [data-testid="collapsedControl"] {
