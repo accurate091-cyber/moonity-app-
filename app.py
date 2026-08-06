@@ -977,12 +977,12 @@ elif menu == "🃏 ไพ่ทาโรต์":
 
     full_deck = major_arcana + minor_arcana
 
-    # CSS บังคับลบกรอบสีเทาและพื้นหลังของปุ่มออกให้เกลี้ยง
+    # CSS จัดการลบกรอบปุ่มและเส้นขอบทุกสถานะของ Streamlit ออกอย่างเด็ดขาด
     st.markdown("""
         <style>
         div[data-testid="column"] button {
             background: transparent !important;
-            border: none !important;
+            border: 0px solid transparent !important;
             box-shadow: none !important;
             outline: none !important;
             padding: 0px !important;
@@ -991,15 +991,17 @@ elif menu == "🃏 ไพ่ทาโรต์":
             transition: transform 0.2s;
         }
         div[data-testid="column"] button:hover {
-            transform: scale(1.2);
+            transform: scale(1.25);
             background: transparent !important;
             border: none !important;
         }
         div[data-testid="column"] button:focus, 
-        div[data-testid="column"] button:active {
+        div[data-testid="column"] button:active,
+        div[data-testid="column"] button:visited {
             border: none !important;
             box-shadow: none !important;
             background: transparent !important;
+            outline: none !important;
         }
         </style>
     """, unsafe_allow_html=True)
