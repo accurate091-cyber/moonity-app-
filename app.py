@@ -977,24 +977,19 @@ elif menu == "🃏 ไพ่ทาโรต์":
 
     full_deck = major_arcana + minor_arcana
 
-    # CSS แต่งสไตล์การ์ดไพ่คว่ำบนโต๊ะ (3 แถว แถวละ 26 ใบ)
+    # CSS ลบกรอบปุ่มสไตล์ Streamlit ออก ให้เหลือแต่รูปการ์ดเนียนๆ
     st.markdown("""
         <style>
-        .tarot-table {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            background: #2e1065;
-            padding: 15px;
-            border-radius: 12px;
-            box-shadow: inset 0 0 15px rgba(0,0,0,0.5);
-            margin-bottom: 15px;
+        div[data-testid="column"] button {
+            background-color: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
+            padding: 2px !important;
+            font-size: 1.2rem !important;
+            transition: transform 0.2s;
         }
-        .tarot-row {
-            display: flex;
-            gap: 4px;
-            justify-content: center;
-            flex-wrap: wrap;
+        div[data-testid="column"] button:hover {
+            transform: scale(1.15);
         }
         </style>
     """, unsafe_allow_html=True)
@@ -1006,23 +1001,21 @@ elif menu == "🃏 ไพ่ทาโรต์":
         st.session_state.selected_card_indices = []
 
     # ปุ่มสับไพ่
-    col_btn1, col_btn2 = st.columns([1, 2])
-    with col_btn1:
-        if st.button("🎴 สับสำรับไพ่ 78 ใบบนโต๊ะ"):
-            with st.spinner("กำลังสับไพ่และจัดเรียงสำรับบนโต๊ะ... ✨🔮"):
-                time.sleep(1)
-                deck_copy = full_deck.copy()
-                random.shuffle(deck_copy)
-                st.session_state.tarot_deck_78 = deck_copy
-                st.session_state.selected_card_indices = []
-            st.success("สับและเรียงไพ่คว่ำ 3 แถวเรียบร้อย!")
+    if st.button("🎴 ทำพิธีสับสำรับไพ่ 78 ใบบนโต๊ะ"):
+        with st.spinner("กำลังสับไพ่และจัดเรียงสำรับบนโต๊ะ... ✨🔮"):
+            time.sleep(1)
+            deck_copy = full_deck.copy()
+            random.shuffle(deck_copy)
+            st.session_state.tarot_deck_78 = deck_copy
+            st.session_state.selected_card_indices = []
+        st.success("สับและเรียงไพ่คว่ำ 3 แถวเรียบร้อย!")
 
     if st.session_state.tarot_deck_78 is None:
         deck_copy = full_deck.copy()
         random.shuffle(deck_copy)
         st.session_state.tarot_deck_78 = deck_copy
 
-    st.markdown(f"**🎴 เลือกไพ่บนโต๊ะของคุณ (เลือกแล้ว {len(st.session_state.selected_card_indices)} / {num_cards} ใบ):**")
+    st.markdown(f"**🎴 เลือกไพ่ของคุณ (เลือกแล้ว {len(st.session_state.selected_card_indices)} / {num_cards} ใบ):**")
 
     # แบ่งไพ่ 78 ใบ ออกเป็น 3 แถว แถวละ 26 ใบ
     deck_rows = [
@@ -1031,7 +1024,7 @@ elif menu == "🃏 ไพ่ทาโรต์":
         st.session_state.tarot_deck_78[52:78]
     ]
 
-    # แสดงผลเป็นโต๊ะไพ่ 3 แถว
+    # แสดงผลเป็นโต๊ะไพ่ 3 แถว (ไม่มีกรอบ ไม่มีคำเขียน เก๋ๆ เหมือนไพ่จริง)
     for r_idx, row_cards in enumerate(deck_rows):
         cols = st.columns(26)
         for c_idx, card_data in enumerate(row_cards):
@@ -1039,9 +1032,9 @@ elif menu == "🃏 ไพ่ทาโรต์":
             is_picked = absolute_idx in st.session_state.selected_card_indices
             
             with cols[c_idx]:
-                # ใช้ปุ่มรูปไพ่คว่ำสไตล์มินิมอล (แสดงเป็นไอคอนไพ่ 🎴)
-                btn_text = "✨" if is_picked else "🎴"
-                if st.button(btn_text, key=f"card_78_{absolute_idx}", help=f"ใบที่ {absolute_idx+1}"):
+                # ถ้าเลือกแล้วให้แสดงเป็นประกาย ✨ ถ้ายังไม่เลือกแสดงเป็นหลังไพ่ 🎴
+                card_icon = "✨" if is_picked else "🎴"
+                if st.button(card_icon, key=f"table_card_{absolute_idx}"):
                     if is_picked:
                         st.session_state.selected_card_indices.remove(absolute_idx)
                         st.rerun()
@@ -1052,7 +1045,7 @@ elif menu == "🃏 ไพ่ทาโรต์":
                         else:
                             st.warning(f"⚠️ เลือกครบ {num_cards} ใบแล้ว!")
 
-    # ปุ่มเคลียร์การเลือก
+    # ปุ่มรีเซ็ตการเลือก
     if st.session_state.selected_card_indices:
         if st.button("🔄 เริ่มเลือกใหม่"):
             st.session_state.selected_card_indices = []
