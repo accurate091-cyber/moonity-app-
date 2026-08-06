@@ -3,14 +3,12 @@ from datetime import datetime
 import streamlit as st
 st.markdown("""
     <style>
-    /* บังคับช่องกรอกข้อความและช่องวันที่ให้ตัวหนังสือเป็นสีดำและพื้นหลังสว่าง เพื่อให้อ่านง่ายใน Dark Mode */
-    input {
-        color: #000000 !important;
-        -webkit-text-fill-color: #000000 !important;
-    }
-    /* บังคับสีข้อความหัวข้อทั่วไปในโหมดมือถือ */
-    p, label, span {
-        color: inherit;
+    /* บังคับตัวหนังสือและป้ายข้อความใน Sidebar ทั้งหมดให้เป็นสีเข้มชัดเจน */
+    [data-testid="stSidebar"] p, 
+    [data-testid="stSidebar"] label, 
+    [data-testid="stSidebar"] span, 
+    [data-testid="stSidebar"] div {
+        color: #1e1b4b !important;
     }
     </style>
 """, unsafe_allow_html=True)
