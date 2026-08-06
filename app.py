@@ -308,7 +308,7 @@ health_pool = ["พลังงานกายสดใส กระปรี้
 # สร้างรายการระดับความเฮง 109 ใบ แบบคละกัน (Level 1: 20, Level 2: 25, Level 3: 30, Level 4: 20, Level 5: 14)
 if "ead_levels_pool" not in st.session_state:
     pool = [1]*20 + [2]*25 + [3]*30 + [4]*20 + [5]*14
-    random.seed(1997) # ล็อกซีดเพื่อให้ตำแหน่งใบเซียมซีคงที่แต่คละระดับกันทั่วทั้ง 109 ใบ
+    random.seed(1997)
     random.shuffle(pool)
     st.session_state.ead_levels_pool = pool
 
@@ -351,8 +351,7 @@ elif menu == "⛩️ เซียมซี":
         stick = random.randint(1, 109)
         lvl = st.session_state.ead_levels_pool[stick - 1]
         
-        # กำหนดข้อความและช่วงค่าพลังตามระดับความเฮงที่สุ่มได้
-        random.seed(stick * 37) # ให้ค่าพลังนิ่งและตรงกับใบเซียมซีใบนั้นๆ
+        random.seed(stick * 37)
         
         if lvl == 1:
             grade = f"🌟 ใบที่ {stick}: มหาโชคมหาลาภสูงสุด (ยอดเยี่ยม)"
@@ -399,54 +398,21 @@ elif menu == "⛩️ เซียมซี":
         * 🍀 **{luck_number}**
         """, unsafe_allow_html=True)
 
-        # แสดงแถบค่าพลัง (Progress Bars) แปลงจากความหมายใบเซียมซี
+        # ใช้ Native Progress Bars ของ Streamlit (สะอาดตาและไม่มีปัญหาโค้ดหลุด)
         st.markdown("---")
         st.markdown("#### 📊 แถบพลังดวงชะตาของคุณวันนี้")
         
-        bars_html = f"""
-        <div style="background-color: #ffffff; padding: 16px; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 2px 6px rgba(0,0,0,0.03);">
-            <div style="margin-bottom: 12px;">
-                <div style="display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 4px; color: #334155;">
-                    <span>💼 ด้านการงานและการเรียน</span>
-                    <span><b>{work_score}%</b></span>
-                </div>
-                <div style="background-color: #f1f5f9; border-radius: 8px; height: 10px; width: 100%; overflow: hidden;">
-                    <div style="background: linear-gradient(90deg, #8b5cf6, #c084fc); height: 100%; width: {work_score}%; border-radius: 8px;"></div>
-                </div>
-            </div>
-
-            <div style="margin-bottom: 12px;">
-                <div style="display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 4px; color: #334155;">
-                    <span>💰 ด้านการเงินและโชคลาภ</span>
-                    <span><b>{fin_score}%</b></span>
-                </div>
-                <div style="background-color: #f1f5f9; border-radius: 8px; height: 10px; width: 100%; overflow: hidden;">
-                    <div style="background: linear-gradient(90deg, #10b981, #34d399); height: 100%; width: {fin_score}%; border-radius: 8px;"></div>
-                </div>
-            </div>
-
-            <div style="margin-bottom: 12px;">
-                <div style="display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 4px; color: #334155;">
-                    <span>💖 ด้านความรักและความสัมพันธ์</span>
-                    <span><b>{love_score}%</b></span>
-                </div>
-                <div style="background-color: #f1f5f9; border-radius: 8px; height: 10px; width: 100%; overflow: hidden;">
-                    <div style="background: linear-gradient(90deg, #f43f5e, #fb7185); height: 100%; width: {love_score}%; border-radius: 8px;"></div>
-                </div>
-            </div>
-
-            <div style="margin-bottom: 4px;">
-                <div style="display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 4px; color: #334155;">
-                    <span>🌿 ด้านสุขภาพและความสมดุล</span>
-                    <span><b>{health_score}%</b></span>
-                </div>
-                <div style="background-color: #f1f5f9; border-radius: 8px; height: 10px; width: 100%; overflow: hidden;">
-                    <div style="background: linear-gradient(90deg, #0ea5e9, #38bdf8); height: 100%; width: {health_score}%; border-radius: 8px;"></div>
-                </div>
-            </div>
-        </div>
-        """
-        st.markdown(bars_html, unsafe_allow_html=True)
+        st.write(f"💼 ด้านการงานและการเรียน (**{work_score}%**)")
+        st.progress(work_score)
+        
+        st.write(f"💰 ด้านการเงินและโชคลาภ (**{fin_score}%**)")
+        st.progress(fin_score)
+        
+        st.write(f"💖 ด้านความรักและความสัมพันธ์ (**{love_score}%**)")
+        st.progress(love_score)
+        
+        st.write(f"🌿 ด้านสุขภาพและความสมดุล (**{health_score}%**)")
+        st.progress(health_score)
 
 elif menu == "🃏 ไพ่ทาโรต์ 3 ใบ":
     st.subheader("🃏 เปิดไพ่ทาโรต์ 3 ใบ (อดีต - ปัจจุบัน - อนาคต)")
