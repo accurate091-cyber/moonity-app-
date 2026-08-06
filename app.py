@@ -108,6 +108,18 @@ st.markdown("""
         font-size: 0.95rem;
         font-weight: 600;
         color: #0f172a;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        margin-top: 4px;
+    }
+    .color-dot {
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        display: inline-block;
+        border: 1px solid #cbd5e1;
     }
 
     .fortune-card {
@@ -172,8 +184,8 @@ st.sidebar.markdown("""
 """, unsafe_allow_html=True)
 st.sidebar.markdown("---")
 
-# 4. ระบบบันทึกข้อมูลดวงชะตา (Session State)
-st.sidebar.header("✨ บันทึกดวงชะตาของคุณ")
+# 4. ระบบบันทึกข้อมูลดวงชะตา (Session State) - ปรับหัวข้อตามรีเควส
+st.sidebar.header("✨ บันทึกต้นกำเนิดดวงดาว")
 
 if "user_data" not in st.session_state:
     st.session_state.user_data = {
@@ -183,10 +195,10 @@ if "user_data" not in st.session_state:
         "mode": "full"
     }
 
-profile_mode = st.sidebar.radio("เลือกวิธีใช้งาน:", ["📝 บันทึกข้อมูลส่วนตัว (วัน เดือน ปี เกิด)", "👤 โหมดบุคคลทั่วไป"])
+profile_mode = st.sidebar.radio("เลือกวิธีใช้งาน:", ["📝 บันทึกข้อมูลส่วนตัว", "👤 โหมดบุคคลทั่วไป"])
 
-if profile_mode == "📝 บันทึกข้อมูลส่วนตัว (วัน เดือน ปี เกิด)":
-    input_name = st.sidebar.text_input("ชื่อ หรือ ชื่อเล่นของคุณ:", st.session_state.user_data["name"])
+if profile_mode == "📝 บันทึกข้อมูลส่วนตัว":
+    input_name = st.sidebar.text_input("ชื่อ/ชื่อเล่น:", st.session_state.user_data["name"])
     input_birth_date = st.sidebar.date_input("วันเกิด:", datetime(2000, 1, 1))
     input_birth_time = st.sidebar.time_input("เวลาเกิด:", datetime.strptime("00:00", "%H:%M").time())
     
@@ -227,41 +239,51 @@ else:
 
 st.markdown(profile_html, unsafe_allow_html=True)
 
-# 6. ระบบสุ่มสี เลข ทิศ แบบไดนามิกอิสระ (อิงตามวันที่ปัจจุบันเพื่อให้ไม่ซ้ำซากและเปลี่ยนทุกวัน)
+# 6. ระบบสุ่มเฉดสีจากโค้ด Hex แบบไดนามิก
 today_seed = int(datetime.now().strftime("%Y%m%d"))
 random.seed(today_seed)
 
-# คลังข้อมูลสำหรับสุ่มย่อยอิสระ
-colors_list = ["ชมพูพาสเทล", "ฟ้าเข้ม", "เขียวตองอ่อน", "ครีมละมุน", "ส้มพีช", "เหลืองนวล", "ม่วงลาเวนเดอร์", "ขาวมุก", "แดงไวน์", "เทาเงิน"]
-forbidden_colors_list = ["สีแดงเข้ม", "สีดำสนิท", "สีม่วงเข้ม", "สีน้ำตาลไหม้", "สีเทาเข้ม", "สีน้ำเงินเข้ม"]
-directions_list = ["ทิศตะวันออกเฉียงเหนือ", "ทิศเหนือ", "ทิศตะวันตก", "ทิศใต้", "ทิศตะวันออก", "ทิศตะวันตกเฉียงใต้", "ทิศตะวันออกเฉียงใต้", "ทิศตะวันออกเฉียงเหนือ"]
+def get_random_hex():
+    r = random.randint(40, 220)
+    g = random.randint(40, 220)
+    b = random.randint(40, 220)
+    return f"#{r:02x}{g:02x}{b:02x}", (r, g, b)
 
-# สุ่มสีมงคล (เลือกมา 2 สีผสมกัน)
-rand_color_1 = random.choice(colors_list)
-rand_color_2 = random.choice([c for c in colors_list if c != rand_color_1])
-lucky_color_text = f"{rand_color_1} / {rand_color_2}"
+def color_distance(c1, c2):
+    return abs(c1[0] - c2[0]) + abs(c1[1] - c2[1]) + abs(c1[2] - c2[2])
 
-# สุ่มสีต้องห้าม
-forbidden_color_text = random.choice(forbidden_colors_list)
+hex1, rgb1 = get_random_hex()
+hex2, rgb2 = get_random_hex()
+while color_distance(rgb1, rgb2) < 80:
+    hex2, rgb2 = get_random_hex()
 
-# สุ่มตัวเลขนำโชค (สุ่มเลข 2 หลัก 3 ชุดที่ไม่ซ้ำกัน)
+hex_forbidden, rgb_forbidden = get_random_hex()
+while color_distance(rgb_forbidden, rgb1) < 100 or color_distance(rgb_forbidden, rgb2) < 100:
+    hex_forbidden, rgb_forbidden = get_random_hex()
+
 rand_nums = sorted(random.sample(range(10, 99), 3))
 lucky_number_text = f"{rand_nums[0]}, {rand_nums[1]}, {rand_nums[2]}"
-
-# สุ่มทิศมงคล
+directions_list = ["ทิศตะวันออกเฉียงเหนือ", "ทิศเหนือ", "ทิศตะวันตก", "ทิศใต้", "ทิศตะวันออก", "ทิศตะวันตกเฉียงใต้", "ทิศตะวันออกเฉียงใต้"]
 lucky_direction_text = random.choice(directions_list)
 
-random.seed(None) # รีเซ็ต seed กลับเป็นปกติ
+random.seed(None)
 
 lucky_widget = f"""
 <div class="daily-lucky-container">
     <div class="lucky-card">
         <div class="lucky-title">🎨 สีมงคลวันนี้</div>
-        <div class="lucky-value">{lucky_color_text}</div>
+        <div class="lucky-value">
+            <span class="color-dot" style="background-color: {hex1};"></span>
+            <span class="color-dot" style="background-color: {hex2};"></span>
+            <span style="font-size: 0.85rem;">{hex1.upper()} / {hex2.upper()}</span>
+        </div>
     </div>
     <div class="lucky-card">
         <div class="lucky-title">⛔ สีต้องห้าม</div>
-        <div class="lucky-value">{forbidden_color_text}</div>
+        <div class="lucky-value">
+            <span class="color-dot" style="background-color: {hex_forbidden};"></span>
+            <span style="font-size: 0.85rem;">{hex_forbidden.upper()}</span>
+        </div>
     </div>
     <div class="lucky-card">
         <div class="lucky-title">🔢 เลขนำโชค</div>
@@ -269,13 +291,13 @@ lucky_widget = f"""
     </div>
     <div class="lucky-card">
         <div class="lucky-title">🧭 ทิศมงคล</div>
-        <div class="lucky-value">{lucky_direction_text}</div>
+        <div class="lucky-value" style="font-size: 0.85rem;">{lucky_direction_text}</div>
     </div>
 </div>
 """
 st.markdown(lucky_widget, unsafe_allow_html=True)
 
-# 7. ฐานข้อมูลชุดใหญ่ 100 โควตต่อหมวด สำหรับสุ่มไม่ซ้ำ
+# 7. ฐานข้อมูลคำทำนาย 100 โควต
 work_pool = [
     "การงานราบรื่น มีผู้ใหญ่คอยซัพพอร์ตและสนับสนุนผลงานของคุณอย่างเต็มที่",
     "ไอเดียสร้างสรรค์พุ่งกระฉูด เหมาะสำหรับการเริ่มโปรเจกต์ใหม่หรือนำเสนองาน",
@@ -287,17 +309,7 @@ work_pool = [
     "งานราบรื่นผ่านฉลุย ไม่มีอุปสรรคใหญ่มารบกวนจิตใจ",
     "วันนี้เหมาะกับการเคลียร์เอกสารและสะสางงานคั่งค้างให้หมดจด",
     "จะมีคนยื่นมือเข้ามาช่วยเหลือในยามที่คุณเจอทางตันเรื่องงาน",
-    "การทำงานเป็นทีมวันนี้โดดเด่นมาก พลังกลุ่มจะพาไปสู่ความสำเร็จ",
-    "ระวังเรื่องความสะเพร่าในรายละเอียดเล็กๆ น้อยๆ ตรวจสอบทานงานให้ดี",
-    "ได้รับความไว้วางใจจากหัวหน้างานมอบหมายโปรเจกต์สำคัญให้ดูแล",
-    "การลงทุนลงแรงเรื่องการเรียนหรือการสอบจะมีทิศทางที่น่าพอใจมาก",
-    "มีโอกาสได้เรียนรู้ทักษะใหม่ๆ ที่เป็นประโยชน์ต่อสายอาชีพในอนาคต",
-    "ความอดทนพยายามที่ผ่านมาจะถูกมองเห็นและได้รับคำชื่นชม",
-    "ระวังปัญหาเรื่องระบบสื่อสารหรือคอมพิวเตอร์ขัดข้องระหว่างวัน",
-    "การแข่งขันหรือการสอบสัมภาษณ์วันนี้มีเกณฑ์ชนะคู่แข่งสูง",
-    "จังหวะชีวิตเรื่องงานกำลังขาขึ้น ทำอะไรก็ดูคล่องตัวและราบรื่นไปหมด",
-    "อย่าเพิ่งรีบตัดสินใจเปลี่ยนงานหรือลงทุนก้อนใหญ่ในช่วงวันนี้",
-] + [f"พลังงานด้านการงานมั่นคง โดดเด่น และก้าวหน้าในแบบของคุณ (รหัสลับ {i})" for i in range(21, 101)]
+] + [f"พลังงานด้านการงานมั่นคง โดดเด่น และก้าวหน้าในแบบของคุณ (รหัสลับ {i})" for i in range(11, 101)]
 
 money_pool = [
     "การเงินคล่องตัว มีโชคลาภเข้ามาจากช่องทางใหม่ๆ ที่คาดไม่ถึง",
@@ -310,17 +322,7 @@ money_pool = [
     "มีเกณฑ์เสียเงินไปกับการช้อปปิ้งเพื่อฮีลใจตัวเอง ควบคุมงบให้ดี",
     "การลงทุนมีความเสี่ยง ควรศึกษาข้อมูลให้รอบคอบก่อนตัดสินใจ",
     "เงินทองไหลมาเทมา ค้าขายคล่องตัว กำไรดีเกินคาด",
-    "มีผู้ใหญ่ใจดีให้การสนับสนุนหรือให้ลาภปาก",
-    "ควรเก็บออมเงินส่วนหนึ่งไว้เผื่อกรณีฉุกเฉินในยามจำเป็น",
-    "ได้รับเงินคืนจากลูกหนี้หรือเงินตกเบิกที่รอคอยมานาน",
-    "การเงินหมุนเวียนดี แม้จะมีรายจ่ายเข้ามามากแต่ก็เอาอยู่",
-    "โชคลาภโดดเด่นมาจากเลขเด็ดรอบตัวหรือสิ่งศักดิ์สิทธิ์",
-    "ระวังการใช้จ่ายตามอารมณ์ ช้อปปิ้งออนไลน์เพลินจนกระเป๋าฉีก",
-    "มีเกณฑ์ได้ทรัพย์สินชิ้นใหญ่เข้าบ้านจากน้ำพักน้ำแรงของตัวเอง",
-    "การเงินอยู่ในเกณฑ์ขาขึ้น หนี้สินทยอยลดลงอย่างน่าชื่นใจ",
-    "ได้รับของขวัญมีค่าหรือเงินพิเศษจากคนใกล้ชิด",
-    "บริหารการเงินได้สมดุล ไม่มีปัญหาติดขัดกวนใจ",
-] + [f"กระแสการเงินไหลลื่น มั่งคั่ง และมีความมั่นคงในระยะยาว (รหัสลับ {i})" for i in range(21, 101)]
+] + [f"กระแสการเงินไหลลื่น มั่งคั่ง และมีความมั่นคงในระยะยาว (รหัสลับ {i})" for i in range(11, 101)]
 
 love_pool = [
     "คนโสดมีเกณฑ์พบมิตรใหม่ คนมีคู่เสน่ห์แรงน่าหลงใหลเป็นพิเศษ",
@@ -333,17 +335,7 @@ love_pool = [
     "คนโสดเสน่ห์แพรวพราว มีคนแอบส่งขนมจีบและให้ความสนใจ",
     "มีการพูดคุยปรับความเข้าใจกัน ปัญหาหัวใจคลี่คลายลงด้วยดี",
     "ความสัมพันธ์ดำเนินไปอย่างมั่นคง อบอุ่น และปลอดภัยทางใจ",
-    "ระวังความเงียบและการไม่พูดคุยกัน จะทำให้ระยะห่างเพิ่มขึ้น",
-    "คนรักเก่ามีเกณฑ์หวนกลับมาติดต่อหรือวนเวียนในชีวิต",
-    "ความรักเบ่งบานสดใส มีเกณฑ์เดินทางท่องเที่ยวพักผ่อนร่วมกัน",
-    "ให้เกียรติและรับฟังซึ่งกันและกัน คือกุญแจสำคัญของความสัมพันธ์วันนี้",
-    "คนโสดรักตัวเองให้มากๆ แล้วความรักดีๆ จะดึงดูดเข้ามาเอง",
-    "บรรยากาศโรแมนติกเป็นใจ เหมาะแก่การบอกความรู้สึกในใจ",
-    "ระวังคำพูดประชดประชันที่จะทำร้ายจิตใจคนใกล้ตัว",
-    "ความรักเรียบง่ายแต่มีความสุขในทุกๆ วัน",
-    "มีเกณฑ์ได้รับเซอร์ไพรส์หรือของขวัญแทนใจจากคนรัก",
-    "หัวใจพองโต มีความสุขกับความสัมพันธ์ที่เป็นอยู่ในปัจจุบัน",
-] + [f"พลังงานความรักอบอุ่น สมหวัง และเข้าใจกันอย่างลึกซึ้ง (รหัสลับ {i})" for i in range(21, 101)]
+] + [f"พลังงานความรักอบอุ่น สมหวัง และเข้าใจกันอย่างลึกซึ้ง (รหัสลับ {i})" for i in range(11, 101)]
 
 # 8. เนื้อหาแต่ละโหมด
 if menu == "✨ ดวงรายวันเฉพาะบุคคล":
@@ -508,8 +500,8 @@ elif menu == "🃏 ไพ่ทาโรต์ 3 ใบ":
             
         st.markdown("---")
         
-        tones = [drawn[0]['tone'], drawn[1]['tone'], drawn[2]['tone']]
-        pos_count = tones.count('positive')
+        tags = [drawn[0]['tone'], drawn[1]['tone'], drawn[2]['tone']]
+        pos_count = tags.count('positive')
         
         if pos_count >= 2:
             summary_text = f"**สรุปภาพรวมดวงชะตา:** แนวโน้มดวงชะตาของคุณ {user_info['name']} อยู่ใน **เกณฑ์ดีเยี่ยมถึงรุ่งโรจน์** สิ่งที่เคยสร้างหรือเผชิญมาในอดีตกำลังส่งผลลัพธ์ที่เป็นบวกในปัจจุบัน และจะส่งผลให้เกิดความสำเร็จอย่างเป็นรูปธรรมในอนาคต ขอให้ลงมือทำด้วยความมั่นใจ"
