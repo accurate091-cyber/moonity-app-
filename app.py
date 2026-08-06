@@ -880,7 +880,7 @@ elif menu == "🃏 ไพ่ทาโรต์":
         positions = ["1. อดีต (Past)", "2. ปัจจุบัน (Present)", "3. อนาคต (Future)"]
     elif "เปิด 5 ใบ" in spread_type:
         num_cards = 5
-        positions = ["1. สถานการณ์ปัจจุบัน", "2. อุปสรรค / ปัญหา", "3. แนวทางแก้ไข / คำแนะนำ", "4. สภาพแวดล้อมรอบตัว", "5. บทสรุป / ผลลัพธ์"]
+        positions = ["1. สถานการณ์ปัจจุบัน", "2. อุปสรรค / ปัญหา", "3. แนวทางแก้ไข / คำแนะนำ", "4. สภาพแวดล้อมรอบตัว", "5. ผลลัพธ์ / บทสรุป"]
     else:
         num_cards = 10
         positions = [
@@ -977,7 +977,7 @@ elif menu == "🃏 ไพ่ทาโรต์":
 
     full_deck = major_arcana + minor_arcana
 
-    # CSS ลบกรอบปุ่มและพื้นหลังออกอย่างเด็ดขาด ให้เหลือแต่รูปไพ่คว่ำเนียนๆ
+    # CSS บังคับลบกรอบสีเทาและพื้นหลังของปุ่มออกให้เกลี้ยง
     st.markdown("""
         <style>
         div[data-testid="column"] button {
@@ -992,6 +992,8 @@ elif menu == "🃏 ไพ่ทาโรต์":
         }
         div[data-testid="column"] button:hover {
             transform: scale(1.2);
+            background: transparent !important;
+            border: none !important;
         }
         div[data-testid="column"] button:focus, 
         div[data-testid="column"] button:active {
