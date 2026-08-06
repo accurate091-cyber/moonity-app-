@@ -10,7 +10,7 @@ st.set_page_config(
     layout="centered"
 )
 
-# เพิ่ม Meta Tags ให้แสดงผลเวลาแชร์ลิงก์สวยงาม
+# เพิ่ม Meta Tags ให้แสดงผลเวลาแชร์ลิงก์
 st.markdown("""
     <head>
         <meta property="og:title" content="🔮 Moonity | คลินิกฮีลใจสไตล์สายมู">
@@ -187,12 +187,13 @@ if auth_mode == "เข้าสู่ระบบด้วย อีเมล":
                 res = supabase.auth.sign_in_with_password({"email": email, "password": password})
                 st.session_state.user = res.user
                 st.sidebar.success("เข้าสู่ระบบสำเร็จ!")
+                st.rerun()
             except Exception as e:
                 st.sidebar.error("อีเมลหรือรหัสผ่านไม่ถูกต้อง")
                 
 elif auth_mode == "สมัครสมาชิกใหม่":
     reg_email = st.sidebar.text_input("อีเมลสำหรับสมัคร:")
-    reg_password = st.sidebar.text_input("ตั้งรหัสผ่าน:", type="password")
+    reg_password = st.sidebar.text_input("ตั้งรหัสผ่าน (อย่างน้อย 6 ตัวอักษร):", type="password")
     reg_name = st.sidebar.text_input("ชื่อ/ชื่อเล่น:", "ดวงดี")
     reg_birth_date = st.sidebar.date_input("วันเกิด:", datetime(1997, 12, 31))
     reg_birth_time = st.sidebar.time_input("เวลาเกิด:", datetime.strptime("09:00", "%H:%M").time())
@@ -203,15 +204,18 @@ elif auth_mode == "สมัครสมาชิกใหม่":
                 res = supabase.auth.sign_up({"email": reg_email, "password": reg_password})
                 if res.user:
                     # บันทึกโปรไฟล์ลงตาราง profiles
-                    supabase.table("profiles").insert({
-                        "id": res.user.id,
-                        "name": reg_name,
-                        "birth_date": reg_birth_date.strftime("%Y-%m-%d"),
-                        "birth_time": reg_birth_time.strftime("%H:%M:%S")
-                    }).execute()
-                    st.sidebar.success("สมัครสมาชิกเรียบร้อย! สามารถเข้าสู่ระบบได้เลย")
+                    try:
+                        supabase.table("profiles").insert({
+                            "id": res.user.id,
+                            "name": reg_name,
+                            "birth_date": reg_birth_date.strftime("%Y-%m-%d"),
+                            "birth_time": reg_birth_time.strftime("%H:%M:%S")
+                        }).execute()
+                    except Exception:
+                        pass
+                    st.sidebar.success("สมัครสมาชิกสำเร็จ! (หาก Supabase เปิดยืนยันอีเมล ให้ตรวจสอบกล่องข้อความ หรือเข้าสู่ระบบได้เลย)")
             except Exception as e:
-                st.sidebar.error(f"เกิดข้อผิดพลาด: {e}")
+                st.sidebar.error(f"สมัครไม่สำเร็จ: กรุณาใช้รหัสผ่าน 6 ตัวขึ้นไป หรืออีเมลนี้อาจเคยสมัครแล้ว")
 
 # ดึงข้อมูลผู้ใช้หากล็อกอินแล้ว
 if st.session_state.user and supabase:
@@ -228,10 +232,13 @@ if st.session_state.user and supabase:
                 "mode": "full"
             }
             st.sidebar.info(f"👤 เข้าใช้งานโดย: {prof['name']}")
-            if st.sidebar.button("ออกจากระบบ"):
-                supabase.auth.sign_out()
-                st.session_state.user = None
-                st.rerun()
+        else:
+            user_info = {"name": "สมาชิกลับ", "birth_date": "ไม่ได้ระบุ", "birth_time": "ไม่ได้ระบุ", "mode": "full"}
+            
+        if st.sidebar.button("ออกจากระบบ"):
+            supabase.auth.sign_out()
+            st.session_state.user = None
+            st.rerun()
     except Exception as e:
         pass
 
@@ -257,24 +264,39 @@ else:
 
 st.markdown(profile_html, unsafe_allow_html=True)
 
-# 7. เพิ่ม Widget สีและเลขมงคลประจำวัน
-lucky_widget = """
+# 7. ระบบสุ่มสี เลข ทิศ ตามวันที่ปัจจุบัน (เพื่อให้เปลี่ยนไปทุกวันอัตโนมัติ)
+today_seed = int(datetime.now().strftime("%Y%m%d"))
+random.seed(today_seed)
+
+colors_pool = [
+    ("ชมพู / ฟ้าเข้ม", "สีแดง", "16, 89, 95", "ตะวันออกเฉียงเหนือ"),
+    ("เขียวตองอ่อน / ครีม", "สีม่วงเข้ม", "24, 56, 91", "ทิศเหนือ"),
+    ("ส้มพาสเทล / ขาว", "สีดำ", "11, 42, 88", "ทิศตะวันตก"),
+    ("เหลืองนวล / ฟ้าอ่อน", "สีเทาเข้ม", "35, 78, 99", "ทิศใต้"),
+    ("ม่วงลาเวนเดอร์ / เขียวมัทฉะ", "สีน้ำตาลไหม้", "14, 29, 66", "ทิศตะวันออก")
+]
+daily_lucky = random.choice(colors_pool)
+
+# คืนค่า random ปกติเพื่อให้โหมดอื่นทำงานสุ่มได้ตามปกติ
+random.seed(None)
+
+lucky_widget = f"""
 <div class="daily-lucky-container">
     <div class="lucky-card">
         <div class="lucky-title">🎨 สีมงคลวันนี้</div>
-        <div class="lucky-value">ชมพู / ฟ้าเข้ม</div>
+        <div class="lucky-value">{daily_lucky[0]}</div>
     </div>
     <div class="lucky-card">
         <div class="lucky-title">⛔ สีต้องห้าม</div>
-        <div class="lucky-value">สีแดง</div>
+        <div class="lucky-value">{daily_lucky[1]}</div>
     </div>
     <div class="lucky-card">
         <div class="lucky-title">🔢 เลขนำโชค</div>
-        <div class="lucky-value">16, 89, 95</div>
+        <div class="lucky-value">{daily_lucky[2]}</div>
     </div>
     <div class="lucky-card">
         <div class="lucky-title">🧭 ทิศมงคล</div>
-        <div class="lucky-value">ตะวันออกเฉียงเหนือ</div>
+        <div class="lucky-value">{daily_lucky[3]}</div>
     </div>
 </div>
 """
@@ -442,7 +464,7 @@ elif menu == "🃏 ไพ่ทาโรต์ 3 ใบ":
                 <p><b>{drawn[1]['name']}</b></p>
                 <p class="fortune-desc">{drawn[1]['present']}</p>
             </div>
-            """, unsafe_allow_html=True)
+            """, unsafe_allow_html=Type if 'Type' in globals() else True)
             
         with col3:
             st.markdown(f"""
