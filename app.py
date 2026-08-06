@@ -867,7 +867,7 @@ elif menu == "⛩️ เซียมซี":
 elif menu == "🃏 ไพ่ทาโรต์":
     import time
     st.subheader("🃏 เปิดไพ่ทาโรต์ศักดิ์สิทธิ์")
-    st.caption("ตั้งจิตอธิษฐาน เลือกรูปแบบการเปิดไพ่ แล้วทำพิธีสับไพ่และเลือกไพ่ด้วยตัวเอง")
+    st.caption("ตั้งจิตอธิษฐาน เลือกรูปแบบการเปิดไพ่ แล้วเลือกหยิบไพ่จากสำรับบนโต๊ะด้วยตัวเอง")
     
     spread_type = st.radio("เลือกรูปแบบการเปิดไพ่:", ["🔮 เปิด 1 ใบ", "🃏 เปิด 3 ใบ", "🎴 เปิด 5 ใบ", "📜 เปิด 10 ใบ (เคลติกครอส)"], horizontal=True)
     
@@ -977,69 +977,96 @@ elif menu == "🃏 ไพ่ทาโรต์":
 
     full_deck = major_arcana + minor_arcana
 
+    # CSS แต่งสไตล์การ์ดไพ่คว่ำบนโต๊ะ (3 แถว แถวละ 26 ใบ)
+    st.markdown("""
+        <style>
+        .tarot-table {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            background: #2e1065;
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.5);
+            margin-bottom: 15px;
+        }
+        .tarot-row {
+            display: flex;
+            gap: 4px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        </style>
+    """, unsafe_allow_html=True)
+
     # จัดการ Session State
-    if "tarot_deck" not in st.session_state:
-        st.session_state.tarot_deck = None
-    if "selected_cards" not in st.session_state:
-        st.session_state.selected_cards = []
+    if "tarot_deck_78" not in st.session_state:
+        st.session_state.tarot_deck_78 = None
+    if "selected_card_indices" not in st.session_state:
+        st.session_state.selected_card_indices = []
 
-    # ปุ่มเริ่มสับไพ่ใหม่เมื่อเปลี่ยนโหมดหรือกดปุ่ม
-    if st.button("🎴 ทำพิธีสับสำรับไพ่ 78 ใบใหม่"):
-        with st.spinner("กำลังสับไพ่และแผ่พลังงานดวงดาว... ✨🔮"):
-            time.sleep(1.2)
-            deck_copy = full_deck.copy()
-            random.shuffle(deck_copy)
-            st.session_state.tarot_deck = deck_copy
-            st.session_state.selected_cards = []
-        st.success("สับสำรับและเรียงไพ่คว่ำเสร็จเรียบร้อย! เชิญคลิกเลือกไพ่ด้านล่างได้เลยครับ")
+    # ปุ่มสับไพ่
+    col_btn1, col_btn2 = st.columns([1, 2])
+    with col_btn1:
+        if st.button("🎴 สับสำรับไพ่ 78 ใบบนโต๊ะ"):
+            with st.spinner("กำลังสับไพ่และจัดเรียงสำรับบนโต๊ะ... ✨🔮"):
+                time.sleep(1)
+                deck_copy = full_deck.copy()
+                random.shuffle(deck_copy)
+                st.session_state.tarot_deck_78 = deck_copy
+                st.session_state.selected_card_indices = []
+            st.success("สับและเรียงไพ่คว่ำ 3 แถวเรียบร้อย!")
 
-    # ถ้ายังไม่สับ ให้สร้างสำรับเริ่มต้นอัตโนมัติ
-    if st.session_state.tarot_deck is None:
+    if st.session_state.tarot_deck_78 is None:
         deck_copy = full_deck.copy()
         random.shuffle(deck_copy)
-        st.session_state.tarot_deck = deck_copy
+        st.session_state.tarot_deck_78 = deck_copy
 
-    st.markdown(f"**🎴 เลือกไพ่ของคุณ (เลือกแล้ว {len(st.session_state.selected_cards)} / {num_cards} ใบ):**")
+    st.markdown(f"**🎴 เลือกไพ่บนโต๊ะของคุณ (เลือกแล้ว {len(st.session_state.selected_card_indices)} / {num_cards} ใบ):**")
 
-    # แสดงกองไพ่เป็นสำรับให้กดคลิกทีละใบ (จำลองกองไพ่คว่ำ 12 ใบให้เลือกหยิบ)
-    cols = st.columns(6)
-    cards_to_display = 12  # แสดงกองไพ่ให้เลือก 12 กอง
-    
-    for idx in range(cards_to_display):
-        col = cols[idx % 6]
-        with col:
-            is_selected = idx in st.session_state.selected_cards
-            button_label = f"✅ ใบที่ {idx+1}" if is_selected else f"🃏 คว่ำไว้ #{idx+1}"
+    # แบ่งไพ่ 78 ใบ ออกเป็น 3 แถว แถวละ 26 ใบ
+    deck_rows = [
+        st.session_state.tarot_deck_78[0:26],
+        st.session_state.tarot_deck_78[26:52],
+        st.session_state.tarot_deck_78[52:78]
+    ]
+
+    # แสดงผลเป็นโต๊ะไพ่ 3 แถว
+    for r_idx, row_cards in enumerate(deck_rows):
+        cols = st.columns(26)
+        for c_idx, card_data in enumerate(row_cards):
+            absolute_idx = (r_idx * 26) + c_idx
+            is_picked = absolute_idx in st.session_state.selected_card_indices
             
-            if st.button(button_label, key=f"card_btn_{idx}"):
-                if is_selected:
-                    # ถ้าคลิกซ้ำให้เอาออก
-                    st.session_state.selected_cards.remove(idx)
-                    st.rerun()
-                else:
-                    # ถ้ายังไม่ครบโควตา ให้เพิ่มเข้าไป
-                    if len(st.session_state.selected_cards) < num_cards:
-                        st.session_state.selected_cards.append(idx)
+            with cols[c_idx]:
+                # ใช้ปุ่มรูปไพ่คว่ำสไตล์มินิมอล (แสดงเป็นไอคอนไพ่ 🎴)
+                btn_text = "✨" if is_picked else "🎴"
+                if st.button(btn_text, key=f"card_78_{absolute_idx}", help=f"ใบที่ {absolute_idx+1}"):
+                    if is_picked:
+                        st.session_state.selected_card_indices.remove(absolute_idx)
                         st.rerun()
                     else:
-                        st.warning(f"⚠️ คุณเลือกครบ {num_cards} ใบแล้วครับ หากต้องการเปลี่ยนให้คลิกยกเลิกใบเดิมก่อน")
+                        if len(st.session_state.selected_card_indices) < num_cards:
+                            st.session_state.selected_card_indices.append(absolute_idx)
+                            st.rerun()
+                        else:
+                            st.warning(f"⚠️ เลือกครบ {num_cards} ใบแล้ว!")
 
-    # ปุ่มรีเซ็ตการเลือก
-    if st.session_state.selected_cards:
-        if st.button("🔄 ล้างการเลือกไพ่ทั้งหมด"):
-            st.session_state.selected_cards = []
+    # ปุ่มเคลียร์การเลือก
+    if st.session_state.selected_card_indices:
+        if st.button("🔄 เริ่มเลือกใหม่"):
+            st.session_state.selected_card_indices = []
             st.rerun()
 
     # เมื่อเลือกครบตามจำนวนที่กำหนด ให้แสดงปุ่มเปิดคำทำนาย
-    if len(st.session_state.selected_cards) == num_cards:
+    if len(st.session_state.selected_card_indices) == num_cards:
         st.markdown("---")
-        if st.button("✨ เปิดไพ่ทำนายผลดวงชะตาเด็ดขาด"):
+        if st.button("✨ เปิดไพ่ทำนายผลดวงชะตา"):
             st.subheader(f"✨ ผลการทำนายไพ่ทาโรต์ ({spread_type}) ของคุณ {user_info['name']}")
             
             for i in range(num_cards):
-                card_idx = st.session_state.selected_cards[i]
-                # ดึงไพ่ตามลำดับที่คลิกเลือกจากสำรับที่สับไว้
-                card = st.session_state.tarot_deck[card_idx % len(st.session_state.tarot_deck)]
+                card_idx = st.session_state.selected_card_indices[i]
+                card = st.session_state.tarot_deck_78[card_idx]
                 pos_title = positions[i]
                 st.markdown(f"""
                 <div class="tarot-card">
@@ -1056,7 +1083,7 @@ elif menu == "🃏 ไพ่ทาโรต์":
             </div>
             """, unsafe_allow_html=True)
     else:
-        st.info(f"💡 กรุณาคลิกเลือกกองไพ่คว่ำให้ครบจำนวน {num_cards} ใบ จึงจะสามารถเปิดคำทำนายได้ครับ")
+        st.info(f"💡 กรุณาคลิกเลือกไพ่คว่ำบนโต๊ะให้ครบจำนวน {num_cards} ใบ จึงจะสามารถเปิดคำทำนายได้ครับ")
         
     # 9. คำคมพลังบวกประจำวัน (จัดเต็มครบทั้ง 366 ประโยคสำหรับทุกวันตลอดปี)
 quotes = [
