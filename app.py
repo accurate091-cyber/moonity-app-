@@ -890,7 +890,7 @@ elif menu == "🃏 ไพ่ทาโรต์":
             "9. ความหวังและลึกๆ ในใจ", "10. บทสรุปสุดท้าย"
         ]
 
-    # ตั้งค่าฐานข้อมูลไพ่ 78 ใบ (ปรับความหมายให้สมูทและระบุคำตอบชัดเจน)
+    # ตั้งค่าฐานข้อมูลไพ่ 78 ใบ (ชุดใหญ่ + ชุดเล็ก)
     major_arcana = [
         {"name": "0. The Fool 🎒", "meaning": "คำตอบ: ใช่ / ได้ (ลุยเลย) — การเริ่มต้นออกเดินทางครั้งใหม่ การกล้าเสี่ยง และการเปิดรับโอกาสด้วยความบริสุทธิ์ใจ"},
         {"name": "1. The Magician 🪄", "meaning": "คำตอบ: ใช่ / ได้ (ทำได้แน่นอน) — พลังอำนาจในตัว ทักษะความสามารถ และการลงมือเนรมิตเป้าหมายให้เป็นจริง"},
@@ -917,7 +917,6 @@ elif menu == "🃏 ไพ่ทาโรต์":
     ]
     
     minor_arcana = [
-        # Wands (ไม้เท้า - ไฟ)
         {"name": "Ace of Wands 🔥", "meaning": "คำตอบ: ใช่ / ได้ (ลุยโปรเจกต์ใหม่) — การเริ่มต้นจุดประกายโปรเจกต์ แรงบันดาลใจ และโอกาสที่ร้อนแรง"},
         {"name": "Two of Wands 🌐", "meaning": "คำตอบ: ได้ (แต่วางแผนให้ดี) — การวางแผนอนาคต การมองการณ์ไกล และการเลือกเส้นทางเดินชีวิต"},
         {"name": "Three of Wands ⛵", "meaning": "คำตอบ: ได้ (รออีกนิดผลลัพธ์กำลังมา) — การรอคอยผลลัพธ์จากการลงทุน การขยายขอบเขต และความสำเร็จที่ใกล้เข้ามา"},
@@ -932,8 +931,6 @@ elif menu == "🃏 ไพ่ทาโรต์":
         {"name": "Knight of Wands 🐎", "meaning": "คำตอบ: ได้ (ไฟแรงแต่ระวังใจร้อน) — ความเร่งรีบ ความกล้าหาญ การเดินทางไกล และการกระทำด้วยอารมณ์ชั่ววูบ"},
         {"name": "Queen of Wands 👑🔥", "meaning": "คำตอบ: ใช่ / ได้ (มั่นใจมีเสน่ห์) — ความเป็นผู้นำ ความมั่นใจ เสน่ห์แพรวพราว และพลังบวกที่ดึงดูดผู้คน"},
         {"name": "King of Wands 🤴🔥", "meaning": "คำตอบ: ใช่ / ได้ (วิสัยทัศน์เยี่ยม) — วิสัยทัศน์กว้างไกล อำนาจ การบริหารจัดการ และความสำเร็จระดับสูง"},
-        
-        # Cups (ถ้วย - น้ำ)
         {"name": "Ace of Cups 🍷", "meaning": "คำตอบ: ใช่ / ได้ (หัวใจพองโตสมหวัง) — ความรักครั้งใหม่ หัวใจพองโต ความสุขล้นปรี่ และการเริ่มต้นความสัมพันธ์ที่ดี"},
         {"name": "Two of Cups 🥂", "meaning": "คำตอบ: ใช่ / ได้ (เข้าใจกันดีเป็นคู่รัก/หุ้นส่วน) — มิตรภาพ ความเข้าใจอันดี การจับมือเป็นหุ้นส่วน หรือความรักที่สมดุล"},
         {"name": "Three of Cups 💃", "meaning": "คำตอบ: ใช่ / ได้ (เฉลิมฉลองสนุกสนาน) — การเฉลิมฉลองกับเพื่อนฝูง ความสุขสนุกสนาน และมิตรภาพที่อบอุ่น"},
@@ -948,8 +945,6 @@ elif menu == "🃏 ไพ่ทาโรต์":
         {"name": "Knight of Cups 🌊", "meaning": "คำตอบ: ใช่ / ได้ (โรแมนติกตามใจฝัน) — ข้อเสนอเรื่องความรัก โรแมนติก และการทำตามหัวใจและความรู้สึก"},
         {"name": "Queen of Cups 👸💧", "meaning": "คำตอบ: ใช่ / ได้ (เห็นอกเห็นใจเยียวยา) — ความเห็นอกเห็นใจ สัญชาตญาณที่แม่นยำ และการเยียวยาจิตใจ"},
         {"name": "King of Cups 🤴💧", "meaning": "คำตอบ: ใช่ / ได้ (มั่นคงใจเย็น) — ความมั่นคงทางอารมณ์ วุฒิภาวะในการจัดการปัญหาด้วยความใจเย็นและเมตตา"},
-        
-        # Swords (ดาบ - ลม)
         {"name": "Ace of Swords 🗡️", "meaning": "คำตอบ: ใช่ / ได้ (ชัดเจนเด็ดขาด) — ไอเดียเฉียบคม ความจริงที่ปรากฏ และการตัดสินใจที่เด็ดขาดชัดเจน"},
         {"name": "Two of Swords 👁️‍🗨️", "meaning": "คำตอบ: ไม่ใช่ / ยังลังเลอึดอัด — การปิดกั้นความจริง การลังเลตัดสินใจ หรือพยายามรักษาสมดุลท่ามกลางความอึดอัด"},
         {"name": "Three of Swords 💔", "meaning": "คำตอบ: ไม่ใช่ / เจ็บปวดผิดหวัง — ความเจ็บปวด เสียใจ อกหัก หรือการได้รับข่าวสารที่แทงใจดำ"},
@@ -964,8 +959,6 @@ elif menu == "🃏 ไพ่ทาโรต์":
         {"name": "Knight of Swords 🐎🗡️", "meaning": "คำตอบ: ได้ (รวดเร็วแต่ระวังคำพูด) — ความเร่งรีบ การพูดตรง แรงผลักดันสูงแต่ต้องระวังคำพูดทำร้ายผู้อื่น"},
         {"name": "Queen of Swords 👸🗡️", "meaning": "คำตอบ: ใช้เหตุผลและความเด็ดขาด — หญิงสาวผู้ใช้เหตุผลและความเด็ดขาด มองทะลุปรุโปร่ง และยึดมั่นความถูกต้อง"},
         {"name": "King of Swords 🤴🗡️", "meaning": "คำตอบ: ใช่ (หากยึดกฎและเหตุผล) — ผู้นำที่ใช้กฎหมายและเหตุผลขั้นสูงสุด ความยุติธรรมและความเฉียบคม"},
-        
-        # Pentacles (เหรียญ - ดิน)
         {"name": "Ace of Pentacles 🪙", "meaning": "คำตอบ: ใช่ / ได้แน่นอน (โชคลาภเงินทอง) — จุดเริ่มต้นทางการเงิน โอกาสทำเงิน งานใหม่ หรือความมั่งคั่งที่เข้ามา"},
         {"name": "Two of Pentacles 🤹", "meaning": "คำตอบ: ได้ (บริหารจัดการให้ดี) — การหมุนเงิน การบริหารจัดการภาระหลายๆ อย่างพร้อมกันอย่างยืดหยุ่น"},
         {"name": "Three of Pentacles 🏛️", "meaning": "คำตอบ: ใช่ / ได้ (ทำงานเป็นทีมสำเร็จ) — การทำงานร่วมกันเป็นทีม ฝีมือเป็นที่ยอมรับ และการสร้างผลงานคุณภาพ"},
@@ -984,8 +977,7 @@ elif menu == "🃏 ไพ่ทาโรต์":
 
     full_deck = major_arcana + minor_arcana
 
-    # CSS ป้องกันปุ่มข้อความตัดบรรทัด ขยายไพ่ 250% และคงระยะห่าง
-# CSS ขยายขนาดปุ่มและไอคอนให้ใหญ่ขึ้นอย่างแท้จริง
+    # CSS ป้องกันปุ่มข้อความตัดบรรทัด ขยายไพ่ และคงระยะห่าง
     st.markdown("""
         <style>
         .stButton button p {
@@ -1001,30 +993,28 @@ elif menu == "🃏 ไพ่ทาโรต์":
             flex: 0 0 auto !important;
             width: auto !important;
             min-width: 0px !important;
-            padding: 0px 2px !important;
+            padding: 0px 1px !important;
         }
-        div.stButton > button {
+        .stButton > button {
             background-color: transparent !important;
             background: transparent !important;
             border: none !important;
             box-shadow: none !important;
             outline: none !important;
-            padding: 5px 10px !important;
-            margin-left: -10px !important;
-            margin-right: -10px !important;
-            font-size: 4rem !important; /* ปรับขนาดให้ใหญ่ขึ้นสะใจ */
-            height: auto !important;
-            min-height: unset !important;
+            padding: 0px !important;
+            margin-left: -12px !important;
+            margin-right: -12px !important;
+            font-size: 5rem !important; 
         }
-        div.stButton > button:hover,
-        div.stButton > button:focus,
-        div.stButton > button:active {
+        .stButton > button:hover,
+        .stButton > button:focus,
+        .stButton > button:active {
             background-color: transparent !important;
             background: transparent !important;
             border: none !important;
             box-shadow: none !important;
             outline: none !important;
-            transform: scale(1.25);
+            transform: scale(1.2);
             z-index: 99;
         }
         </style>
@@ -1053,7 +1043,7 @@ elif menu == "🃏 ไพ่ทาโรต์":
 
     st.markdown(f"**🎴 เลือกไพ่ของคุณ (เลือกแล้ว {len(st.session_state.selected_card_indices)} / {num_cards} ใบ):**")
 
-    # จัดเรียง 20 คอลัมน์ต่อแถวเท่าเดิม
+    # จัดเรียง 20 คอลัมน์ต่อแถว
     row_size = 20
     deck_rows = [st.session_state.tarot_deck_78[i:i + row_size] for i in range(0, len(st.session_state.tarot_deck_78), row_size)]
 
@@ -1074,7 +1064,7 @@ elif menu == "🃏 ไพ่ทาโรต์":
                             st.session_state.selected_card_indices.append(absolute_idx)
                             st.rerun()
                         else:
-                            st.toast(f"⚠️ เลือกครบ {num_cards} ใบแล้ว!", )
+                            st.toast(f"⚠️ เลือกครบ {num_cards} ใบแล้ว!", icon="⚠️")
 
     # ปุ่มรีเซ็ตการเลือก
     if st.session_state.selected_card_indices:
@@ -1082,35 +1072,33 @@ elif menu == "🃏 ไพ่ทาโรต์":
             st.session_state.selected_card_indices = []
             st.rerun()
 
-   # เมื่อเลือกครบตามจำนวนที่กำหนด ให้แสดงปุ่มเปิดคำทำนาย
-if len(st.session_state.selected_card_indices) == num_cards:
-    st.markdown("---")
-    if st.button("✨ เปิดไพ่ทำนายผลดวงชะตา"):
-        st.subheader(f"✨ ผลการทำนายไพ่ทาโรต์ ({spread_type}) ของคุณ {user_info['name']}")
-        
-        for i in range(num_cards):
-            card_idx = st.session_state.selected_card_indices[i]
-            card = st.session_state.tarot_deck_78[card_idx]
-            pos_title = positions[i]
+    # เมื่อเลือกครบตามจำนวนที่กำหนด ให้แสดงปุ่มเปิดคำทำนาย
+    if len(st.session_state.selected_card_indices) == num_cards:
+        st.markdown("---")
+        if st.button("✨ เปิดไพ่ทำนายผลดวงชะตา"):
+            st.subheader(f"✨ ผลการทำนายไพ่ทาโรต์ ({spread_type}) ของคุณ {user_info['name']}")
             
+            for i in range(num_cards):
+                card_idx = st.session_state.selected_card_indices[i]
+                card = st.session_state.tarot_deck_78[card_idx]
+                pos_title = positions[i]
+                
+                st.markdown(f"""
+                <div class="tarot-card" style="background: white; padding: 15px; border-radius: 10px; border: 2px solid #7c3aed; margin-bottom: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+                    <h4 style="color: #6b21a8; margin-bottom: 8px; border-bottom: 1px solid #e9d5ff; padding-bottom: 5px;">{pos_title}</h4>
+                    <p style="font-size: 1.1rem; font-weight: 600; color: #1e1b4b; margin-bottom: 6px;">🎴 ไพ่ที่ได้: {card['name']}</p>
+                    <p class="fortune-desc" style="margin: 0; color: #334155; line-height: 1.5;">{card['meaning']}</p>
+                </div>
+                """, unsafe_allow_html=True)
+                
             st.markdown(f"""
-            <div class="tarot-card" style="background: white; padding: 15px; border-radius: 10px; border: 2px solid #7c3aed; margin-bottom: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
-                <h4 style="color: #6b21a8; margin-bottom: 8px; border-bottom: 1px solid #e9d5ff; padding-bottom: 5px;">{pos_title}</h4>
-                <p style="font-size: 1.1rem; font-weight: 600; color: #1e1b4b; margin-bottom: 6px;">🎴 ไพ่ที่ได้: {card['name']}</p>
-                <p class="fortune-desc" style="margin: 0; color: #334155; line-height: 1.5;">{card['meaning']}</p>
+            <div class="summary-box" style="background: #f3e8ff; padding: 15px; border-radius: 10px; border-left: 5px solid #7c3aed; margin-top: 20px;">
+                <h4 style="color: #6b21a8; margin-top: 0;">💡 คำแนะนำจากสำรับไพ่</h4>
+                <p style="margin-bottom: 0; color: #3b0764;">ขอให้คุณ {user_info['name']} นำคำทำนายและแนวทางจากไพ่ไปปรับใช้ด้วยสติและความมั่นใจ ขอให้วันนี้เป็นวันที่ดีและเต็มไปด้วยพลังงานบวกครับ!</p>
             </div>
             """, unsafe_allow_html=True)
-            
-        # กล่องสรุปผลอยู่นอกลูป for จะแสดงผลแค่ครั้งเดียวตอนท้ายสุด
-        st.markdown(f"""
-        <div class="summary-box" style="background: #f3e8ff; padding: 15px; border-radius: 10px; border-left: 5px solid #7c3aed; margin-top: 20px;">
-            <h4 style="color: #6b21a8; margin-top: 0;">💡 คำแนะนำจากสำรับไพ่</h4>
-            <p style="margin-bottom: 0; color: #3b0764;">ขอให้คุณ {user_info['name']} นำคำทำนายและแนวทางจากไพ่ไปปรับใช้ด้วยสติและความมั่นใจ ขอให้วันนี้เป็นวันที่ดีและเต็มไปด้วยพลังงานบวกครับ!</p>
-        </div>
-        """, unsafe_allow_html=True)
-else:
-    st.info(f"💡 กรุณาคลิกเลือกไพ่คว่ำบนโต๊ะให้ครบจำนวน {num_cards} ใบ จึงจะสามารถเปิดคำทำนายได้ครับ")
-        
+    else:
+        st.info(f"💡 กรุณาคลิกเลือกไพ่คว่ำบนโต๊ะให้ครบจำนวน {num_cards} ใบ จึงจะสามารถเปิดคำทำนายได้ครับ")
     # 9. คำคมพลังบวกประจำวัน (จัดเต็มครบทั้ง 366 ประโยคสำหรับทุกวันตลอดปี)
 quotes = [
     "✨ 'ทุกวันคือโอกาสใหม่ในการเริ่มต้นสร้างสิ่งดีๆ ให้ตัวเอง'",
