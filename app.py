@@ -17,7 +17,7 @@ st.markdown("""
     </head>
 """, unsafe_allow_html=True)
 
-# 2. Custom CSS ตกแต่ง UI ตามดีไซน์
+# 2. Custom CSS ตกแต่ง UI (ขยายขนาดวงกลมสีให้ใหญ่ขึ้น)
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Mitr:wght@300;400;500;600&display=swap');
@@ -94,7 +94,7 @@ st.markdown("""
         min-width: 130px;
         background-color: #ffffff;
         border: 1px solid #f1f5f9;
-        padding: 10px 14px;
+        padding: 12px 14px;
         border-radius: 10px;
         box-shadow: 0 2px 4px rgba(0,0,0,0.03);
         text-align: center;
@@ -102,24 +102,25 @@ st.markdown("""
     .lucky-title {
         font-size: 0.8rem;
         color: #64748b;
-        margin-bottom: 2px;
+        margin-bottom: 6px;
     }
     .lucky-value {
-        font-size: 0.95rem;
+        font-size: 1rem;
         font-weight: 600;
         color: #0f172a;
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 6px;
-        margin-top: 4px;
+        gap: 10px;
+        margin-top: 6px;
     }
-    .color-dot {
-        width: 16px;
-        height: 16px;
+    .color-circle-large {
+        width: 32px;
+        height: 32px;
         border-radius: 50%;
         display: inline-block;
-        border: 1px solid #cbd5e1;
+        border: 2px solid #ffffff;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.15);
     }
 
     .fortune-card {
@@ -184,7 +185,7 @@ st.sidebar.markdown("""
 """, unsafe_allow_html=True)
 st.sidebar.markdown("---")
 
-# 4. ระบบบันทึกข้อมูลดวงชะตา (Session State) - ปรับหัวข้อตามรีเควส
+# 4. ระบบบันทึกข้อมูลดวงชะตา (Session State)
 st.sidebar.header("✨ บันทึกต้นกำเนิดดวงดาว")
 
 if "user_data" not in st.session_state:
@@ -239,7 +240,7 @@ else:
 
 st.markdown(profile_html, unsafe_allow_html=True)
 
-# 6. ระบบสุ่มเฉดสีจากโค้ด Hex แบบไดนามิก
+# 6. ระบบสุ่มเฉดสีจากโค้ด Hex แบบไดนามิก (ซ่อนโค้ด แสดงเฉพาะวงกลมสีใหญ่ๆ)
 today_seed = int(datetime.now().strftime("%Y%m%d"))
 random.seed(today_seed)
 
@@ -273,25 +274,23 @@ lucky_widget = f"""
     <div class="lucky-card">
         <div class="lucky-title">🎨 สีมงคลวันนี้</div>
         <div class="lucky-value">
-            <span class="color-dot" style="background-color: {hex1};"></span>
-            <span class="color-dot" style="background-color: {hex2};"></span>
-            <span style="font-size: 0.85rem;">{hex1.upper()} / {hex2.upper()}</span>
+            <span class="color-circle-large" style="background-color: {hex1};"></span>
+            <span class="color-circle-large" style="background-color: {hex2};"></span>
         </div>
     </div>
     <div class="lucky-card">
         <div class="lucky-title">⛔ สีต้องห้าม</div>
         <div class="lucky-value">
-            <span class="color-dot" style="background-color: {hex_forbidden};"></span>
-            <span style="font-size: 0.85rem;">{hex_forbidden.upper()}</span>
+            <span class="color-circle-large" style="background-color: {hex_forbidden};"></span>
         </div>
     </div>
     <div class="lucky-card">
         <div class="lucky-title">🔢 เลขนำโชค</div>
-        <div class="lucky-value">{lucky_number_text}</div>
+        <div class="lucky-value" style="font-size: 0.95rem; margin-top: 10px;">{lucky_number_text}</div>
     </div>
     <div class="lucky-card">
         <div class="lucky-title">🧭 ทิศมงคล</div>
-        <div class="lucky-value" style="font-size: 0.85rem;">{lucky_direction_text}</div>
+        <div class="lucky-value" style="font-size: 0.85rem; margin-top: 10px;">{lucky_direction_text}</div>
     </div>
 </div>
 """
