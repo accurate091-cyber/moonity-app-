@@ -1,9 +1,17 @@
 import random
 from datetime import datetime
 import streamlit as st
+# 1. ตั้งค่าหน้าของแอป (ต้องอยู่บนสุด)
+st.set_page_config(
+    page_title="🔮 Moonity | คลินิกฮีลใจสไตล์สายมู",
+    page_icon="🔮",
+    layout="centered"
+)
+
+# 2. Custom CSS ตกแต่ง UI (วางไว้หลัง set_page_config)
 st.markdown("""
     <style>
-    /* บังคับหัวข้อ ป้ายชื่อ และข้อความทั้งหมดใน Sidebar ให้เป็นสีเข้มชัดเจนเสมอ */
+    /* บังคับตัวหนังสือและหัวข้อทั้งหมดเฉพาะใน Sidebar ให้เป็นสีม่วงเข้ม */
     [data-testid="stSidebar"] p, 
     [data-testid="stSidebar"] span, 
     [data-testid="stSidebar"] label, 
@@ -11,8 +19,9 @@ st.markdown("""
     [data-testid="stSidebar"] h2, 
     [data-testid="stSidebar"] h3, 
     [data-testid="stSidebar"] h4,
-    [data-testid="stSidebar"] div[data-testid="stMarkdownContainer"] {
-        color: #1e1b4b !important;
+    [data-testid="stSidebar"] div,
+    [data-testid="stSidebar"] .stRadio label p {
+        color: #4c1d95 !important;
     }
 
     /* บังคับช่องกรอกข้อมูลให้พื้นหลังขาว ตัวหนังสือดำเสมอ */
@@ -27,13 +36,6 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-
-# 1. ตั้งค่าหน้าตาของแอป
-st.set_page_config(
-    page_title="🔮 Moonity | คลินิกฮีลใจสไตล์สายมู",
-    page_icon="🔮",
-    layout="centered"
-)
 
 st.markdown("""
     <head>
