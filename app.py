@@ -977,9 +977,12 @@ elif menu == "🃏 ไพ่ทาโรต์":
 
     full_deck = major_arcana + minor_arcana
 
-    # CSS บีบระยะห่างให้การ์ดชิดกันมากๆ และขยายขนาดไอคอนให้ใหญ่สะใจ
+    # CSS ป้องกันปุ่มข้อความตัดบรรทัด ขยายไพ่ 250% และคงระยะห่าง
     st.markdown("""
         <style>
+        .stButton button p {
+            white-space: nowrap !important;
+        }
         [data-testid="stHorizontalBlock"] {
             display: flex !important;
             flex-wrap: wrap !important;
@@ -999,9 +1002,9 @@ elif menu == "🃏 ไพ่ทาโรต์":
             box-shadow: none !important;
             outline: none !important;
             padding: 0px !important;
-            margin-left: -8px !important;
-            margin-right: -8px !important;
-            font-size: 3.2rem !important; /* ขยายขนาดไพ่ให้ใหญ่ขึ้นสะใจ */
+            margin-left: -12px !important;
+            margin-right: -12px !important;
+            font-size: 5rem !important; 
         }
         .stButton > button:hover,
         .stButton > button:focus,
@@ -1011,7 +1014,7 @@ elif menu == "🃏 ไพ่ทาโรต์":
             border: none !important;
             box-shadow: none !important;
             outline: none !important;
-            transform: scale(1.35);
+            transform: scale(1.2);
             z-index: 99;
         }
         </style>
@@ -1040,7 +1043,7 @@ elif menu == "🃏 ไพ่ทาโรต์":
 
     st.markdown(f"**🎴 เลือกไพ่ของคุณ (เลือกแล้ว {len(st.session_state.selected_card_indices)} / {num_cards} ใบ):**")
 
-    # จัดเรียงเป็น 20 คอลัมน์ต่อแถวเพื่อให้การ์ดชิดติดกันแน่นหนา
+    # จัดเรียง 20 คอลัมน์ต่อแถวเท่าเดิม
     row_size = 20
     deck_rows = [st.session_state.tarot_deck_78[i:i + row_size] for i in range(0, len(st.session_state.tarot_deck_78), row_size)]
 
