@@ -1064,7 +1064,7 @@ elif menu == "🃏 ไพ่ทาโรต์":
                             st.session_state.selected_card_indices.append(absolute_idx)
                             st.rerun()
                         else:
-                            st.warning(f"⚠️ เลือกครบ {num_cards} ใบแล้ว!")
+                            st.toast(f"⚠️ เลือกครบ {num_cards} ใบแล้ว!", )
 
     # ปุ่มรีเซ็ตการเลือก
     if st.session_state.selected_card_indices:
