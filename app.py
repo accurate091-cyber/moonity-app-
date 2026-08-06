@@ -11,12 +11,12 @@ st.set_page_config(
 
 st.markdown("""
     <style>
-    /* สยบความดื้อ บังคับทุกชั้นกล่องใน Sidebar ให้เป็นสีม่วงเข้มและตัวหนังสือขาวทั้งหมด */
+    /* เปลี่ยนพื้นหลัง Sidebar เป็นสีเขียวเข้มหรูหรา และบังคับตัวหนังสือเป็นสีขาวทั้งหมด */
     [data-testid="stSidebar"], 
     [data-testid="stSidebar"] div, 
     [data-testid="stSidebar"] section,
     [data-testid="stSidebar"] [data-testid="stVerticalBlock"] {
-        background-color: #2e1065 !important;
+        background-color: #064e3b !important;
     }
     
     [data-testid="stSidebar"] *, 
@@ -32,16 +32,16 @@ st.markdown("""
         -webkit-text-fill-color: #ffffff !important;
     }
 
-    /* ช่องกรอกข้อมูลพื้นหลังสีม่วงกลาง ตัวหนังสือขาว */
+    /* ช่องกรอกข้อมูลพื้นหลังสีเขียวกลาง ตัวหนังสือขาว */
     [data-testid="stSidebar"] input, 
     [data-testid="stSidebar"] textarea, 
     [data-testid="stSidebar"] select {
-        background-color: #4c1d95 !important;
+        background-color: #047857 !important;
         color: #ffffff !important;
         -webkit-text-fill-color: #ffffff !important;
     }
     div[data-baseweb="input"] {
-        background-color: #4c1d95 !important;
+        background-color: #047857 !important;
     }
     </style>
 """, unsafe_allow_html=True)
