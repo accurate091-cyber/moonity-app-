@@ -9,6 +9,7 @@ st.set_page_config(
     layout="centered"
 )
 
+
 st.markdown("""
     <style>
     /* เปลี่ยนพื้นหลัง Sidebar เป็นสีเขียวเข้มหรูหรา และบังคับตัวหนังสือเป็นสีขาวทั้งหมด */
