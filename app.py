@@ -9,7 +9,7 @@ st.set_page_config(
     layout="centered"
 )
 
-# เพิ่ม Meta Tags ให้แสดงผลเวลาแชร์ลิงก์
+# เพิ่ม Meta Tags สำหรับแชร์ลิงก์
 st.markdown("""
     <head>
         <meta property="og:title" content="🔮 Moonity | คลินิกฮีลใจสไตล์สายมู">
@@ -17,7 +17,7 @@ st.markdown("""
     </head>
 """, unsafe_allow_html=True)
 
-# 2. Custom CSS ตกแต่ง
+# 2. Custom CSS ตกแต่ง UI ตามดีไซน์
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Mitr:wght@300;400;500;600&display=swap');
@@ -46,10 +46,21 @@ st.markdown("""
         font-size: 1.8rem;
         font-weight: 600;
         color: #4c1d95;
-        margin-bottom: 10px;
+        margin-bottom: 5px;
         display: flex;
         align-items: center;
         gap: 8px;
+    }
+
+    .sidebar-concept {
+        font-size: 0.82rem;
+        color: #6b21a8;
+        background: rgba(255, 255, 255, 0.6);
+        padding: 8px 10px;
+        border-radius: 8px;
+        margin-bottom: 15px;
+        line-height: 1.4;
+        border-left: 3px solid #8b5cf6;
     }
 
     .user-profile-box {
@@ -152,49 +163,55 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# 3. โลโก้ Moonity ใน Sidebar
+# 3. โลโก้และแนวคิดใน Sidebar
 st.sidebar.markdown('<div class="sidebar-logo-title">🔮 Moonity</div>', unsafe_allow_html=True)
+st.sidebar.markdown("""
+<div class="sidebar-concept">
+    ✨ <b>แนวความคิด:</b> โชคชะตาคือเส้นทางของเราเอง ตัวเราต่างหากที่กำหนดอนาคต
+</div>
+""", unsafe_allow_html=True)
 st.sidebar.markdown("---")
 
-# 4. ระบบบันทึกข้อมูลดวงชะตา (Session State) - เปลี่ยนค่าเริ่มต้นเป็น "ดวงดี" 1/1/2000 00:00
+# 4. ระบบบันทึกข้อมูลดวงชะตา (Session State)
 st.sidebar.header("✨ บันทึกดวงชะตาของคุณ")
 
 if "user_data" not in st.session_state:
     st.session_state.user_data = {
-        "name": "ดวงดี",
+        "name": "คุณดวงดี",
         "birth_date": "01/01/2000",
         "birth_time": "00:00 น.",
         "mode": "full"
     }
 
-profile_mode = st.sidebar.radio("เลือกวิธีใช้งาน:", ["📝 บันทึกข้อมูลส่วนตัว", "👤 ใช้งานแบบผู้มาเยือน"])
+profile_mode = st.sidebar.radio("เลือกวิธีใช้งาน:", ["📝 บันทึกข้อมูลส่วนตัว (วัน เดือน ปี เกิด)", "👤 โหมดบุคคลทั่วไป"])
 
-if profile_mode == "📝 บันทึกข้อมูลส่วนตัว":
+if profile_mode == "📝 บันทึกข้อมูลส่วนตัว (วัน เดือน ปี เกิด)":
     input_name = st.sidebar.text_input("ชื่อ หรือ ชื่อเล่นของคุณ:", st.session_state.user_data["name"])
     input_birth_date = st.sidebar.date_input("วันเกิด:", datetime(2000, 1, 1))
     input_birth_time = st.sidebar.time_input("เวลาเกิด:", datetime.strptime("00:00", "%H:%M").time())
     
-    if st.sidebar.button("💾 บันทึกข้อมูลดวงชะตา"):
+    if st.sidebar.button("💾 บันทึกต้นกำเนิดดวงชะตา"):
         st.session_state.user_data = {
             "name": input_name.strip(),
             "birth_date": input_birth_date.strftime("%d/%m/%Y"),
             "birth_time": input_birth_time.strftime("%H:%M") + " น.",
             "mode": "full"
         }
-        st.sidebar.success("บันทึกข้อมูลเรียบร้อยแล้วจ้า! ✨")
+        st.sidebar.success("บันทึกต้นกำเนิดดวงชะตาเรียบร้อย! ✨")
 
     user_info = st.session_state.user_data
 else:
     user_info = {"name": "ผู้มาเยือน", "birth_date": "ไม่ได้ระบุ", "birth_time": "ไม่ได้ระบุ", "mode": "guest"}
 
 st.sidebar.markdown("---")
-menu = st.sidebar.radio("📌 เลือกโหมดคำทำนาย", ["✨ ดวงรายวันเฉพาะบุคคล", "⛩️ เซียมซีออนไลน์", "🃏 ไพ่ทาโรต์ 3 ใบ"])
+st.sidebar.subheader("📌 เลือกโหมดคำทำนาย")
+menu = st.sidebar.radio("เลือกเส้นทางดวงดาว", ["✨ ดวงรายวันเฉพาะบุคคล", "⛩️ เซียมซีออนไลน์", "🃏 ไพ่ทาโรต์ 3 ใบ"])
 
-# 5. แสดงกล่องข้อมูลส่วนตัวชิดซ้ายด้านบน
+# 5. แสดงกล่องข้อมูลดวงชะตาด้านบน
 if user_info['mode'] == 'full':
     profile_html = f"""
     <div class="user-profile-box">
-        <div class="user-profile-title">✨ ข้อมูลดวงชะตา: คุณ{user_info['name']}</div>
+        <div class="user-profile-title">✨ ข้อมูลดวงชะตา: {user_info['name']}</div>
         <div class="user-profile-detail">
             📅 <b>วันเกิด:</b> {user_info['birth_date']} &nbsp;|&nbsp; ⏰ <b>เวลาเกิด:</b> {user_info['birth_time']}
         </div>
@@ -203,21 +220,21 @@ if user_info['mode'] == 'full':
 else:
     profile_html = f"""
     <div class="user-profile-box">
-        <div class="user-profile-title">✨ ข้อมูลดวงชะตา: คุณ{user_info['name']}</div>
-        <div class="user-profile-detail">🎲 โหมดใช้งานแบบผู้มาเยือน (เลือกโหมด "บันทึกข้อมูลส่วนตัว" ด้านข้างเพื่อใส่ข้อมูลของคุณ)</div>
+        <div class="user-profile-title">✨ ข้อมูลดวงชะตา: {user_info['name']}</div>
+        <div class="user-profile-detail">🎲 โหมดบุคคลทั่วไป (เลือกโหมดบันทึกข้อมูลส่วนตัวด้านข้างเพื่อผูกดวงชะตา)</div>
     </div>
     """
 
 st.markdown(profile_html, unsafe_allow_html=True)
 
-# 6. ระบบสุ่มสี เลข ทิศ ตามวันที่ปัจจุบัน (เปลี่ยนอัตโนมัติทุกวัน)
+# 6. ระบบสุ่มสี เลข ทิศ ตามวันที่ปัจจุบัน (เปลี่ยนอัตโนมัติทุกวันตามดีไซน์)
 today_seed = int(datetime.now().strftime("%Y%m%d"))
 random.seed(today_seed)
 
 colors_pool = [
+    ("ส้มพาสเทล / ขาว", "สีดำ", "11, 42, 88", "ทิศตะวันตก"),
     ("ชมพู / ฟ้าเข้ม", "สีแดง", "16, 89, 95", "ตะวันออกเฉียงเหนือ"),
     ("เขียวตองอ่อน / ครีม", "สีม่วงเข้ม", "24, 56, 91", "ทิศเหนือ"),
-    ("ส้มพาสเทล / ขาว", "สีดำ", "11, 42, 88", "ทิศตะวันตก"),
     ("เหลืองนวล / ฟ้าอ่อน", "สีเทาเข้ม", "35, 78, 99", "ทิศใต้"),
     ("ม่วงลาเวนเดอร์ / เขียวมัทฉะ", "สีน้ำตาลไหม้", "14, 29, 66", "ทิศตะวันออก")
 ]
@@ -248,9 +265,10 @@ st.markdown(lucky_widget, unsafe_allow_html=True)
 
 # 7. เนื้อหาแต่ละโหมด
 if menu == "✨ ดวงรายวันเฉพาะบุคคล":
-    st.subheader(f"✨ คำทำนายประจำวันสำหรับ: คุณ{user_info['name']}")
+    st.subheader(f"✨ คำทำนายประจำวันสำหรับ: {user_info['name']}")
     
-    if st.button("🔮 ผูกดวงรับคำทำนาย"):
+    # เปลี่ยนปุ่มเป็น "รับคำทำนาย" ตามที่ดีไซน์โน้ตไว้
+    if st.button("🔮 รับคำทำนาย"):
         work_list = [
             "การงานราบรื่น มีผู้ใหญ่คอยซัพพอร์ตและสนับสนุนผลงาน",
             "ไอเดียสร้างสรรค์พุ่งกระฉูด เหมาะสำหรับการเริ่มโปรเจกต์ใหม่",
@@ -288,7 +306,7 @@ elif menu == "⛩️ เซียมซีออนไลน์":
     st.subheader("⛩️ เขย่าเซียมซีตั้งจิตอธิษฐาน")
     st.caption("ตั้งจิตให้นิ่ง นึกถึงสิ่งที่อยากรู้ แล้วกดเขย่ากระบอกเซียมซี")
     
-    if st.button("🎯 เขย่ากระบอกเซียมซี"):
+    if st.button("🎯 รับคำทำนาย"):
         stick = random.randint(1, 5)
         
         fortunes_db = {
@@ -347,7 +365,7 @@ elif menu == "⛩️ เซียมซีออนไลน์":
 
 elif menu == "🃏 ไพ่ทาโรต์ 3 ใบ":
     st.subheader("🃏 เปิดไพ่ทาโรต์ 3 ใบ (อดีต - ปัจจุบัน - อนาคต)")
-    st.caption("ตั้งจิตอธิษฐานถึงเรื่องที่ต้องการคำตอบ แล้วกดปุ่มทำนาย")
+    st.caption("ตั้งจิตอธิษฐานถึงเรื่องที่ต้องการคำตอบ แล้วกดปุ่มรับคำทำนาย")
     
     cards_db = [
         {
@@ -387,7 +405,7 @@ elif menu == "🃏 ไพ่ทาโรต์ 3 ใบ":
         }
     ]
     
-    if st.button("🔮 สุ่มเปิดไพ่ทำนาย"):
+    if st.button("🔮 รับคำทำนาย"):
         drawn = random.sample(cards_db, 3)
         st.subheader(f"✨ ผลการทำนายไพ่ทาโรต์ของคุณ {user_info['name']}")
         
@@ -438,10 +456,12 @@ elif menu == "🃏 ไพ่ทาโรต์ 3 ใบ":
         </div>
         """, unsafe_allow_html=True)
 
-# 8. คำคมพลังบวกประจำวัน
+# 8. คำคมพลังบวกประจำวัน (เปลี่ยนทุกครั้งเมื่อกดคลิกหรือ Refresh หน้าเว็บ)
 quotes = [
-    "✨ 'ดวงชะตาเป็นเพียงเข็มทิศ การลงมือทำคือผู้กำหนดทิศทางชีวิตที่แท้จริง'",
-    "🌟 'ทุกวันคือโอกาสใหม่ในการเริ่มต้นสร้างสิ่งดีๆ ให้ตัวเอง'",
-    "💖 'ความเชื่อมั่นในตัวเอง คือคาถาเวทมนตร์ที่ดีที่สุด'"
+    "✨ 'ทุกวันคือโอกาสใหม่ในการเริ่มต้นสร้างสิ่งดีๆ ให้ตัวเอง'",
+    "🌟 'ดวงชะตาเป็นเพียงเข็มทิศ การลงมือทำคือผู้กำหนดทิศทางชีวิตที่แท้จริง'",
+    "💖 'ความเชื่อมั่นในตัวเอง คือคาถาเวทมนตร์ที่ดีที่สุด'",
+    "🌿 'ไม่มีคำว่าสายเกินไปสำหรับการเริ่มต้นใหม่ในแบบที่เราต้องการ'",
+    "☀️ 'ปล่อยวางเรื่องที่ควบคุมไม่ได้ แล้วโฟกัสสิ่งที่เราสร้างได้ในวันนี้'"
 ]
 st.markdown(f'<div class="quote-box">{random.choice(quotes)}</div>', unsafe_allow_html=True)
