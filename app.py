@@ -3,15 +3,30 @@ from datetime import datetime
 import streamlit as st
 st.markdown("""
     <style>
-    /* บังคับตัวหนังสือและป้ายข้อความใน Sidebar ทั้งหมดให้เป็นสีเข้มชัดเจน */
+    /* บังคับหัวข้อ ป้ายชื่อ และข้อความทั้งหมดใน Sidebar ให้เป็นสีเข้มชัดเจนเสมอ */
     [data-testid="stSidebar"] p, 
-    [data-testid="stSidebar"] label, 
     [data-testid="stSidebar"] span, 
-    [data-testid="stSidebar"] div {
+    [data-testid="stSidebar"] label, 
+    [data-testid="stSidebar"] h1, 
+    [data-testid="stSidebar"] h2, 
+    [data-testid="stSidebar"] h3, 
+    [data-testid="stSidebar"] h4,
+    [data-testid="stSidebar"] div[data-testid="stMarkdownContainer"] {
         color: #1e1b4b !important;
+    }
+
+    /* บังคับช่องกรอกข้อมูลให้พื้นหลังขาว ตัวหนังสือดำเสมอ */
+    input, textarea, select {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+        -webkit-text-fill-color: #000000 !important;
+    }
+    div[data-baseweb="input"] {
+        background-color: #ffffff !important;
     }
     </style>
 """, unsafe_allow_html=True)
+
 
 # 1. ตั้งค่าหน้าตาของแอป
 st.set_page_config(
