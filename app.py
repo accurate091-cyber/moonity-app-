@@ -867,7 +867,7 @@ elif menu == "⛩️ เซียมซี":
 elif menu == "🃏 ไพ่ทาโรต์":
     import time
     st.subheader("🃏 เปิดไพ่ทาโรต์ศักดิ์สิทธิ์")
-    st.caption("ตั้งจิตอธิษฐาน เลือกรูปแบบการเปิดไพ่ แล้วเลือกหยิบไพ่จากสำรับด้านล่างด้วยตัวเอง")
+    st.caption("ตั้งจิตอธิษฐาน เลือกรูปแบบการเปิดไพ่ แล้วเลือกหยิบไพ่จากสำรับบนโต๊ะด้วยตัวเอง")
     
     spread_type = st.radio("เลือกรูปแบบการเปิดไพ่:", ["🔮 เปิด 1 ใบ", "🃏 เปิด 3 ใบ", "🎴 เปิด 5 ใบ", "📜 เปิด 10 ใบ (เคลติกครอส)"], horizontal=True)
     
@@ -970,23 +970,35 @@ elif menu == "🃏 ไพ่ทาโรต์":
         {"name": "Nine of Pentacles 🍇", "meaning": "ความมั่งคั่ง อิสรภาพทางการเงิน และการใช้ชีวิตอย่างมีความสุขกับความสำเร็จของตนเอง"},
         {"name": "Ten of Pentacles 🏰", "meaning": "ความมั่นคงระดับวงศ์ตระกูล ความมั่งคั่งถาวร มรดก และครอบครัวที่อบอุ่นสมบูรณ์"},
         {"name": "Page of Pentacles 📜🪙", "meaning": "ข่าวดีเรื่องเงิน การเริ่มเรียนรู้ทักษะสร้างอาชีพ หรือโอกาสทางการเงินใหม่ๆ"},
-        {"name": "Knight of Pentacles 🚜", "meaning": "ความขยันขันแข็ง ความมั่นคง ทำแบบช้าแต่ชัวร์ เชื่อถือได้ร้อยเปอร์เซ็นต์"},
+        {"name": "Knight of Pentacles 🚜", "meaning": "ความขยันขันแข็ง ความมั่นคง ทำงานแบบช้าแต่ชัวร์ เชื่อถือได้ร้อยเปอร์เซ็นต์"},
         {"name": "Queen of Pentacles 👸🪙", "meaning": "ความใจดี การบริหารจัดการทรัพย์เก่ง อบอุ่น และสร้างความสุขสบายให้คนรอบข้าง"},
         {"name": "King of Pentacles 🤴🪙", "meaning": "ความมั่งคั่งระดับมหาเศรษฐี ความสำเร็จสูงสุดทางธุรกิจและความมั่นคงปลอดภัยในชีวิต"}
     ]
 
     full_deck = major_arcana + minor_arcana
 
-    # CSS ตกแต่งปุ่มไพ่ให้สะอาดตา ไร้กรอบกวนใจ
+    # CSS บีบระยะห่างระหว่างการ์ดให้ชิดติดกันแบบสนิท ไร้ช่องว่างกว้าง และลบกรอบปุ่ม
     st.markdown("""
         <style>
+        [data-testid="stHorizontalBlock"] {
+            display: flex !important;
+            flex-wrap: wrap !important;
+            justify-content: flex-start !important;
+            gap: 2px !important;
+        }
+        [data-testid="column"] {
+            flex: 0 0 auto !important;
+            width: auto !important;
+            min-width: 0px !important;
+            padding: 0px 2px !important;
+        }
         .stButton > button {
             background-color: transparent !important;
             background: transparent !important;
             border: none !important;
             box-shadow: none !important;
             outline: none !important;
-            padding: 4px !important;
+            padding: 0px !important;
             margin: 0px !important;
             font-size: 2rem !important;
         }
@@ -998,7 +1010,8 @@ elif menu == "🃏 ไพ่ทาโรต์":
             border: none !important;
             box-shadow: none !important;
             outline: none !important;
-            transform: scale(1.2);
+            transform: scale(1.25);
+            z-index: 10;
         }
         </style>
     """, unsafe_allow_html=True)
@@ -1026,8 +1039,8 @@ elif menu == "🃏 ไพ่ทาโรต์":
 
     st.markdown(f"**🎴 เลือกไพ่ของคุณ (เลือกแล้ว {len(st.session_state.selected_card_indices)} / {num_cards} ใบ):**")
 
-    # จัดเรียงเป็น 6 คอลัมน์ต่อแถว (ขนาดกำลังพอดี ไม่แคบจนข้อความเตือนเพี้ยน)
-    row_size = 6
+    # จัดเรียงเป็น 15 คอลัมน์ต่อแถวเพื่อให้การ์ดเรียงชิดติดกันสวยงาม
+    row_size = 15
     deck_rows = [st.session_state.tarot_deck_78[i:i + row_size] for i in range(0, len(st.session_state.tarot_deck_78), row_size)]
 
     for r_idx, row_cards in enumerate(deck_rows):
@@ -1081,6 +1094,7 @@ elif menu == "🃏 ไพ่ทาโรต์":
             """, unsafe_allow_html=True)
     else:
         st.info(f"💡 กรุณาคลิกเลือกไพ่คว่ำบนโต๊ะให้ครบจำนวน {num_cards} ใบ จึงจะสามารถเปิดคำทำนายได้ครับ")
+        
     # 9. คำคมพลังบวกประจำวัน (จัดเต็มครบทั้ง 366 ประโยคสำหรับทุกวันตลอดปี)
 quotes = [
     "✨ 'ทุกวันคือโอกาสใหม่ในการเริ่มต้นสร้างสิ่งดีๆ ให้ตัวเอง'",
