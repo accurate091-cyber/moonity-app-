@@ -978,6 +978,7 @@ elif menu == "🃏 ไพ่ทาโรต์":
     full_deck = major_arcana + minor_arcana
 
     # CSS ป้องกันปุ่มข้อความตัดบรรทัด ขยายไพ่ 250% และคงระยะห่าง
+# CSS ขยายขนาดปุ่มและไอคอนให้ใหญ่ขึ้นอย่างแท้จริง
     st.markdown("""
         <style>
         .stButton button p {
@@ -993,28 +994,30 @@ elif menu == "🃏 ไพ่ทาโรต์":
             flex: 0 0 auto !important;
             width: auto !important;
             min-width: 0px !important;
-            padding: 0px 1px !important;
+            padding: 0px 2px !important;
         }
-        .stButton > button {
+        div.stButton > button {
             background-color: transparent !important;
             background: transparent !important;
             border: none !important;
             box-shadow: none !important;
             outline: none !important;
-            padding: 0px !important;
-            margin-left: -12px !important;
-            margin-right: -12px !important;
-            font-size: 5rem !important; 
+            padding: 5px 10px !important;
+            margin-left: -10px !important;
+            margin-right: -10px !important;
+            font-size: 4rem !important; /* ปรับขนาดให้ใหญ่ขึ้นสะใจ */
+            height: auto !important;
+            min-height: unset !important;
         }
-        .stButton > button:hover,
-        .stButton > button:focus,
-        .stButton > button:active {
+        div.stButton > button:hover,
+        div.stButton > button:focus,
+        div.stButton > button:active {
             background-color: transparent !important;
             background: transparent !important;
             border: none !important;
             box-shadow: none !important;
             outline: none !important;
-            transform: scale(1.2);
+            transform: scale(1.25);
             z-index: 99;
         }
         </style>
