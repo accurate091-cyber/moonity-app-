@@ -356,38 +356,38 @@ elif menu == "⛩️ เซียมซี":
         if lvl == 1:
             grade = f"🌟 ใบที่ {stick}: มหาโชคมหาลาภสูงสุด (ยอดเยี่ยม)"
             detail = "ดวงชะตาสว่างไสว สิ่งที่คิดหรืออธิษฐานไว้จะประสบความสำเร็จสมปรารถนาทุกประการ มีผู้ใหญ่เมตตาอุปถัมภ์ เงินทองไหลมาเทมา"
-            work_score = random.randint(88, 98)
-            fin_score = random.randint(90, 100)
-            love_score = random.randint(82, 95)
-            health_score = random.randint(85, 95)
+            work_score, work_status = random.randint(88, 98), "ปังขั้นสุด ทำอะไรก็ราบรื่น"
+            fin_score, fin_status = random.randint(90, 100), "รับทรัพย์รัวๆ เงินทองไหลมาเทมา"
+            love_score, love_status = random.randint(82, 95), "หวานฉ่ำ เข้าใจกันดีมาก"
+            health_score, health_status = random.randint(85, 95), "ฟิตเต็มร้อย พลังงานล้นเหลือ"
         elif lvl == 2:
             grade = f"🌸 ใบที่ {stick}: เมตตามหาเสน่ห์ เจริญรุ่งเรือง (ดีมาก)"
             detail = "ดวงมีเสน่ห์เป็นที่รักใคร่ของผู้คนรอบข้าง เดินทางไปไหนมีแต่คนคอยช่วยเหลือ อุปสรรคคลี่คลายลงด้วยดี ผลงานโดดเด่น"
-            work_score = random.randint(75, 87)
-            fin_score = random.randint(75, 88)
-            love_score = random.randint(78, 90)
-            health_score = random.randint(75, 88)
+            work_score, work_status = random.randint(75, 87), "ราบรื่นดี ผลงานโดดเด่น"
+            fin_score, fin_status = random.randint(75, 88), "คล่องตัว ไม่ขัดสน"
+            love_score, love_status = random.randint(78, 90), "เสน่ห์แรง มีคนเมตตา"
+            health_score, health_status = random.randint(75, 88), "สดใส ร่างกายแข็งแรงดี"
         elif lvl == 3:
             grade = f"⚖️ ใบที่ {stick}: ชะลอเพื่อรอจังหวะ ตั้งหลักชีวิต (ปานกลาง)"
             detail = "ช่วงนี้ดวงชะตากำลังอยู่ในช่วงทรงตัว อย่าเพิ่งใจร้อนทำการใหญ่ ตั้งสติทำจิตใจให้สงบ ยึดความซื่อสัตย์และความรอบคอบเป็นหลัก"
-            work_score = random.randint(55, 72)
-            fin_score = random.randint(55, 70)
-            love_score = random.randint(55, 70)
-            health_score = random.randint(60, 75)
+            work_score, work_status = random.randint(55, 72), "ทรงตัว ค่อยเป็นค่อยไป"
+            fin_score, fin_status = random.randint(55, 70), "พอใช้ บริหารเงินรอบคอบ"
+            love_score, love_status = random.randint(55, 70), "เรื่อยๆ ระวังคำพูด"
+            health_score, health_status = random.randint(60, 75), "ปกติ พักผ่อนให้พอ"
         elif lvl == 4:
             grade = f"⚠️ ใบที่ {stick}: เตือนสติระวังภัย สร้างบุญสะเดาะเคราะห์ (ต้องระวัง)"
             detail = "ช่วงนี้มีวิบากกรรมหรืออุปสรรคเข้ามาทดสอบความอดทน ควรหาเวลาไปทำบุญตักบาตร บริจาคทานเพื่อเสริมดวงชะตาและแก้เคล็ด"
-            work_score = random.randint(35, 52)
-            fin_score = random.randint(35, 52)
-            love_score = random.randint(40, 60)
-            health_score = random.randint(45, 65)
+            work_score, work_status = random.randint(35, 52), "ต้องตั้งสติ ระวังเอกสาร"
+            fin_score, fin_status = random.randint(35, 52), "รัดเข็มขัด งดเสี่ยงโชค"
+            love_score, love_status = random.randint(40, 60), "ระวังอารมณ์และคำพูด"
+            health_score, health_status = random.randint(45, 65), "พักผ่อนน้อย ระวังป่วย"
         else:
             grade = f"🌅 ใบที่ {stick}: ฟ้าหลังฝน ปลดล็อกความสำเร็จ (ฟื้นตัวดี)"
             detail = "ความทุกข์ความยากลำบากที่เคยเผชิญกำลังจะผ่านพ้นไป สิ่งดีๆ กำลังเข้ามาแทนที่ จงมีความเชื่อมั่นและลงมือทำอย่างเต็มที่"
-            work_score = random.randint(72, 86)
-            fin_score = random.randint(68, 84)
-            love_score = random.randint(68, 85)
-            health_score = random.randint(70, 88)
+            work_score, work_status = random.randint(72, 86), "กำลังดีขึ้น ปัญหาคลี่คลาย"
+            fin_score, fin_status = random.randint(68, 84), "เริ่มคล่องตัว ปลดหนี้ได้"
+            love_score, love_status = random.randint(68, 85), "ปรับความเข้าใจกันดีขึ้น"
+            health_score, health_status = random.randint(70, 88), "ชาร์จแบต ร่างกายฟื้นตัว"
 
         luck_number = f"เลขมงคลเสริมดวง: {stick}, {(stick * 3) % 90 + 1}, {(stick * 7) % 90 + 1}"
         
@@ -398,21 +398,40 @@ elif menu == "⛩️ เซียมซี":
         * 🍀 **{luck_number}**
         """, unsafe_allow_html=True)
 
-        # ใช้ Native Progress Bars ของ Streamlit (สะอาดตาและไม่มีปัญหาโค้ดหลุด)
+        # ฟังก์ชันสร้างเรตติ้งไอคอนพร้อมทำตัวที่ยังไม่เต็มให้จางลง (Opacity 0.2)
+        def render_icon_rating(icon_symbol, score):
+            total_icons = 5
+            filled_count = max(1, min(total_icons, round((score / 100) * total_icons)))
+            empty_count = total_icons - filled_count
+            filled_str = icon_symbol * filled_count
+            empty_str = f'<span style="opacity: 0.2;">{icon_symbol * empty_count}</span>' if empty_count > 0 else ""
+            return f"{filled_str}{empty_str}"
+
         st.markdown("---")
-        st.markdown("#### 📊 แถบพลังดวงชะตาของคุณวันนี้")
-        
-        st.write(f"💼 ด้านการงานและการเรียน (**{work_score}%**)")
-        st.progress(work_score)
-        
-        st.write(f"💰 ด้านการเงินและโชคลาภ (**{fin_score}%**)")
-        st.progress(fin_score)
-        
-        st.write(f"💖 ด้านความรักและความสัมพันธ์ (**{love_score}%**)")
-        st.progress(love_score)
-        
-        st.write(f"🌿 ด้านสุขภาพและความสมดุล (**{health_score}%**)")
-        st.progress(health_score)
+        st.markdown("#### 🔮 ภาพรวมคำทำนาย")
+
+        # แสดงผลแบบ Icon/Symbol Rating ที่สอดคล้องกับไอคอนหมวดหมู่
+        ratings_data = [
+            ("💼", "ด้านการงานและการเรียน", work_score, work_status),
+            ("💰", "ด้านการเงินและโชคลาภ", fin_score, fin_status),
+            ("💖", "ด้านความรักและความสัมพันธ์", love_score, love_status),
+            ("🌿", "ด้านสุขภาพและความสมดุล", health_score, health_status)
+        ]
+
+        for icon, title, score, status in ratings_data:
+            stars_html = render_icon_rating(icon, score)
+            st.markdown(f"""
+            <div style="background: #ffffff; border: 1px solid #e2e8f0; padding: 12px 16px; border-radius: 10px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 1px 3px rgba(0,0,0,0.02);">
+                <div>
+                    <div style="font-weight: 600; color: #1e293b; font-size: 0.95rem; margin-bottom: 2px;">{title}</div>
+                    <div style="font-size: 0.85rem; color: #64748b;">สเตตัส: <span style="color: #7c3aed; font-weight: 500;">{status}</span></div>
+                </div>
+                <div style="text-align: right;">
+                    <div style="font-size: 1.25rem; letter-spacing: 3px;">{stars_html}</div>
+                    <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 2px;">คะแนน {score}%</div>
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
 
 elif menu == "🃏 ไพ่ทาโรต์ 3 ใบ":
     st.subheader("🃏 เปิดไพ่ทาโรต์ 3 ใบ (อดีต - ปัจจุบัน - อนาคต)")
