@@ -38,6 +38,12 @@ st.markdown("""
         -webkit-text-fill-color: #ffffff !important;
     }
 
+    /* ซ่อนข้อความไอคอนระบบที่หลุดรอดด้านบน เช่น keyboard_double_ */
+    [data-testid="stSidebar"] [data-testid="stSidebarHeader"] span,
+    [data-testid="stSidebar"] header {
+        color: transparent !important;
+    }
+
     /* ช่องกรอกข้อมูลใน Sidebar พื้นหลังม่วงกลาง ตัวหนังสือขาว */
     [data-testid="stSidebar"] input, 
     [data-testid="stSidebar"] textarea, 
@@ -50,7 +56,19 @@ st.markdown("""
         background-color: #4c1d95 !important;
     }
 
-    /* 3. ปรับปุ่มใน Sidebar ให้เป็นปุ่มสีขาวสะอาดตา ตัวหนังสือม่วง */
+    /* 3. ปรับแต่ง Radio / เมนูใน Sidebar ให้มีสีอ่อนลงและสวยงาม */
+    [data-testid="stSidebar"] div[role="radiogroup"] label {
+        background-color: rgba(255, 255, 255, 0.04) !important;
+        border-radius: 8px !important;
+        padding: 4px 10px !important;
+        margin-bottom: 4px !important;
+        transition: background-color 0.2s ease;
+    }
+    [data-testid="stSidebar"] div[role="radiogroup"] label:hover {
+        background-color: rgba(255, 255, 255, 0.12) !important;
+    }
+
+    /* ปุ่มใน Sidebar ให้เป็นปุ่มสีขาวสะอาดตา ตัวหนังสือม่วง */
     [data-testid="stSidebar"] .stButton > button {
         background-color: #ffffff !important;
         color: #4c1d95 !important;
@@ -88,7 +106,7 @@ st.markdown("""
         gap: 8px;
     }
 
-    /* 4. ปรับกล่อง Concept ใน Sidebar ให้โทนสีเดียวกับ Profile Box ด้านขวา */
+    /* กล่อง Concept ใน Sidebar */
     .sidebar-concept {
         font-size: 0.82rem;
         color: #4c1d95 !important;
@@ -105,7 +123,7 @@ st.markdown("""
         -webkit-text-fill-color: #4c1d95 !important;
     }
 
-    /* 5. ปรับ Profile Box ด้านขวา */
+    /* Profile Box ด้านขวา */
     .user-profile-box {
         background: #f3e8ff;
         border: 1px solid #e9d5ff;
@@ -205,7 +223,6 @@ st.markdown("""
         margin-top: 18px;
     }
 
-    /* 6. ปรับ Quote Box ให้เป็นพื้นหลังทึบสะอาดตา */
     .quote-box {
         background-color: #ffffff !important;
         border: 1px solid #e2e8f0;
@@ -220,6 +237,7 @@ st.markdown("""
     }
     </style>
 """, unsafe_allow_html=True)
+
 
 # 3. โลโก้และแนวคิดใน Sidebar
 st.sidebar.markdown('<div class="sidebar-logo-title">🔮 Moonity</div>', unsafe_allow_html=True)
