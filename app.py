@@ -217,7 +217,7 @@ else:
 
 st.sidebar.markdown("---")
 st.sidebar.subheader("📌 เลือกโหมดคำทำนาย")
-menu = st.sidebar.radio("เลือกเส้นทางดวงดาว", ["✨ ดวงรายวันเฉพาะบุคคล", "⛩️ เซียมซี", "🃏 ไพ่ทาโรต์ 3 ใบ"])
+menu = st.sidebar.radio("เลือกเส้นทางดวงดาว", ["✨ ดวงรายวันเฉพาะบุคคล", "⛩️ เซียมซี", "🃏 ไพ่ทาโรต์"])
 
 # 5. แสดงกล่องข้อมูลดวงชะตาด้านบน
 formatted_bday = user_info['birth_date'].strftime("%d/%m/%Y") if isinstance(user_info['birth_date'], datetime) or hasattr(user_info['birth_date'], 'strftime') else "01/01/2000"
