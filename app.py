@@ -8,16 +8,14 @@ st.set_page_config(
     page_icon="🔮",
     layout="centered"
 )
-
-
 st.markdown("""
     <style>
-    /* เปลี่ยนพื้นหลัง Sidebar เป็นสีเขียวเข้มหรูหรา และบังคับตัวหนังสือเป็นสีขาวทั้งหมด */
+    /* เปลี่ยนพื้นหลัง Sidebar กลับเป็นสีม่วงเข้มหรูหรา และบังคับตัวหนังสือเป็นสีขาวทั้งหมด */
     [data-testid="stSidebar"], 
     [data-testid="stSidebar"] div, 
     [data-testid="stSidebar"] section,
     [data-testid="stSidebar"] [data-testid="stVerticalBlock"] {
-        background-color: #064e3b !important;
+        background-color: #2e1065 !important;
     }
     
     [data-testid="stSidebar"] *, 
@@ -29,23 +27,24 @@ st.markdown("""
     [data-testid="stSidebar"] h3,
     [data-testid="stSidebar"] h4,
     [data-testid="stSidebar"] div {
-        color: #78350f !important;
-        -webkit-text-fill-color: #78350f !important;
+        color: #ffffff !important;
+        -webkit-text-fill-color: #ffffff !important;
     }
 
-    /* ช่องกรอกข้อมูลพื้นหลังสีเขียวกลาง ตัวหนังสือขาว */
+    /* ช่องกรอกข้อมูลพื้นหลังสีม่วงกลาง ตัวหนังสือขาว */
     [data-testid="stSidebar"] input, 
     [data-testid="stSidebar"] textarea, 
     [data-testid="stSidebar"] select {
-        background-color: #047857 !important;
-        color: #78350f !important;
-        -webkit-text-fill-color: #78350f !important;
+        background-color: #4c1d95 !important;
+        color: #ffffff !important;
+        -webkit-text-fill-color: #ffffff !important;
     }
     div[data-baseweb="input"] {
-        background-color: #047857 !important;
+        background-color: #4c1d95 !important;
     }
     </style>
 """, unsafe_allow_html=True)
+
 
 # 2. Custom CSS ตกแต่ง UI
 st.markdown("""
