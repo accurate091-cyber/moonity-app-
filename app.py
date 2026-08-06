@@ -156,14 +156,14 @@ st.markdown("""
 st.sidebar.markdown('<div class="sidebar-logo-title">🔮 Moonity</div>', unsafe_allow_html=True)
 st.sidebar.markdown("---")
 
-# 4. ระบบบันทึกข้อมูลดวงชะตา (Session State)
+# 4. ระบบบันทึกข้อมูลดวงชะตา (Session State) - เปลี่ยนค่าเริ่มต้นเป็น "ดวงดี" 1/1/2000 00:00
 st.sidebar.header("✨ บันทึกดวงชะตาของคุณ")
 
 if "user_data" not in st.session_state:
     st.session_state.user_data = {
-        "name": "ปาง",
-        "birth_date": "31/12/2540",
-        "birth_time": "16:36 น.",
+        "name": "ดวงดี",
+        "birth_date": "01/01/2000",
+        "birth_time": "00:00 น.",
         "mode": "full"
     }
 
@@ -171,8 +171,8 @@ profile_mode = st.sidebar.radio("เลือกวิธีใช้งาน:"
 
 if profile_mode == "📝 บันทึกข้อมูลส่วนตัว":
     input_name = st.sidebar.text_input("ชื่อ หรือ ชื่อเล่นของคุณ:", st.session_state.user_data["name"])
-    input_birth_date = st.sidebar.date_input("วันเกิด:", datetime(1997, 12, 31))
-    input_birth_time = st.sidebar.time_input("เวลาเกิด:", datetime.strptime("16:36", "%H:%M").time())
+    input_birth_date = st.sidebar.date_input("วันเกิด:", datetime(2000, 1, 1))
+    input_birth_time = st.sidebar.time_input("เวลาเกิด:", datetime.strptime("00:00", "%H:%M").time())
     
     if st.sidebar.button("💾 บันทึกข้อมูลดวงชะตา"):
         st.session_state.user_data = {
