@@ -977,58 +977,87 @@ elif menu == "🃏 ไพ่ทาโรต์":
 
     full_deck = major_arcana + minor_arcana
 
-    # จัดการ Session State เพื่อจำสำรับที่สับแล้ว
-    if "shuffled_deck" not in st.session_state:
-        st.session_state.shuffled_deck = None
+    # จัดการ Session State
+    if "tarot_deck" not in st.session_state:
+        st.session_state.tarot_deck = None
+    if "selected_cards" not in st.session_state:
+        st.session_state.selected_cards = []
 
-    # ปุ่มทำพิธีสับไพ่
-    if st.button("🎴 เริ่มสับสำรับไพ่ 78 ใบ"):
-        with st.spinner("กำลังสับไพ่และรวบรวมพลังงานดวงดาว... ✨🪄"):
-            time.sleep(1.5)  # จำลองอนิเมชั่นความหน่วงเวลาสับไพ่
+    # ปุ่มเริ่มสับไพ่ใหม่เมื่อเปลี่ยนโหมดหรือกดปุ่ม
+    if st.button("🎴 ทำพิธีสับสำรับไพ่ 78 ใบใหม่"):
+        with st.spinner("กำลังสับไพ่และแผ่พลังงานดวงดาว... ✨🔮"):
+            time.sleep(1.2)
             deck_copy = full_deck.copy()
             random.shuffle(deck_copy)
-            st.session_state.shuffled_deck = deck_copy
-        st.success("สับสำรับไพ่เรียบร้อยแล้ว! เชิญเลือกไพ่ของคุณด้านล่างได้เลยครับ")
+            st.session_state.tarot_deck = deck_copy
+            st.session_state.selected_cards = []
+        st.success("สับสำรับและเรียงไพ่คว่ำเสร็จเรียบร้อย! เชิญคลิกเลือกไพ่ด้านล่างได้เลยครับ")
 
-    # ถ้าสับไพ่แล้ว ให้แสดงช่องเลือกไพ่
-    if st.session_state.shuffled_deck is not None:
-        st.markdown(f"**🎴 กรุณาเลือกหยิบไพ่จำนวน {num_cards} ใบ จากสำรับคว่ำอยู่:**")
-        
-        # สร้างตัวเลือกกองไพ่ 78 กองให้ผู้ใช้เลือก
-        selected_indices = st.multiselect(
-            f"คลิกเลือกกองไพ่ (เลือกให้ครบ {num_cards} ใบ):",
-            options=range(len(st.session_state.shuffled_deck)),
-            format_func=lambda x: f"🃏 กองไพ่คว่ำที่ {x+1}",
-            max_selections=num_cards
-        )
-        
-        # เมื่อเลือกครบตามจำนวนที่กำหนด ให้แสดงปุ่มเปิดดูคำทำนาย
-        if len(selected_indices) == num_cards:
-            if st.button("✨ เปิดไพ่ทำนายผลดวงชะตา"):
-                st.subheader(f"✨ ผลการทำนายไพ่ทาโรต์ ({spread_type}) ของคุณ {user_info['name']}")
-                
-                for i in range(num_cards):
-                    card_idx = selected_indices[i]
-                    card = st.session_state.shuffled_deck[card_idx]
-                    pos_title = positions[i]
-                    st.markdown(f"""
-                    <div class="tarot-card">
-                        <h4 style="color: #6b21a8; margin-bottom: 4px;">{pos_title}</h4>
-                        <p style="font-size: 1.05rem; font-weight: 600; color: #0f172a; margin-bottom: 6px;">🎴 ไพ่ที่ได้: {card['name']}</p>
-                        <p class="fortune-desc" style="margin: 0;">{card['meaning']}</p>
-                    </div>
-                    """, unsafe_allow_html=True)
-                    
+    # ถ้ายังไม่สับ ให้สร้างสำรับเริ่มต้นอัตโนมัติ
+    if st.session_state.tarot_deck is None:
+        deck_copy = full_deck.copy()
+        random.shuffle(deck_copy)
+        st.session_state.tarot_deck = deck_copy
+
+    st.markdown(f"**🎴 เลือกไพ่ของคุณ (เลือกแล้ว {len(st.session_state.selected_cards)} / {num_cards} ใบ):**")
+
+    # แสดงกองไพ่เป็นสำรับให้กดคลิกทีละใบ (จำลองกองไพ่คว่ำ 12 ใบให้เลือกหยิบ)
+    cols = st.columns(6)
+    cards_to_display = 12  # แสดงกองไพ่ให้เลือก 12 กอง
+    
+    for idx in range(cards_to_display):
+        col = cols[idx % 6]
+        with col:
+            is_selected = idx in st.session_state.selected_cards
+            button_label = f"✅ ใบที่ {idx+1}" if is_selected else f"🃏 คว่ำไว้ #{idx+1}"
+            
+            if st.button(button_label, key=f"card_btn_{idx}"):
+                if is_selected:
+                    # ถ้าคลิกซ้ำให้เอาออก
+                    st.session_state.selected_cards.remove(idx)
+                    st.rerun()
+                else:
+                    # ถ้ายังไม่ครบโควตา ให้เพิ่มเข้าไป
+                    if len(st.session_state.selected_cards) < num_cards:
+                        st.session_state.selected_cards.append(idx)
+                        st.rerun()
+                    else:
+                        st.warning(f"⚠️ คุณเลือกครบ {num_cards} ใบแล้วครับ หากต้องการเปลี่ยนให้คลิกยกเลิกใบเดิมก่อน")
+
+    # ปุ่มรีเซ็ตการเลือก
+    if st.session_state.selected_cards:
+        if st.button("🔄 ล้างการเลือกไพ่ทั้งหมด"):
+            st.session_state.selected_cards = []
+            st.rerun()
+
+    # เมื่อเลือกครบตามจำนวนที่กำหนด ให้แสดงปุ่มเปิดคำทำนาย
+    if len(st.session_state.selected_cards) == num_cards:
+        st.markdown("---")
+        if st.button("✨ เปิดไพ่ทำนายผลดวงชะตาเด็ดขาด"):
+            st.subheader(f"✨ ผลการทำนายไพ่ทาโรต์ ({spread_type}) ของคุณ {user_info['name']}")
+            
+            for i in range(num_cards):
+                card_idx = st.session_state.selected_cards[i]
+                # ดึงไพ่ตามลำดับที่คลิกเลือกจากสำรับที่สับไว้
+                card = st.session_state.tarot_deck[card_idx % len(st.session_state.tarot_deck)]
+                pos_title = positions[i]
                 st.markdown(f"""
-                <div class="summary-box">
-                    <h4>💡 คำแนะนำจากสำรับไพ่</h4>
-                    <p>ขอให้คุณ {user_info['name']} นำคำทำนายและแนวทางจากไพ่ไปปรับใช้ด้วยสติและความมั่นใจ ขอให้วันนี้เป็นวันที่ดีและเต็มไปด้วยพลังงานบวกครับ!</p>
+                <div class="tarot-card">
+                    <h4 style="color: #6b21a8; margin-bottom: 4px;">{pos_title}</h4>
+                    <p style="font-size: 1.05rem; font-weight: 600; color: #0f172a; margin-bottom: 6px;">🎴 ไพ่ที่ได้: {card['name']}</p>
+                    <p class="fortune-desc" style="margin: 0;">{card['meaning']}</p>
                 </div>
                 """, unsafe_allow_html=True)
-        else:
-            st.info(f"💡 กรุณาคลิกเลือกกองไพ่ให้ครบอีก {num_cards - len(selected_indices)} ใบ จึงจะสามารถกดเปิดคำทำนายได้")
+                
+            st.markdown(f"""
+            <div class="summary-box">
+                <h4>💡 คำแนะนำจากสำรับไพ่</h4>
+                <p>ขอให้คุณ {user_info['name']} นำคำทำนายและแนวทางจากไพ่ไปปรับใช้ด้วยสติและความมั่นใจ ขอให้วันนี้เป็นวันที่ดีและเต็มไปด้วยพลังงานบวกครับ!</p>
+            </div>
+            """, unsafe_allow_html=True)
     else:
-        st.warning("⚠️ กรุณากดปุ่ม 'เริ่มสับสำรับไพ่ 78 ใบ' ด้านบนก่อน เพื่อเริ่มต้นพิธีเปิดไพ่ครับ")
+        st.info(f"💡 กรุณาคลิกเลือกกองไพ่คว่ำให้ครบจำนวน {num_cards} ใบ จึงจะสามารถเปิดคำทำนายได้ครับ")
+        
     # 9. คำคมพลังบวกประจำวัน (จัดเต็มครบทั้ง 366 ประโยคสำหรับทุกวันตลอดปี)
 quotes = [
     "✨ 'ทุกวันคือโอกาสใหม่ในการเริ่มต้นสร้างสิ่งดีๆ ให้ตัวเอง'",
