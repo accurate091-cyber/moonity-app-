@@ -1082,32 +1082,32 @@ elif menu == "🃏 ไพ่ทาโรต์":
             st.session_state.selected_card_indices = []
             st.rerun()
 
-    # เมื่อเลือกครบตามจำนวนที่กำหนด ให้แสดงปุ่มเปิดคำทำนาย
-    if len(st.session_state.selected_card_indices) == num_cards:
-        st.markdown("---")
-        if st.button("✨ เปิดไพ่ทำนายผลดวงชะตา"):
-            st.subheader(f"✨ ผลการทำนายไพ่ทาโรต์ ({spread_type}) ของคุณ {user_info['name']}")
+   # เมื่อเลือกครบตามจำนวนที่กำหนด ให้แสดงปุ่มเปิดคำทำนาย
+if len(st.session_state.selected_card_indices) == num_cards:
+    st.markdown("---")
+    if st.button("✨ เปิดไพ่ทำนายผลดวงชะตา"):
+        st.subheader(f"✨ ผลการทำนายไพ่ทาโรต์ ({spread_type}) ของคุณ {user_info['name']}")
+        
+        for i in range(num_cards):
+            card_idx = st.session_state.selected_card_indices[i]
+            card = st.session_state.tarot_deck_78[card_idx]
+            pos_title = positions[i]
             
-            for i in range(num_cards):
-                card_idx = st.session_state.selected_card_indices[i]
-                card = st.session_state.tarot_deck_78[card_idx]
-                pos_title = positions[i]
-                st.markdown(f"""
-                <div class="tarot-card">
-                    <h4 style="color: #6b21a8; margin-bottom: 4px;">{pos_title}</h4>
-                    <p style="font-size: 1.05rem; font-weight: 600; color: #0f172a; margin-bottom: 6px;">🎴 ไพ่ที่ได้: {card['name']}</p>
-                    <p class="fortune-desc" style="margin: 0;">{card['meaning']}</p>
-                </div>
-                """, unsafe_allow_html=True)
-                
+            st.markdown(f"""
+            <div class="tarot-card" style="background: white; padding: 15px; border-radius: 10px; border: 2px solid #7c3aed; margin-bottom: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+                <h4 style="color: #6b21a8; margin-bottom: 8px; border-bottom: 1px solid #e9d5ff; padding-bottom: 5px;">{pos_title}</h4>
+                <p style="font-size: 1.1rem; font-weight: 600; color: #1e1b4b; margin-bottom: 6px;">🎴 ไพ่ที่ได้: {card['name']}</p>
+                <p class="fortune-desc" style="margin: 0; color: #334155; line-height: 1.5;">{card['meaning']}</p>
+            </div>
+            """, unsafe_allow_html=True)
             st.markdown(f"""
             <div class="summary-box">
                 <h4>💡 คำแนะนำจากสำรับไพ่</h4>
-                <p>ขอให้คุณ {user_info['name']} นำคำทำนายและแนวทางจากไพ่ไปปรับใช้ด้วยสติและความมั่นใจ ขอให้วันนี้เป็นวันที่ดีและเต็มไปด้วยพลังงานบวกครับ!</p>
+                <p>ขอให้คุณ {user_info['name']} นำคำทำนายและแนวทางจากไพ่ไปปรับใช้ด้วยสติและความมั่นใจ ขอให้วันนี้เป็นวันที่ดีและเต็มไปด้วยพลังงานบวก!</p>
             </div>
             """, unsafe_allow_html=True)
     else:
-        st.info(f"💡 กรุณาคลิกเลือกไพ่คว่ำบนโต๊ะให้ครบจำนวน {num_cards} ใบ จึงจะสามารถเปิดคำทำนายได้ครับ")
+        st.info(f"💡 กรุณาคลิกเลือกไพ่คว่ำบนโต๊ะให้ครบจำนวน {num_cards} ใบ จึงจะสามารถเปิดคำทำนายได้")
         
     # 9. คำคมพลังบวกประจำวัน (จัดเต็มครบทั้ง 366 ประโยคสำหรับทุกวันตลอดปี)
 quotes = [
