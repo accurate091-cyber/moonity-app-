@@ -1,5 +1,6 @@
 import random
 from datetime import datetime
+import uuid
 import streamlit as st
 from supabase import create_client, Client
 
@@ -169,7 +170,7 @@ st.markdown("""
 st.sidebar.markdown('<div class="sidebar-logo-title">🔮 Moonity</div>', unsafe_allow_html=True)
 st.sidebar.markdown("---")
 
-# 5. ระบบบันทึกข้อมูลดวงชะตา (จำตัวตนผ่านชื่อ/รหัสส่วนตัว)
+# 5. ระบบบันทึกข้อมูลดวงชะตา
 st.sidebar.header("✨ บันทึกดวงชะตาของคุณ")
 
 if "profile_saved" not in st.session_state:
@@ -182,20 +183,20 @@ profile_mode = st.sidebar.radio("เลือกวิธีใช้งาน:"
 if profile_mode == "📝 บันทึกข้อมูลส่วนตัว (จำถาวร)":
     input_name = st.sidebar.text_input("ชื่อ หรือ ชื่อเล่นของคุณ:", "ปาง")
     input_birth_date = st.sidebar.date_input("วันเกิด:", datetime(1997, 12, 31))
-    input_birth_time = st.sidebar.time_input("เวลาเกิด:", datetime.strptime("09:00", "%H:%M").time())
+    input_birth_time = st.sidebar.time_input("เวลาเกิด:", datetime.strptime("16:36", "%H:%M").time())
     
     if st.sidebar.button("💾 บันทึกข้อมูลดวงชะตา"):
         if supabase:
             try:
-                # ใช้ชื่อเป็น ID หลักในการค้นหาและบันทึก
+                # สร้าง UUID สำหรับช่อง id เพื่อให้ตรงกับโครงสร้างตาราง Supabase
+                generated_id = str(uuid.uuid4())
                 profile_payload = {
-                    "id": input_name.strip(),
+                    "id": generated_id,
                     "name": input_name.strip(),
                     "birth_date": input_birth_date.strftime("%Y-%m-%d"),
                     "birth_time": input_birth_time.strftime("%H:%M:%S")
                 }
-                # ทำ Upsert บันทึกทับหรือสร้างใหม่ในตาราง profiles
-                supabase.table("profiles").upsert(profile_payload).execute()
+                supabase.table("profiles").insert(profile_payload).execute()
                 
                 st.session_state.user_data = {
                     "name": input_name.strip(),
@@ -204,17 +205,15 @@ if profile_mode == "📝 บันทึกข้อมูลส่วนตั�
                     "mode": "full"
                 }
                 st.session_state.profile_saved = True
-                st.sidebar.success("บันทึกข้อมูลสำเร็จ! ดวงชะตาถูกจำไว้เรียบร้อย")
+                st.sidebar.success("บันทึกข้อมูลสำเร็จแล้วจ้า! ✨")
             except Exception as e:
-                st.sidebar.error(f"เกิดข้อผิดพลาดในการบันทึก: {e}")
+                st.sidebar.error(f"เกิดข้อผิดพลาด: {e}")
         else:
             st.sidebar.error("ยังไม่ได้เชื่อมต่อฐานข้อมูล Supabase")
 
-    # ถ้าเคยบันทึกแล้วในเซสชันนี้ ดึงมาแสดง
     if st.session_state.profile_saved:
         user_info = st.session_state.user_data
     else:
-        # ลองดึงข้อมูลล่าสุดจาก Supabase ถ้ามีชื่อนี้อยู่แล้ว
         user_info = st.session_state.user_data
 else:
     user_info = {"name": "ผู้มาเยือน", "birth_date": "ไม่ได้ระบุ", "birth_time": "ไม่ได้ระบุ", "mode": "guest"}
