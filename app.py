@@ -1100,14 +1100,16 @@ if len(st.session_state.selected_card_indices) == num_cards:
                 <p class="fortune-desc" style="margin: 0; color: #334155; line-height: 1.5;">{card['meaning']}</p>
             </div>
             """, unsafe_allow_html=True)
-            st.markdown(f"""
-            <div class="summary-box">
-                <h4>💡 คำแนะนำจากสำรับไพ่</h4>
-                <p>ขอให้คุณ {user_info['name']} นำคำทำนายและแนวทางจากไพ่ไปปรับใช้ด้วยสติและความมั่นใจ ขอให้วันนี้เป็นวันที่ดีและเต็มไปด้วยพลังงานบวก!</p>
-            </div>
-            """, unsafe_allow_html=True)
-    else:
-        st.info(f"💡 กรุณาคลิกเลือกไพ่คว่ำบนโต๊ะให้ครบจำนวน {num_cards} ใบ จึงจะสามารถเปิดคำทำนายได้")
+            
+        # กล่องสรุปผลอยู่นอกลูป for จะแสดงผลแค่ครั้งเดียวตอนท้ายสุด
+        st.markdown(f"""
+        <div class="summary-box" style="background: #f3e8ff; padding: 15px; border-radius: 10px; border-left: 5px solid #7c3aed; margin-top: 20px;">
+            <h4 style="color: #6b21a8; margin-top: 0;">💡 คำแนะนำจากสำรับไพ่</h4>
+            <p style="margin-bottom: 0; color: #3b0764;">ขอให้คุณ {user_info['name']} นำคำทำนายและแนวทางจากไพ่ไปปรับใช้ด้วยสติและความมั่นใจ ขอให้วันนี้เป็นวันที่ดีและเต็มไปด้วยพลังงานบวกครับ!</p>
+        </div>
+        """, unsafe_allow_html=True)
+else:
+    st.info(f"💡 กรุณาคลิกเลือกไพ่คว่ำบนโต๊ะให้ครบจำนวน {num_cards} ใบ จึงจะสามารถเปิดคำทำนายได้ครับ")
         
     # 9. คำคมพลังบวกประจำวัน (จัดเต็มครบทั้ง 366 ประโยคสำหรับทุกวันตลอดปี)
 quotes = [
