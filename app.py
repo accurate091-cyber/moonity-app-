@@ -38,10 +38,9 @@ st.markdown("""
         -webkit-text-fill-color: #ffffff !important;
     }
 
-    /* ซ่อนข้อความไอคอนระบบที่หลุดรอดด้านบน เช่น keyboard_double_ */
-    [data-testid="stSidebar"] [data-testid="stSidebarHeader"] span,
-    [data-testid="stSidebar"] header {
-        color: transparent !important;
+    /* ซ่อนแถบ Header ด้านบนสุดใน Sidebar ให้เกลี้ยง (ตัดปัญหาข้อความหลุด) */
+    [data-testid="stSidebarHeader"] {
+        display: none !important;
     }
 
     /* ช่องกรอกข้อมูลใน Sidebar พื้นหลังม่วงกลาง ตัวหนังสือขาว */
@@ -56,16 +55,16 @@ st.markdown("""
         background-color: #4c1d95 !important;
     }
 
-    /* 3. ปรับแต่ง Radio / เมนูใน Sidebar ให้มีสีอ่อนลงและสวยงาม */
-    [data-testid="stSidebar"] div[role="radiogroup"] label {
-        background-color: rgba(255, 255, 255, 0.04) !important;
+    /* 3. ปรับแต่งเมนู Radio ใน Sidebar ให้มีพื้นหลังสีอ่อนลงและนูนสวยขึ้น */
+    [data-testid="stSidebar"] .stRadio div[role="radiogroup"] label {
+        background-color: rgba(255, 255, 255, 0.1) !important;
         border-radius: 8px !important;
-        padding: 4px 10px !important;
-        margin-bottom: 4px !important;
-        transition: background-color 0.2s ease;
+        padding: 6px 12px !important;
+        margin-bottom: 6px !important;
+        border: 1px solid rgba(255, 255, 255, 0.05) !important;
     }
-    [data-testid="stSidebar"] div[role="radiogroup"] label:hover {
-        background-color: rgba(255, 255, 255, 0.12) !important;
+    [data-testid="stSidebar"] .stRadio div[role="radiogroup"] label:hover {
+        background-color: rgba(255, 255, 255, 0.2) !important;
     }
 
     /* ปุ่มใน Sidebar ให้เป็นปุ่มสีขาวสะอาดตา ตัวหนังสือม่วง */
@@ -237,7 +236,6 @@ st.markdown("""
     }
     </style>
 """, unsafe_allow_html=True)
-
 
 # 3. โลโก้และแนวคิดใน Sidebar
 st.sidebar.markdown('<div class="sidebar-logo-title">🔮 Moonity</div>', unsafe_allow_html=True)
