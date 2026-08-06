@@ -11,11 +11,19 @@ st.set_page_config(
 
 st.markdown("""
     <style>
-    /* ล็อกสีพื้นหลังและตัวหนังสือใน Sidebar ไม่ให้ถูก Dark Mode ของ Safari กลับสี */
+    /* ล็อกสีพื้นหลังและบังคับสีตัวหนังสือใน Sidebar ทั้งหมดให้เป็นสีม่วงเข้มเด็ดขาด */
     [data-testid="stSidebar"] {
         background-color: #f3e8ff !important;
     }
-    [data-testid="stSidebar"] * {
+    [data-testid="stSidebar"] p,
+    [data-testid="stSidebar"] span,
+    [data-testid="stSidebar"] label,
+    [data-testid="stSidebar"] h1,
+    [data-testid="stSidebar"] h2,
+    [data-testid="stSidebar"] h3,
+    [data-testid="stSidebar"] h4,
+    [data-testid="stSidebar"] div,
+    [data-testid="stSidebar"] .stRadio label p {
         color: #4c1d95 !important;
         -webkit-text-fill-color: #4c1d95 !important;
     }
@@ -32,14 +40,6 @@ st.markdown("""
         background-color: #ffffff !important;
     }
     </style>
-""", unsafe_allow_html=True)
-
-
-st.markdown("""
-    <head>
-        <meta property="og:title" content="🔮 Moonity | คลินิกฮีลใจสไตล์สายมู">
-        <meta property="og:description" content="พื้นที่พักใจ ดูดวงรายวัน เซียมซี ไพ่ทาโรต์ ฮีลใจให้พลังบวก">
-    </head>
 """, unsafe_allow_html=True)
 
 # 2. Custom CSS ตกแต่ง UI
