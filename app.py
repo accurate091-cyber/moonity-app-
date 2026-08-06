@@ -169,79 +169,57 @@ st.markdown("""
 st.sidebar.markdown('<div class="sidebar-logo-title">🔮 Moonity</div>', unsafe_allow_html=True)
 st.sidebar.markdown("---")
 
-# 5. ระบบเข้าสู่ระบบ / บันทึกข้อมูล
-st.sidebar.header("🔑 เข้าสู่ระบบ / สมาชิก")
-if "user" not in st.session_state:
-    st.session_state.user = None
+# 5. ระบบบันทึกข้อมูลดวงชะตา (จำตัวตนผ่านชื่อ/รหัสส่วนตัว)
+st.sidebar.header("✨ บันทึกดวงชะตาของคุณ")
 
-auth_mode = st.sidebar.radio("เลือกทำรายการ:", ["เข้าสู่ระบบด้วย อีเมล", "สมัครสมาชิกใหม่", "ใช้งานแบบชั่วคราว"])
+if "profile_saved" not in st.session_state:
+    st.session_state.profile_saved = False
+if "user_data" not in st.session_state:
+    st.session_state.user_data = {"name": "ผู้มาเยือน", "birth_date": "ไม่ได้ระบุ", "birth_time": "ไม่ได้ระบุ", "mode": "guest"}
 
-user_info = {"name": "ผู้มาเยือน", "birth_date": "ไม่ได้ระบุ", "birth_time": "ไม่ได้ระบุ", "mode": "guest"}
+profile_mode = st.sidebar.radio("เลือกวิธีใช้งาน:", ["📝 บันทึกข้อมูลส่วนตัว (จำถาวร)", "👤 ใช้งานแบบชั่วคราว"])
 
-if auth_mode == "เข้าสู่ระบบด้วย อีเมล":
-    email = st.sidebar.text_input("อีเมล:")
-    password = st.sidebar.text_input("รหัสผ่าน:", type="password")
-    if st.sidebar.button("เข้าสู่ระบบ"):
-        if supabase:
-            try:
-                res = supabase.auth.sign_in_with_password({"email": email, "password": password})
-                st.session_state.user = res.user
-                st.sidebar.success("เข้าสู่ระบบสำเร็จ!")
-                st.rerun()
-            except Exception as e:
-                st.sidebar.error("อีเมลหรือรหัสผ่านไม่ถูกต้อง")
-                
-elif auth_mode == "สมัครสมาชิกใหม่":
-    reg_email = st.sidebar.text_input("อีเมลสำหรับสมัคร:")
-    reg_password = st.sidebar.text_input("ตั้งรหัสผ่าน (อย่างน้อย 6 ตัวอักษร):", type="password")
-    reg_name = st.sidebar.text_input("ชื่อ/ชื่อเล่น:", "ดวงดี")
-    reg_birth_date = st.sidebar.date_input("วันเกิด:", datetime(1997, 12, 31))
-    reg_birth_time = st.sidebar.time_input("เวลาเกิด:", datetime.strptime("09:00", "%H:%M").time())
+if profile_mode == "📝 บันทึกข้อมูลส่วนตัว (จำถาวร)":
+    input_name = st.sidebar.text_input("ชื่อ หรือ ชื่อเล่นของคุณ:", "ปาง")
+    input_birth_date = st.sidebar.date_input("วันเกิด:", datetime(1997, 12, 31))
+    input_birth_time = st.sidebar.time_input("เวลาเกิด:", datetime.strptime("09:00", "%H:%M").time())
     
-    if st.sidebar.button("ลงทะเบียน"):
+    if st.sidebar.button("💾 บันทึกข้อมูลดวงชะตา"):
         if supabase:
             try:
-                res = supabase.auth.sign_up({"email": reg_email, "password": reg_password})
-                if res.user:
-                    # บันทึกโปรไฟล์ลงตาราง profiles
-                    try:
-                        supabase.table("profiles").insert({
-                            "id": res.user.id,
-                            "name": reg_name,
-                            "birth_date": reg_birth_date.strftime("%Y-%m-%d"),
-                            "birth_time": reg_birth_time.strftime("%H:%M:%S")
-                        }).execute()
-                    except Exception:
-                        pass
-                    st.sidebar.success("สมัครสมาชิกสำเร็จ! (หาก Supabase เปิดยืนยันอีเมล ให้ตรวจสอบกล่องข้อความ หรือเข้าสู่ระบบได้เลย)")
+                # ใช้ชื่อเป็น ID หลักในการค้นหาและบันทึก
+                profile_payload = {
+                    "id": input_name.strip(),
+                    "name": input_name.strip(),
+                    "birth_date": input_birth_date.strftime("%Y-%m-%d"),
+                    "birth_time": input_birth_time.strftime("%H:%M:%S")
+                }
+                # ทำ Upsert บันทึกทับหรือสร้างใหม่ในตาราง profiles
+                supabase.table("profiles").upsert(profile_payload).execute()
+                
+                st.session_state.user_data = {
+                    "name": input_name.strip(),
+                    "birth_date": input_birth_date.strftime("%d/%m/%Y"),
+                    "birth_time": input_birth_time.strftime("%H:%M") + " น.",
+                    "mode": "full"
+                }
+                st.session_state.profile_saved = True
+                st.sidebar.success("บันทึกข้อมูลสำเร็จ! ดวงชะตาถูกจำไว้เรียบร้อย")
             except Exception as e:
-                st.sidebar.error(f"สมัครไม่สำเร็จ: กรุณาใช้รหัสผ่าน 6 ตัวขึ้นไป หรืออีเมลนี้อาจเคยสมัครแล้ว")
-
-# ดึงข้อมูลผู้ใช้หากล็อกอินแล้ว
-if st.session_state.user and supabase:
-    try:
-        profile_res = supabase.table("profiles").select("*").eq("id", st.session_state.user.id).execute()
-        if profile_res.data:
-            prof = profile_res.data[0]
-            b_date = datetime.strptime(prof['birth_date'], "%Y-%m-%d").strftime("%d/%m/%Y") if prof['birth_date'] else "ไม่ได้ระบุ"
-            b_time = prof['birth_time'][:5] + " น." if prof['birth_time'] else "ไม่ได้ระบุ"
-            user_info = {
-                "name": prof['name'],
-                "birth_date": b_date,
-                "birth_time": b_time,
-                "mode": "full"
-            }
-            st.sidebar.info(f"👤 เข้าใช้งานโดย: {prof['name']}")
+                st.sidebar.error(f"เกิดข้อผิดพลาดในการบันทึก: {e}")
         else:
-            user_info = {"name": "สมาชิกลับ", "birth_date": "ไม่ได้ระบุ", "birth_time": "ไม่ได้ระบุ", "mode": "full"}
-            
-        if st.sidebar.button("ออกจากระบบ"):
-            supabase.auth.sign_out()
-            st.session_state.user = None
-            st.rerun()
-    except Exception as e:
-        pass
+            st.sidebar.error("ยังไม่ได้เชื่อมต่อฐานข้อมูล Supabase")
 
+    # ถ้าเคยบันทึกแล้วในเซสชันนี้ ดึงมาแสดง
+    if st.session_state.profile_saved:
+        user_info = st.session_state.user_data
+    else:
+        # ลองดึงข้อมูลล่าสุดจาก Supabase ถ้ามีชื่อนี้อยู่แล้ว
+        user_info = st.session_state.user_data
+else:
+    user_info = {"name": "ผู้มาเยือน", "birth_date": "ไม่ได้ระบุ", "birth_time": "ไม่ได้ระบุ", "mode": "guest"}
+
+st.sidebar.markdown("---")
 menu = st.sidebar.radio("📌 เลือกโหมดคำทำนาย", ["✨ ดวงรายวันเฉพาะบุคคล", "⛩️ เซียมซีออนไลน์", "🃏 ไพ่ทาโรต์ 3 ใบ"])
 
 # 6. แสดงกล่องข้อมูลส่วนตัวชิดซ้ายด้านบน
@@ -258,13 +236,13 @@ else:
     profile_html = f"""
     <div class="user-profile-box">
         <div class="user-profile-title">✨ ข้อมูลดวงชะตา: คุณ{user_info['name']}</div>
-        <div class="user-profile-detail">🎲 โหมดใช้งานแบบชั่วคราว (เข้าสู่ระบบเพื่อบันทึกดวงชะตาถาวร)</div>
+        <div class="user-profile-detail">🎲 โหมดใช้งานแบบชั่วคราว (เลือกโหมด "บันทึกข้อมูลส่วนตัว" ด้านข้างเพื่อจำข้อมูล)</div>
     </div>
     """
 
 st.markdown(profile_html, unsafe_allow_html=True)
 
-# 7. ระบบสุ่มสี เลข ทิศ ตามวันที่ปัจจุบัน (เพื่อให้เปลี่ยนไปทุกวันอัตโนมัติ)
+# 7. ระบบสุ่มสี เลข ทิศ ตามวันที่ปัจจุบัน (เปลี่ยนอัตโนมัติทุกวัน)
 today_seed = int(datetime.now().strftime("%Y%m%d"))
 random.seed(today_seed)
 
@@ -276,8 +254,6 @@ colors_pool = [
     ("ม่วงลาเวนเดอร์ / เขียวมัทฉะ", "สีน้ำตาลไหม้", "14, 29, 66", "ทิศตะวันออก")
 ]
 daily_lucky = random.choice(colors_pool)
-
-# คืนค่า random ปกติเพื่อให้โหมดอื่นทำงานสุ่มได้ตามปกติ
 random.seed(None)
 
 lucky_widget = f"""
@@ -430,7 +406,7 @@ elif menu == "🃏 ไพ่ทาโรต์ 3 ใบ":
         {
             "name": "The Fool 🎒",
             "past": "อดีตเคยผ่านการเริ่มต้นใหม่ การกล้าเสี่ยง หรือก้าวออกจากพื้นที่เซฟโซนเดิมๆ",
-            "present": "ปัจจุบันพร้อมที่จะเปิดรับประสบการณ์ใหม่ มีอิสรภาพในการคิดและตัดสินใจ แต่างอาจขาดความระมัดระวังเล็กน้อย",
+            "present": "ปัจจุบันพร้อมที่จะเปิดรับประสบการณ์ใหม่ มีอิสรภาพในการคิดและตัดสินใจ แต่วาจาอาจต้องระวังเล็กน้อย",
             "future": "อนาคตจะได้เริ่มต้นเส้นทางใหม่ การเดินทางใหม่ๆ หรือการลงทุนที่ท้าทายแต่ตื่นเต้น",
             "tone": "neutral"
         },
@@ -464,7 +440,7 @@ elif menu == "🃏 ไพ่ทาโรต์ 3 ใบ":
                 <p><b>{drawn[1]['name']}</b></p>
                 <p class="fortune-desc">{drawn[1]['present']}</p>
             </div>
-            """, unsafe_allow_html=Type if 'Type' in globals() else True)
+            """, unsafe_allow_html=True)
             
         with col3:
             st.markdown(f"""
