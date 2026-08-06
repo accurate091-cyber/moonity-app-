@@ -880,7 +880,7 @@ elif menu == "🃏 ไพ่ทาโรต์":
         positions = ["1. อดีต (Past)", "2. ปัจจุบัน (Present)", "3. อนาคต (Future)"]
     elif "เปิด 5 ใบ" in spread_type:
         num_cards = 5
-        positions = ["1. สถานการณ์ปัจจุบัน", "2. อุปสรรค / ปัญหา", "3. แนวทางแก้ไข / คำแนะนำ", "4. สภาพแวดล้อมรอบตัว", "5. ผลลัพธ์ / บทสรุป"]
+        positions = ["1. สถานการณ์ปัจจุบัน", "2. อุปสรรค / ปัญหา", "3. แนวทางแก้ไข / คำแนะนำ", "4. สภาพแวดล้อมรอบตัว", "5. บทสรุป / ผลลัพธ์"]
     else:
         num_cards = 10
         positions = [
@@ -977,19 +977,27 @@ elif menu == "🃏 ไพ่ทาโรต์":
 
     full_deck = major_arcana + minor_arcana
 
-    # CSS ลบกรอบปุ่มสไตล์ Streamlit ออก ให้เหลือแต่รูปการ์ดเนียนๆ
+    # CSS ลบกรอบปุ่มและพื้นหลังออกอย่างเด็ดขาด ให้เหลือแต่รูปไพ่คว่ำเนียนๆ
     st.markdown("""
         <style>
         div[data-testid="column"] button {
-            background-color: transparent !important;
+            background: transparent !important;
             border: none !important;
             box-shadow: none !important;
-            padding: 2px !important;
-            font-size: 1.2rem !important;
+            outline: none !important;
+            padding: 0px !important;
+            margin: 0px !important;
+            font-size: 1.25rem !important;
             transition: transform 0.2s;
         }
         div[data-testid="column"] button:hover {
-            transform: scale(1.15);
+            transform: scale(1.2);
+        }
+        div[data-testid="column"] button:focus, 
+        div[data-testid="column"] button:active {
+            border: none !important;
+            box-shadow: none !important;
+            background: transparent !important;
         }
         </style>
     """, unsafe_allow_html=True)
@@ -1008,7 +1016,7 @@ elif menu == "🃏 ไพ่ทาโรต์":
             random.shuffle(deck_copy)
             st.session_state.tarot_deck_78 = deck_copy
             st.session_state.selected_card_indices = []
-        st.success("สับและเรียงไพ่คว่ำ 3 แถวเรียบร้อย!")
+        st.success("สับไพ่เรียบร้อยแล้ว กรุณาเลือกไพ่ใบที่ชอบ")
 
     if st.session_state.tarot_deck_78 is None:
         deck_copy = full_deck.copy()
@@ -1024,7 +1032,7 @@ elif menu == "🃏 ไพ่ทาโรต์":
         st.session_state.tarot_deck_78[52:78]
     ]
 
-    # แสดงผลเป็นโต๊ะไพ่ 3 แถว (ไม่มีกรอบ ไม่มีคำเขียน เก๋ๆ เหมือนไพ่จริง)
+    # แสดงผลเป็นโต๊ะไพ่ 3 แถว ไร้กรอบ ไร้ข้อความกวนใจ
     for r_idx, row_cards in enumerate(deck_rows):
         cols = st.columns(26)
         for c_idx, card_data in enumerate(row_cards):
@@ -1032,7 +1040,6 @@ elif menu == "🃏 ไพ่ทาโรต์":
             is_picked = absolute_idx in st.session_state.selected_card_indices
             
             with cols[c_idx]:
-                # ถ้าเลือกแล้วให้แสดงเป็นประกาย ✨ ถ้ายังไม่เลือกแสดงเป็นหลังไพ่ 🎴
                 card_icon = "✨" if is_picked else "🎴"
                 if st.button(card_icon, key=f"table_card_{absolute_idx}"):
                     if is_picked:
