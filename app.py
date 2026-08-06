@@ -1,6 +1,19 @@
 import random
 from datetime import datetime
 import streamlit as st
+st.markdown("""
+    <style>
+    /* บังคับช่องกรอกข้อความและช่องวันที่ให้ตัวหนังสือเป็นสีดำและพื้นหลังสว่าง เพื่อให้อ่านง่ายใน Dark Mode */
+    input {
+        color: #000000 !important;
+        -webkit-text-fill-color: #000000 !important;
+    }
+    /* บังคับสีข้อความหัวข้อทั่วไปในโหมดมือถือ */
+    p, label, span {
+        color: inherit;
+    }
+    </style>
+""", unsafe_allow_html=True)
 
 # 1. ตั้งค่าหน้าตาของแอป
 st.set_page_config(
