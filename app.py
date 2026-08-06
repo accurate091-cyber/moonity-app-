@@ -10,7 +10,14 @@ st.set_page_config(
 )
 st.markdown("""
     <style>
-    /* เปลี่ยนพื้นหลัง Sidebar กลับเป็นสีม่วงเข้มหรูหรา และบังคับตัวหนังสือเป็นสีขาวทั้งหมด */
+    @import url('https://fonts.googleapis.com/css2?family=Mitr:wght@300;400;500;600&display=swap');
+
+    /* 1. ล็อกฟ้อนต์ทุกส่วนและหัวข้อในแอปให้เป็น Mitr ทั้งหมด */
+    html, body, .stApp, p, h1, h2, h3, h4, h5, h6, input, select, textarea, label, span, div {
+        font-family: 'Mitr', sans-serif !important;
+    }
+
+    /* 2. เปลี่ยนพื้นหลัง Sidebar เป็นสีม่วงเข้มหรูหรา และบังคับตัวหนังสือเป็นสีขาว */
     [data-testid="stSidebar"], 
     [data-testid="stSidebar"] div, 
     [data-testid="stSidebar"] section,
@@ -31,7 +38,7 @@ st.markdown("""
         -webkit-text-fill-color: #ffffff !important;
     }
 
-    /* ช่องกรอกข้อมูลพื้นหลังสีม่วงกลาง ตัวหนังสือขาว */
+    /* ช่องกรอกข้อมูลใน Sidebar พื้นหลังม่วงกลาง ตัวหนังสือขาว */
     [data-testid="stSidebar"] input, 
     [data-testid="stSidebar"] textarea, 
     [data-testid="stSidebar"] select {
@@ -42,22 +49,22 @@ st.markdown("""
     div[data-baseweb="input"] {
         background-color: #4c1d95 !important;
     }
-    </style>
-""", unsafe_allow_html=True)
 
-
-# 2. Custom CSS ตกแต่ง UI
-st.markdown("""
-    <style>
-    @import url('https://fonts.googleapis.com/css2?family=Mitr:wght@300;400;500;600&display=swap');
-
-    html, body, .stApp, p, h1, h2, h3, h4, h5, h6, input, select, textarea, label {
-        font-family: 'Mitr', sans-serif !important;
+    /* 3. ปรับปุ่มใน Sidebar ให้เป็นปุ่มสีขาวสะอาดตา ตัวหนังสือม่วง */
+    [data-testid="stSidebar"] .stButton > button {
+        background-color: #ffffff !important;
+        color: #4c1d95 !important;
+        -webkit-text-fill-color: #4c1d95 !important;
+        border: 1px solid #e9d5ff !important;
+        border-radius: 8px !important;
+        font-weight: 500 !important;
+        width: 100% !important;
     }
-
-    [data-testid="stSidebar"] {
-    background: linear-gradient(180deg, #f3e8ff 0%, #fce7f3 100%) !important;
-}
+    [data-testid="stSidebar"] .stButton > button:hover {
+        background-color: #f3e8ff !important;
+        color: #581c87 !important;
+        -webkit-text-fill-color: #581c87 !important;
+    }
 
     [data-testid="stSidebarCollapseButton"],
     [data-testid="collapsedControl"] {
@@ -74,26 +81,33 @@ st.markdown("""
     .sidebar-logo-title {
         font-size: 1.8rem;
         font-weight: 600;
-        color: #4c1d95;
+        color: #ffffff;
         margin-bottom: 5px;
         display: flex;
         align-items: center;
         gap: 8px;
     }
 
+    /* 4. ปรับกล่อง Concept ใน Sidebar ให้โทนสีเดียวกับ Profile Box ด้านขวา */
     .sidebar-concept {
         font-size: 0.82rem;
-        color: #6b21a8;
-        background: rgba(255, 255, 255, 0.6);
-        padding: 8px 10px;
+        color: #4c1d95 !important;
+        -webkit-text-fill-color: #4c1d95 !important;
+        background: #f3e8ff !important;
+        padding: 10px 12px;
         border-radius: 8px;
         margin-bottom: 15px;
         line-height: 1.4;
         border-left: 3px solid #8b5cf6;
     }
+    .sidebar-concept * {
+        color: #4c1d95 !important;
+        -webkit-text-fill-color: #4c1d95 !important;
+    }
 
+    /* 5. ปรับ Profile Box ด้านขวา */
     .user-profile-box {
-        background: linear-gradient(135deg, #f3e8ff 0%, #fce7f3 100%);
+        background: #f3e8ff;
         border: 1px solid #e9d5ff;
         border-left: 5px solid #8b5cf6;
         padding: 14px 18px;
@@ -191,16 +205,18 @@ st.markdown("""
         margin-top: 18px;
     }
 
+    /* 6. ปรับ Quote Box ให้เป็นพื้นหลังทึบสะอาดตา */
     .quote-box {
-        background-color: #f8fafc;
+        background-color: #ffffff !important;
         border: 1px solid #e2e8f0;
         padding: 14px 18px;
         border-radius: 10px;
         margin-top: 25px;
         text-align: center;
-        color: #64748b;
+        color: #475569;
         font-size: 0.88rem;
         font-style: italic;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.02);
     }
     </style>
 """, unsafe_allow_html=True)
