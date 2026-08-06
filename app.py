@@ -8,7 +8,7 @@ st.set_page_config(
     page_icon="🔮",
     layout="centered"
 )
-st.markdown("""
+、st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Mitr:wght@300;400;500;600&display=swap');
 
@@ -17,12 +17,12 @@ st.markdown("""
         font-family: 'Mitr', sans-serif !important;
     }
 
-    /* 2. เปลี่ยนพื้นหลัง Sidebar เป็นสีม่วงเข้มหรูหรา และบังคับตัวหนังสือเป็นสีขาว */
+    /* 2. เปลี่ยนพื้นหลัง Sidebar เป็นสีม่วงพาสเทล #D19FEA และตัวหนังสือเป็นสีม่วงเข้ม */
     [data-testid="stSidebar"], 
     [data-testid="stSidebar"] div, 
     [data-testid="stSidebar"] section,
     [data-testid="stSidebar"] [data-testid="stVerticalBlock"] {
-        background-color: #2e1065 !important;
+        background-color: #D19FEA !important;
     }
     
     [data-testid="stSidebar"] *, 
@@ -34,53 +34,53 @@ st.markdown("""
     [data-testid="stSidebar"] h3,
     [data-testid="stSidebar"] h4,
     [data-testid="stSidebar"] div {
-        color: #ffffff !important;
-        -webkit-text-fill-color: #ffffff !important;
+        color: #2e1065 !important;
+        -webkit-text-fill-color: #2e1065 !important;
     }
 
-    /* ซ่อนแถบ Header ด้านบนสุดใน Sidebar ให้เกลี้ยง (ตัดปัญหาข้อความหลุด) */
+    /* ซ่อนแถบ Header ด้านบนสุดใน Sidebar ให้เกลี้ยง */
     [data-testid="stSidebarHeader"] {
         display: none !important;
     }
 
-    /* ช่องกรอกข้อมูลใน Sidebar พื้นหลังม่วงกลาง ตัวหนังสือขาว */
+    /* ช่องกรอกข้อมูลใน Sidebar พื้นหลังสีขาว ตัวหนังสือม่วงเข้ม */
     [data-testid="stSidebar"] input, 
     [data-testid="stSidebar"] textarea, 
     [data-testid="stSidebar"] select {
-        background-color: #4c1d95 !important;
-        color: #ffffff !important;
-        -webkit-text-fill-color: #ffffff !important;
+        background-color: #ffffff !important;
+        color: #2e1065 !important;
+        -webkit-text-fill-color: #2e1065 !important;
     }
     div[data-baseweb="input"] {
-        background-color: #4c1d95 !important;
+        background-color: #ffffff !important;
     }
 
-    /* 3. ปรับแต่งเมนู Radio ใน Sidebar ให้มีพื้นหลังสีอ่อนลงและนูนสวยขึ้น */
+    /* 3. ปรับแต่งเมนู Radio ใน Sidebar ให้เข้ากับธีมพาสเทล */
     [data-testid="stSidebar"] .stRadio div[role="radiogroup"] label {
-        background-color: rgba(255, 255, 255, 0.1) !important;
+        background-color: rgba(255, 255, 255, 0.3) !important;
         border-radius: 8px !important;
         padding: 6px 12px !important;
         margin-bottom: 6px !important;
-        border: 1px solid rgba(255, 255, 255, 0.05) !important;
+        border: 1px solid rgba(255, 255, 255, 0.4) !important;
     }
     [data-testid="stSidebar"] .stRadio div[role="radiogroup"] label:hover {
-        background-color: rgba(255, 255, 255, 0.2) !important;
+        background-color: rgba(255, 255, 255, 0.6) !important;
     }
 
-    /* ปุ่มใน Sidebar ให้เป็นปุ่มสีขาวสะอาดตา ตัวหนังสือม่วง */
+    /* ปุ่มใน Sidebar ให้เป็นปุ่มสีขาวสะอาดตา ตัวหนังสือม่วงเข้ม */
     [data-testid="stSidebar"] .stButton > button {
         background-color: #ffffff !important;
-        color: #4c1d95 !important;
-        -webkit-text-fill-color: #4c1d95 !important;
-        border: 1px solid #e9d5ff !important;
+        color: #2e1065 !important;
+        -webkit-text-fill-color: #2e1065 !important;
+        border: 1px solid #ffffff !important;
         border-radius: 8px !important;
         font-weight: 500 !important;
         width: 100% !important;
     }
     [data-testid="stSidebar"] .stButton > button:hover {
         background-color: #f3e8ff !important;
-        color: #581c87 !important;
-        -webkit-text-fill-color: #581c87 !important;
+        color: #2e1065 !important;
+        -webkit-text-fill-color: #2e1065 !important;
     }
 
     [data-testid="stSidebarCollapseButton"],
@@ -98,7 +98,8 @@ st.markdown("""
     .sidebar-logo-title {
         font-size: 1.8rem;
         font-weight: 600;
-        color: #ffffff;
+        color: #2e1065 !important;
+        -webkit-text-fill-color: #2e1065 !important;
         margin-bottom: 5px;
         display: flex;
         align-items: center;
@@ -108,18 +109,18 @@ st.markdown("""
     /* กล่อง Concept ใน Sidebar */
     .sidebar-concept {
         font-size: 0.82rem;
-        color: #4c1d95 !important;
-        -webkit-text-fill-color: #4c1d95 !important;
-        background: #f3e8ff !important;
+        color: #2e1065 !important;
+        -webkit-text-fill-color: #2e1065 !important;
+        background: rgba(255, 255, 255, 0.5) !important;
         padding: 10px 12px;
         border-radius: 8px;
         margin-bottom: 15px;
         line-height: 1.4;
-        border-left: 3px solid #8b5cf6;
+        border-left: 3px solid #6b21a8;
     }
     .sidebar-concept * {
-        color: #4c1d95 !important;
-        -webkit-text-fill-color: #4c1d95 !important;
+        color: #2e1065 !important;
+        -webkit-text-fill-color: #2e1065 !important;
     }
 
     /* Profile Box ด้านขวา */
