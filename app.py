@@ -55,7 +55,7 @@ st.set_page_config(
         background-color: #ffffff !important;
     }
 
-    /* 3. ปรับแต่งเมนู Radio ใน Sidebar ให้เข้ากับธีมพาสเทล */
+    /* 3. ปรับแต่งเมนู Radio ใน Sidebar ให้เข้ากับธีมพาสเทล */ 
     [data-testid="stSidebar"] .stRadio div[role="radiogroup"] label {
         background-color: rgba(255, 255, 255, 0.3) !important;
         border-radius: 8px !important;
