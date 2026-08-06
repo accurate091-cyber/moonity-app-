@@ -28,8 +28,8 @@ st.markdown("""
     [data-testid="stSidebar"] h3,
     [data-testid="stSidebar"] h4,
     [data-testid="stSidebar"] div {
-        color: #ffffff !important;
-        -webkit-text-fill-color: #ffffff !important;
+        color: #78350f !important;
+        -webkit-text-fill-color: #78350f !important;
     }
 
     /* ช่องกรอกข้อมูลพื้นหลังสีเขียวกลาง ตัวหนังสือขาว */
@@ -37,8 +37,8 @@ st.markdown("""
     [data-testid="stSidebar"] textarea, 
     [data-testid="stSidebar"] select {
         background-color: #047857 !important;
-        color: #ffffff !important;
-        -webkit-text-fill-color: #ffffff !important;
+        color: #78350f !important;
+        -webkit-text-fill-color: #78350f !important;
     }
     div[data-baseweb="input"] {
         background-color: #047857 !important;
