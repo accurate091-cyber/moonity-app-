@@ -867,7 +867,7 @@ elif menu == "⛩️ เซียมซี":
 elif menu == "🃏 ไพ่ทาโรต์":
     import time
     st.subheader("🃏 เปิดไพ่ทาโรต์ศักดิ์สิทธิ์")
-    st.caption("ตั้งจิตอธิษฐาน เลือกรูปแบบการเปิดไพ่ แล้วเลือกหยิบไพ่จากสำรับบนโต๊ะด้วยตัวเอง")
+    st.caption("ตั้งจิตอธิษฐาน เลือกรูปแบบการเปิดไพ่ แล้วเลือกหยิบไพ่จากสำรับที่แผ่บนโต๊ะด้วยตัวเอง")
     
     spread_type = st.radio("เลือกรูปแบบการเปิดไพ่:", ["🔮 เปิด 1 ใบ", "🃏 เปิด 3 ใบ", "🎴 เปิด 5 ใบ", "📜 เปิด 10 ใบ (เคลติกครอส)"], horizontal=True)
     
@@ -977,28 +977,34 @@ elif menu == "🃏 ไพ่ทาโรต์":
 
     full_deck = major_arcana + minor_arcana
 
-    # CSS ลบกรอบปุ่มออกให้เกลี้ยงเกลา
+    # CSS จัดการให้ไพ่เรียงซ้อนเหลื่อมกันแบบแผงพัด (Overlapping Deck) และลบกรอบปุ่ม
     st.markdown("""
         <style>
+        .tarot-fan-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: -15px; /* ทำให้ไพ่เหลื่อมซ้อนทับกัน */
+            background: linear-gradient(135deg, #2e1065 0%, #4c1d95 100%);
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            margin-bottom: 20px;
+        }
         .stButton > button {
             background-color: transparent !important;
             background: transparent !important;
             border: none !important;
             box-shadow: none !important;
             outline: none !important;
-            padding: 2px !important;
-            margin: 2px !important;
+            padding: 5px !important;
+            margin: -8px !important; /* ดึงไพ่ให้ชิดซ้อนกันเหมือนสำรับจริง */
             font-size: 2.5rem !important;
+            transition: transform 0.2s ease, z-index 0.2s;
         }
-        .stButton > button:hover,
-        .stButton > button:focus,
-        .stButton > button:active {
-            background-color: transparent !important;
-            background: transparent !important;
-            border: none !important;
-            box-shadow: none !important;
-            outline: none !important;
-            transform: scale(1.25);
+        .stButton > button:hover {
+            transform: scale(1.3) translateY(-10px) !important;
+            z-index: 999;
         }
         </style>
     """, unsafe_allow_html=True)
@@ -1010,8 +1016,8 @@ elif menu == "🃏 ไพ่ทาโรต์":
         st.session_state.selected_card_indices = []
 
     # ปุ่มสับไพ่
-    if st.button("🎴 ทำพิธีสับสำรับไพ่ 78 ใบบนโต๊ะ"):
-        with st.spinner("กำลังสับไพ่และจัดเรียงสำรับบนโต๊ะ... ✨🔮"):
+    if st.button("🎴 ทำพิธีสับสำรับไพ่ 78 ใบ"):
+        with st.spinner("กำลังสับไพ่และแผ่สำรับบนโต๊ะ... ✨🔮"):
             time.sleep(1)
             deck_copy = full_deck.copy()
             random.shuffle(deck_copy)
@@ -1026,29 +1032,29 @@ elif menu == "🃏 ไพ่ทาโรต์":
 
     st.markdown(f"**🎴 เลือกไพ่ของคุณ (เลือกแล้ว {len(st.session_state.selected_card_indices)} / {num_cards} ใบ):**")
 
-    # กำหนดให้แสดง 8 คอลัมน์ต่อแถว
-    row_size = 8
-    deck_rows = [st.session_state.tarot_deck_78[i:i + row_size] for i in range(0, len(st.session_state.tarot_deck_78), row_size)]
-
-    # แสดงผลเป็นโต๊ะไพ่
-    for r_idx, row_cards in enumerate(deck_rows):
-        cols = st.columns(row_size)
-        for c_idx, card_data in enumerate(row_cards):
-            absolute_idx = (r_idx * row_size) + c_idx
-            is_picked = absolute_idx in st.session_state.selected_card_indices
-            
-            with cols[c_idx]:
-                card_icon = "✨" if is_picked else "🎴"
-                if st.button(card_icon, key=f"table_card_{absolute_idx}"):
-                    if is_picked:
-                        st.session_state.selected_card_indices.remove(absolute_idx)
+    # ใช้ตู้ Container ครอบเพื่อให้ไพ่เรียงซ้อนเหลื่อมกันสวยงามเหมือนแผงพัด
+    st.markdown('<div class="tarot-fan-container">', unsafe_allow_html=True)
+    
+    # แสดงไพ่ทั้ง 78 ใบบนแผงสำรับ
+    cols = st.columns(15) # จัดกลุ่มย่อยให้แสดงผลลื่นไหล
+    for idx, card_data in enumerate(st.session_state.tarot_deck_78):
+        col_idx = idx % 15
+        is_picked = idx in st.session_state.selected_card_indices
+        
+        with cols[col_idx]:
+            card_icon = "✨" if is_picked else "🎴"
+            if st.button(card_icon, key=f"fan_card_{idx}"):
+                if is_picked:
+                    st.session_state.selected_card_indices.remove(idx)
+                    st.rerun()
+                else:
+                    if len(st.session_state.selected_card_indices) < num_cards:
+                        st.session_state.selected_card_indices.append(idx)
                         st.rerun()
                     else:
-                        if len(st.session_state.selected_card_indices) < num_cards:
-                            st.session_state.selected_card_indices.append(absolute_idx)
-                            st.rerun()
-                        else:
-                            st.warning(f"⚠️ เลือกครบ {num_cards} ใบแล้ว!")
+                        st.warning(f"⚠️ เลือกครบ {num_cards} ใบแล้ว!")
+
+    st.markdown('</div>', unsafe_allow_html=True)
 
     # ปุ่มรีเซ็ตการเลือก
     if st.session_state.selected_card_indices:
@@ -1081,7 +1087,7 @@ elif menu == "🃏 ไพ่ทาโรต์":
             </div>
             """, unsafe_allow_html=True)
     else:
-        st.info(f"💡 กรุณาคลิกเลือกไพ่คว่ำบนโต๊ะให้ครบจำนวน {num_cards} ใบ จึงจะสามารถเปิดคำทำนายได้ครับ")
+        st.info(f"💡 กรุณาคลิกเลือกไพ่คว่ำให้ครบจำนวน {num_cards} ใบ จึงจะสามารถเปิดคำทำนายได้ครับ")
         
     # 9. คำคมพลังบวกประจำวัน (จัดเต็มครบทั้ง 366 ประโยคสำหรับทุกวันตลอดปี)
 quotes = [
