@@ -8,31 +8,34 @@ st.set_page_config(
     page_icon="🔮",
     layout="centered"
 )
+
 st.markdown("""
     <style>
-    /* บังคับเปลี่ยนสีพื้นหลัง Sidebar และตัวหนังสือด้วยแท็ก section ที่เจาะจงที่สุด */
-    section[data-testid="stSidebar"], 
-    section[data-testid="stSidebar"] > div {
+    /* สยบความดื้อ บังคับทุกชั้นกล่องใน Sidebar ให้เป็นสีม่วงเข้มและตัวหนังสือขาวทั้งหมด */
+    [data-testid="stSidebar"], 
+    [data-testid="stSidebar"] div, 
+    [data-testid="stSidebar"] section,
+    [data-testid="stSidebar"] [data-testid="stVerticalBlock"] {
         background-color: #2e1065 !important;
     }
     
-    section[data-testid="stSidebar"] p,
-    section[data-testid="stSidebar"] span,
-    section[data-testid="stSidebar"] label,
-    section[data-testid="stSidebar"] h1,
-    section[data-testid="stSidebar"] h2,
-    section[data-testid="stSidebar"] h3,
-    section[data-testid="stSidebar"] h4,
-    section[data-testid="stSidebar"] div,
-    section[data-testid="stSidebar"] .stRadio label p {
+    [data-testid="stSidebar"] *, 
+    [data-testid="stSidebar"] p,
+    [data-testid="stSidebar"] span,
+    [data-testid="stSidebar"] label,
+    [data-testid="stSidebar"] h1,
+    [data-testid="stSidebar"] h2,
+    [data-testid="stSidebar"] h3,
+    [data-testid="stSidebar"] h4,
+    [data-testid="stSidebar"] div {
         color: #ffffff !important;
         -webkit-text-fill-color: #ffffff !important;
     }
 
     /* ช่องกรอกข้อมูลพื้นหลังสีม่วงกลาง ตัวหนังสือขาว */
-    section[data-testid="stSidebar"] input, 
-    section[data-testid="stSidebar"] textarea, 
-    section[data-testid="stSidebar"] select {
+    [data-testid="stSidebar"] input, 
+    [data-testid="stSidebar"] textarea, 
+    [data-testid="stSidebar"] select {
         background-color: #4c1d95 !important;
         color: #ffffff !important;
         -webkit-text-fill-color: #ffffff !important;
