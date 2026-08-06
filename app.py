@@ -9,25 +9,15 @@ st.set_page_config(
     layout="centered"
 )
 
-# 2. Custom CSS ตกแต่ง UI และแก้ปัญหา Dark Mode มือถือ
 st.markdown("""
     <style>
-    /* สั่งบังคับให้หน้าเว็บแสดงผลในโหมดสว่างเสมอ */
-    :root {
-        color-scheme: light !important;
+    /* ล็อกสีพื้นหลังและตัวหนังสือใน Sidebar ไม่ให้ถูก Dark Mode ของ Safari กลับสี */
+    [data-testid="stSidebar"] {
+        background-color: #f3e8ff !important;
     }
-
-    /* บังคับตัวหนังสือและหัวข้อทั้งหมดใน Sidebar ให้เป็นสีม่วงเข้มเด็ดขาด */
-    [data-testid="stSidebar"] p, 
-    [data-testid="stSidebar"] span, 
-    [data-testid="stSidebar"] label, 
-    [data-testid="stSidebar"] h1, 
-    [data-testid="stSidebar"] h2, 
-    [data-testid="stSidebar"] h3, 
-    [data-testid="stSidebar"] h4,
-    [data-testid="stSidebar"] div,
-    [data-testid="stSidebar"] .stRadio label p {
+    [data-testid="stSidebar"] * {
         color: #4c1d95 !important;
+        -webkit-text-fill-color: #4c1d95 !important;
     }
 
     /* บังคับช่องกรอกข้อมูลให้พื้นหลังสีขาว ตัวหนังสือสีดำเสมอ */
@@ -43,7 +33,6 @@ st.markdown("""
     }
     </style>
 """, unsafe_allow_html=True)
-
 
 
 st.markdown("""
