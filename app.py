@@ -17,7 +17,7 @@ st.markdown("""
     </head>
 """, unsafe_allow_html=True)
 
-# 2. Custom CSS ตกแต่ง UI (ขยายขนาดวงกลมสีให้ใหญ่ขึ้น)
+# 2. Custom CSS ตกแต่ง UI
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Mitr:wght@300;400;500;600&display=swap');
@@ -191,7 +191,7 @@ st.sidebar.header("✨ บันทึกต้นกำเนิดดวงด
 if "user_data" not in st.session_state:
     st.session_state.user_data = {
         "name": "ดวงดี",
-        "birth_date": "01/01/2000",
+        "birth_date": datetime(2000, 1, 1),
         "birth_time": "00:00 น.",
         "mode": "full"
     }
@@ -200,13 +200,13 @@ profile_mode = st.sidebar.radio("เลือกวิธีใช้งาน:"
 
 if profile_mode == "📝 บันทึกข้อมูลส่วนตัว":
     input_name = st.sidebar.text_input("ชื่อ/ชื่อเล่น:", st.session_state.user_data["name"])
-    input_birth_date = st.sidebar.date_input("วันเกิด:", datetime(2000, 1, 1))
+    input_birth_date = st.sidebar.date_input("วันเกิด:", st.session_state.user_data["birth_date"])
     input_birth_time = st.sidebar.time_input("เวลาเกิด:", datetime.strptime("00:00", "%H:%M").time())
     
     if st.sidebar.button("💾 บันทึกต้นกำเนิดดวงชะตา"):
         st.session_state.user_data = {
             "name": input_name.strip(),
-            "birth_date": input_birth_date.strftime("%d/%m/%Y"),
+            "birth_date": input_birth_date,
             "birth_time": input_birth_time.strftime("%H:%M") + " น.",
             "mode": "full"
         }
@@ -214,19 +214,21 @@ if profile_mode == "📝 บันทึกข้อมูลส่วนตั�
 
     user_info = st.session_state.user_data
 else:
-    user_info = {"name": "ผู้มาเยือน", "birth_date": "ไม่ได้ระบุ", "birth_time": "ไม่ได้ระบุ", "mode": "guest"}
+    user_info = {"name": "ผู้มาเยือน", "birth_date": datetime(2000, 1, 1), "birth_time": "ไม่ได้ระบุ", "mode": "guest"}
 
 st.sidebar.markdown("---")
 st.sidebar.subheader("📌 เลือกโหมดคำทำนาย")
 menu = st.sidebar.radio("เลือกเส้นทางดวงดาว", ["✨ ดวงรายวันเฉพาะบุคคล", "⛩️ เซียมซีออนไลน์", "🃏 ไพ่ทาโรต์ 3 ใบ"])
 
 # 5. แสดงกล่องข้อมูลดวงชะตาด้านบน
+formatted_bday = user_info['birth_date'].strftime("%d/%m/%Y") if isinstance(user_info['birth_date'], datetime) or hasattr(user_info['birth_date'], 'strftime') else "01/01/2000"
+
 if user_info['mode'] == 'full':
     profile_html = f"""
     <div class="user-profile-box">
         <div class="user-profile-title">✨ ข้อมูลดวงชะตา: {user_info['name']}</div>
         <div class="user-profile-detail">
-            📅 <b>วันเกิด:</b> {user_info['birth_date']} &nbsp;|&nbsp; ⏰ <b>เวลาเกิด:</b> {user_info['birth_time']}
+            📅 <b>วันเกิด:</b> {formatted_bday} &nbsp;|&nbsp; ⏰ <b>เวลาเกิด:</b> {user_info['birth_time']}
         </div>
     </div>
     """
@@ -240,9 +242,11 @@ else:
 
 st.markdown(profile_html, unsafe_allow_html=True)
 
-# 6. ระบบสุ่มเฉดสีจากโค้ด Hex แบบไดนามิก (ซ่อนโค้ด แสดงเฉพาะวงกลมสีใหญ่ๆ)
-today_seed = int(datetime.now().strftime("%Y%m%d"))
-random.seed(today_seed)
+# 6. ระบบสุ่มสี เลข ทิศ ที่อิงจาก "วันเกิดของผู้ใช้ + วันที่ใช้งานปัจจุบัน" (เปลี่ยนตามคนและเปลี่ยนตามวัน)
+bday_str = user_info['birth_date'].strftime("%Y%m%d") if hasattr(user_info['birth_date'], 'strftime') else "20000101"
+today_str = datetime.now().strftime("%Y%m%d")
+combined_seed = int(bday_str) + int(today_str) + len(str(user_info['name']))
+random.seed(combined_seed)
 
 def get_random_hex():
     r = random.randint(40, 220)
@@ -267,7 +271,7 @@ lucky_number_text = f"{rand_nums[0]}, {rand_nums[1]}, {rand_nums[2]}"
 directions_list = ["ทิศตะวันออกเฉียงเหนือ", "ทิศเหนือ", "ทิศตะวันตก", "ทิศใต้", "ทิศตะวันออก", "ทิศตะวันตกเฉียงใต้", "ทิศตะวันออกเฉียงใต้"]
 lucky_direction_text = random.choice(directions_list)
 
-random.seed(None)
+random.seed(None) # รีเซ็ต seed
 
 lucky_widget = f"""
 <div class="daily-lucky-container">
