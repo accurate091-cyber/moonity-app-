@@ -11,9 +11,9 @@ st.set_page_config(
 
 st.markdown("""
     <style>
-    /* ล็อกสีพื้นหลังและบังคับสีตัวหนังสือใน Sidebar ทั้งหมดให้เป็นสีม่วงเข้มเด็ดขาด */
+    /* เปลี่ยนพื้นหลัง Sidebar เป็นสีม่วงเข้มหรูหรา คุมโทนสายมู และบังคับตัวหนังสือเป็นสีขาวชัดเจนทุกโหมด */
     [data-testid="stSidebar"] {
-        background-color: #f3e8ff !important;
+        background-color: #2e1065 !important;
     }
     [data-testid="stSidebar"] p,
     [data-testid="stSidebar"] span,
@@ -24,23 +24,24 @@ st.markdown("""
     [data-testid="stSidebar"] h4,
     [data-testid="stSidebar"] div,
     [data-testid="stSidebar"] .stRadio label p {
-        color: #4c1d95 !important;
-        -webkit-text-fill-color: #4c1d95 !important;
+        color: #ffffff !important;
+        -webkit-text-fill-color: #ffffff !important;
     }
 
-    /* บังคับช่องกรอกข้อมูลให้พื้นหลังสีขาว ตัวหนังสือสีดำเสมอ */
+    /* ช่องกรอกข้อมูล ปรับให้เป็นพื้นหลังสีม่วงกลางๆ และตัวหนังสือสีขาวเพื่อให้พิมพ์เห็นชัด */
     [data-testid="stSidebar"] input, 
     [data-testid="stSidebar"] textarea, 
     [data-testid="stSidebar"] select {
-        background-color: #ffffff !important;
-        color: #000000 !important;
-        -webkit-text-fill-color: #000000 !important;
+        background-color: #4c1d95 !important;
+        color: #ffffff !important;
+        -webkit-text-fill-color: #ffffff !important;
     }
     div[data-baseweb="input"] {
-        background-color: #ffffff !important;
+        background-color: #4c1d95 !important;
     }
     </style>
 """, unsafe_allow_html=True)
+
 
 # 2. Custom CSS ตกแต่ง UI
 st.markdown("""
