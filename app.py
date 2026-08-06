@@ -1,8 +1,6 @@
 import random
 from datetime import datetime
-import uuid
 import streamlit as st
-from supabase import create_client, Client
 
 # 1. ตั้งค่าหน้าตาของแอป
 st.set_page_config(
@@ -19,19 +17,7 @@ st.markdown("""
     </head>
 """, unsafe_allow_html=True)
 
-# 2. เชื่อมต่อ Supabase Database
-@st.cache_resource
-def init_supabase() -> Client:
-    url = st.secrets["SUPABASE_URL"]
-    key = st.secrets["SUPABASE_KEY"]
-    return create_client(url, key)
-
-try:
-    supabase = init_supabase()
-except Exception as e:
-    supabase = None
-
-# 3. Custom CSS ตกแต่ง
+# 2. Custom CSS ตกแต่ง
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Mitr:wght@300;400;500;600&display=swap');
@@ -166,62 +152,45 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# 4. โลโก้ Moonity ใน Sidebar
+# 3. โลโก้ Moonity ใน Sidebar
 st.sidebar.markdown('<div class="sidebar-logo-title">🔮 Moonity</div>', unsafe_allow_html=True)
 st.sidebar.markdown("---")
 
-# 5. ระบบบันทึกข้อมูลดวงชะตา
+# 4. ระบบบันทึกข้อมูลดวงชะตา (Session State)
 st.sidebar.header("✨ บันทึกดวงชะตาของคุณ")
 
-if "profile_saved" not in st.session_state:
-    st.session_state.profile_saved = False
 if "user_data" not in st.session_state:
-    st.session_state.user_data = {"name": "ผู้มาเยือน", "birth_date": "ไม่ได้ระบุ", "birth_time": "ไม่ได้ระบุ", "mode": "guest"}
+    st.session_state.user_data = {
+        "name": "ปาง",
+        "birth_date": "31/12/2540",
+        "birth_time": "16:36 น.",
+        "mode": "full"
+    }
 
-profile_mode = st.sidebar.radio("เลือกวิธีใช้งาน:", ["📝 บันทึกข้อมูลส่วนตัว (จำถาวร)", "👤 ใช้งานแบบชั่วคราว"])
+profile_mode = st.sidebar.radio("เลือกวิธีใช้งาน:", ["📝 บันทึกข้อมูลส่วนตัว", "👤 ใช้งานแบบผู้มาเยือน"])
 
-if profile_mode == "📝 บันทึกข้อมูลส่วนตัว (จำถาวร)":
-    input_name = st.sidebar.text_input("ชื่อ หรือ ชื่อเล่นของคุณ:", "ปาง")
+if profile_mode == "📝 บันทึกข้อมูลส่วนตัว":
+    input_name = st.sidebar.text_input("ชื่อ หรือ ชื่อเล่นของคุณ:", st.session_state.user_data["name"])
     input_birth_date = st.sidebar.date_input("วันเกิด:", datetime(1997, 12, 31))
     input_birth_time = st.sidebar.time_input("เวลาเกิด:", datetime.strptime("16:36", "%H:%M").time())
     
     if st.sidebar.button("💾 บันทึกข้อมูลดวงชะตา"):
-        if supabase:
-            try:
-                # สร้าง UUID สำหรับช่อง id เพื่อให้ตรงกับโครงสร้างตาราง Supabase
-                generated_id = str(uuid.uuid4())
-                profile_payload = {
-                    "id": generated_id,
-                    "name": input_name.strip(),
-                    "birth_date": input_birth_date.strftime("%Y-%m-%d"),
-                    "birth_time": input_birth_time.strftime("%H:%M:%S")
-                }
-                supabase.table("profiles").insert(profile_payload).execute()
-                
-                st.session_state.user_data = {
-                    "name": input_name.strip(),
-                    "birth_date": input_birth_date.strftime("%d/%m/%Y"),
-                    "birth_time": input_birth_time.strftime("%H:%M") + " น.",
-                    "mode": "full"
-                }
-                st.session_state.profile_saved = True
-                st.sidebar.success("บันทึกข้อมูลสำเร็จแล้วจ้า! ✨")
-            except Exception as e:
-                st.sidebar.error(f"เกิดข้อผิดพลาด: {e}")
-        else:
-            st.sidebar.error("ยังไม่ได้เชื่อมต่อฐานข้อมูล Supabase")
+        st.session_state.user_data = {
+            "name": input_name.strip(),
+            "birth_date": input_birth_date.strftime("%d/%m/%Y"),
+            "birth_time": input_birth_time.strftime("%H:%M") + " น.",
+            "mode": "full"
+        }
+        st.sidebar.success("บันทึกข้อมูลเรียบร้อยแล้วจ้า! ✨")
 
-    if st.session_state.profile_saved:
-        user_info = st.session_state.user_data
-    else:
-        user_info = st.session_state.user_data
+    user_info = st.session_state.user_data
 else:
     user_info = {"name": "ผู้มาเยือน", "birth_date": "ไม่ได้ระบุ", "birth_time": "ไม่ได้ระบุ", "mode": "guest"}
 
 st.sidebar.markdown("---")
 menu = st.sidebar.radio("📌 เลือกโหมดคำทำนาย", ["✨ ดวงรายวันเฉพาะบุคคล", "⛩️ เซียมซีออนไลน์", "🃏 ไพ่ทาโรต์ 3 ใบ"])
 
-# 6. แสดงกล่องข้อมูลส่วนตัวชิดซ้ายด้านบน
+# 5. แสดงกล่องข้อมูลส่วนตัวชิดซ้ายด้านบน
 if user_info['mode'] == 'full':
     profile_html = f"""
     <div class="user-profile-box">
@@ -235,13 +204,13 @@ else:
     profile_html = f"""
     <div class="user-profile-box">
         <div class="user-profile-title">✨ ข้อมูลดวงชะตา: คุณ{user_info['name']}</div>
-        <div class="user-profile-detail">🎲 โหมดใช้งานแบบชั่วคราว (เลือกโหมด "บันทึกข้อมูลส่วนตัว" ด้านข้างเพื่อจำข้อมูล)</div>
+        <div class="user-profile-detail">🎲 โหมดใช้งานแบบผู้มาเยือน (เลือกโหมด "บันทึกข้อมูลส่วนตัว" ด้านข้างเพื่อใส่ข้อมูลของคุณ)</div>
     </div>
     """
 
 st.markdown(profile_html, unsafe_allow_html=True)
 
-# 7. ระบบสุ่มสี เลข ทิศ ตามวันที่ปัจจุบัน (เปลี่ยนอัตโนมัติทุกวัน)
+# 6. ระบบสุ่มสี เลข ทิศ ตามวันที่ปัจจุบัน (เปลี่ยนอัตโนมัติทุกวัน)
 today_seed = int(datetime.now().strftime("%Y%m%d"))
 random.seed(today_seed)
 
@@ -277,7 +246,7 @@ lucky_widget = f"""
 """
 st.markdown(lucky_widget, unsafe_allow_html=True)
 
-# 8. เนื้อหาแต่ละโหมด
+# 7. เนื้อหาแต่ละโหมด
 if menu == "✨ ดวงรายวันเฉพาะบุคคล":
     st.subheader(f"✨ คำทำนายประจำวันสำหรับ: คุณ{user_info['name']}")
     
@@ -469,7 +438,7 @@ elif menu == "🃏 ไพ่ทาโรต์ 3 ใบ":
         </div>
         """, unsafe_allow_html=True)
 
-# 9. คำคมพลังบวกประจำวัน
+# 8. คำคมพลังบวกประจำวัน
 quotes = [
     "✨ 'ดวงชะตาเป็นเพียงเข็มทิศ การลงมือทำคือผู้กำหนดทิศทางชีวิตที่แท้จริง'",
     "🌟 'ทุกวันคือโอกาสใหม่ในการเริ่มต้นสร้างสิ่งดีๆ ให้ตัวเอง'",
