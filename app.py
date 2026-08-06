@@ -977,20 +977,20 @@ elif menu == "🃏 ไพ่ทาโรต์":
 
     full_deck = major_arcana + minor_arcana
 
-    # CSS บีบระยะห่างระหว่างการ์ดให้ชิดติดกันแบบสนิท ไร้ช่องว่างกว้าง และลบกรอบปุ่ม
+    # CSS บีบระยะห่างให้การ์ดชิดกันมากๆ และขยายขนาดไอคอนให้ใหญ่สะใจ
     st.markdown("""
         <style>
         [data-testid="stHorizontalBlock"] {
             display: flex !important;
             flex-wrap: wrap !important;
             justify-content: flex-start !important;
-            gap: 2px !important;
+            gap: 0px !important;
         }
         [data-testid="column"] {
             flex: 0 0 auto !important;
             width: auto !important;
             min-width: 0px !important;
-            padding: 0px 2px !important;
+            padding: 0px 1px !important;
         }
         .stButton > button {
             background-color: transparent !important;
@@ -999,8 +999,9 @@ elif menu == "🃏 ไพ่ทาโรต์":
             box-shadow: none !important;
             outline: none !important;
             padding: 0px !important;
-            margin: 0px !important;
-            font-size: 2rem !important;
+            margin-left: -8px !important;
+            margin-right: -8px !important;
+            font-size: 3.2rem !important; /* ขยายขนาดไพ่ให้ใหญ่ขึ้นสะใจ */
         }
         .stButton > button:hover,
         .stButton > button:focus,
@@ -1010,8 +1011,8 @@ elif menu == "🃏 ไพ่ทาโรต์":
             border: none !important;
             box-shadow: none !important;
             outline: none !important;
-            transform: scale(1.25);
-            z-index: 10;
+            transform: scale(1.35);
+            z-index: 99;
         }
         </style>
     """, unsafe_allow_html=True)
@@ -1039,8 +1040,8 @@ elif menu == "🃏 ไพ่ทาโรต์":
 
     st.markdown(f"**🎴 เลือกไพ่ของคุณ (เลือกแล้ว {len(st.session_state.selected_card_indices)} / {num_cards} ใบ):**")
 
-    # จัดเรียงเป็น 15 คอลัมน์ต่อแถวเพื่อให้การ์ดเรียงชิดติดกันสวยงาม
-    row_size = 15
+    # จัดเรียงเป็น 20 คอลัมน์ต่อแถวเพื่อให้การ์ดชิดติดกันแน่นหนา
+    row_size = 20
     deck_rows = [st.session_state.tarot_deck_78[i:i + row_size] for i in range(0, len(st.session_state.tarot_deck_78), row_size)]
 
     for r_idx, row_cards in enumerate(deck_rows):
