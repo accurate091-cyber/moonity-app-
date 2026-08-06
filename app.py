@@ -977,19 +977,17 @@ elif menu == "🃏 ไพ่ทาโรต์":
 
     full_deck = major_arcana + minor_arcana
 
-    # CSS เจาะลึกถึงคลาสโครงสร้างปุ่มของ Streamlit เพื่อลบกรอบสีเทาออกอย่างสิ้นเชิง
+    # CSS ลบกรอบปุ่มออกให้เกลี้ยงเกลา
     st.markdown("""
         <style>
         .stButton > button {
             background-color: transparent !important;
             background: transparent !important;
             border: none !important;
-            border-color: transparent !important;
             box-shadow: none !important;
             outline: none !important;
             padding: 0px !important;
             margin: 0px !important;
-            border-radius: 0px !important;
         }
         .stButton > button:hover,
         .stButton > button:focus,
@@ -997,7 +995,6 @@ elif menu == "🃏 ไพ่ทาโรต์":
             background-color: transparent !important;
             background: transparent !important;
             border: none !important;
-            border-color: transparent !important;
             box-shadow: none !important;
             outline: none !important;
             transform: scale(1.25);
@@ -1028,18 +1025,21 @@ elif menu == "🃏 ไพ่ทาโรต์":
 
     st.markdown(f"**🎴 เลือกไพ่ของคุณ (เลือกแล้ว {len(st.session_state.selected_card_indices)} / {num_cards} ใบ):**")
 
-    # แบ่งไพ่ 78 ใบ ออกเป็น 3 แถว แถวละ 26 ใบ
+    # แบ่งไพ่ 78 ใบ ออกเป็น 6 แถว แถวละ 13 ใบ (จัดเรียงสวยงาม ไม่บีบเลย์เอาต์)
     deck_rows = [
-        st.session_state.tarot_deck_78[0:26],
-        st.session_state.tarot_deck_78[26:52],
-        st.session_state.tarot_deck_78[52:78]
+        st.session_state.tarot_deck_78[0:13],
+        st.session_state.tarot_deck_78[13:26],
+        st.session_state.tarot_deck_78[26:39],
+        st.session_state.tarot_deck_78[39:52],
+        st.session_state.tarot_deck_78[52:65],
+        st.session_state.tarot_deck_78[65:78]
     ]
 
-    # แสดงผลเป็นโต๊ะไพ่ 3 แถว ไร้กรอบโดยสมบูรณ์
+    # แสดงผลเป็นโต๊ะไพ่ 6 แถว แถวละ 13 ใบ
     for r_idx, row_cards in enumerate(deck_rows):
-        cols = st.columns(26)
+        cols = st.columns(13)
         for c_idx, card_data in enumerate(row_cards):
-            absolute_idx = (r_idx * 26) + c_idx
+            absolute_idx = (r_idx * 13) + c_idx
             is_picked = absolute_idx in st.session_state.selected_card_indices
             
             with cols[c_idx]:
@@ -1053,7 +1053,7 @@ elif menu == "🃏 ไพ่ทาโรต์":
                             st.session_state.selected_card_indices.append(absolute_idx)
                             st.rerun()
                         else:
-                            st.warning(f"⚠️ เลือกครบ {num_cards} ใบแล้ว!")
+                            st.toast(f"⚠️ เลือกครบ {num_cards} ใบแล้ว!", icon="⚠️")
 
     # ปุ่มรีเซ็ตการเลือก
     if st.session_state.selected_card_indices:
@@ -1087,7 +1087,6 @@ elif menu == "🃏 ไพ่ทาโรต์":
             """, unsafe_allow_html=True)
     else:
         st.info(f"💡 กรุณาคลิกเลือกไพ่คว่ำบนโต๊ะให้ครบจำนวน {num_cards} ใบ จึงจะสามารถเปิดคำทำนายได้ครับ")
-        
     # 9. คำคมพลังบวกประจำวัน (จัดเต็มครบทั้ง 366 ประโยคสำหรับทุกวันตลอดปี)
 quotes = [
     "✨ 'ทุกวันคือโอกาสใหม่ในการเริ่มต้นสร้างสิ่งดีๆ ให้ตัวเอง'",
