@@ -11,10 +11,12 @@ st.set_page_config(
 
 st.markdown("""
     <style>
-    /* เปลี่ยนพื้นหลัง Sidebar เป็นสีม่วงเข้มหรูหรา คุมโทนสายมู และบังคับตัวหนังสือเป็นสีขาวชัดเจนทุกโหมด */
-    [data-testid="stSidebar"] {
+        /* เปลี่ยนพื้นหลัง Sidebar เป็นสีม่วงเข้มหรูหราแบบเจาะจงทะลุถึงกล่องชั้นใน */
+    [data-testid="stSidebar"], 
+    [data-testid="stSidebar"] > div:first-child {
         background-color: #2e1065 !important;
     }
+
     [data-testid="stSidebar"] p,
     [data-testid="stSidebar"] span,
     [data-testid="stSidebar"] label,
